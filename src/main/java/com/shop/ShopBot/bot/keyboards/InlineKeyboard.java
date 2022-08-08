@@ -1,41 +1,48 @@
 package com.shop.ShopBot.bot.keyboards;
 
-import com.shop.ShopBot.constant.BotMessageEnum;
+import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.constant.CallbackDataPartsEnum;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class InlineKeyboard {
 
-    public InlineKeyboardMarkup getInlineMessageButtonsWithHelp(String prefix) {
-        InlineKeyboardMarkup inlineKeyboardMarkup = getInlineMessageButtons(prefix);
-        inlineKeyboardMarkup.getKeyboard().add(getButton(
-                "Помощь",
-                prefix + CallbackDataPartsEnum.TASK_.name()
-        ));
+    public InlineKeyboardMarkup getInlineUserSettingsButtons() {
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(getButton("Switch mode", CallbackDataPartsEnum.USER_SETTINGS_.name() + ""));
+        rowList.add(getButton("Set name", CallbackDataPartsEnum.USER_SETTINGS_.name() + ""));
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup getInlineMessageButtons(String prefix) {
+    public InlineKeyboardMarkup getInlineWalletButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(getButton("Add", CallbackDataPartsEnum.WALLET_.name() + ""));
+        rowList.add(getButton("History", CallbackDataPartsEnum.WALLET_.name() + ""));
+        rowList.add(getButton("Withdraw", CallbackDataPartsEnum.WALLET_.name() + ""));
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
 
-        for (BotMessageEnum dictionary : BotMessageEnum.values()) {
-            rowList.add(getButton(
-                    dictionary.getMessage(),
-                    prefix + dictionary.name()
-            ));
-        }
+    public InlineKeyboardMarkup getInlineBuyerPanelButtons() {
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(getButton("", CallbackDataPartsEnum.BUYER_PANEL_.name() + ""));
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
 
-        if (!rowList.isEmpty()) {
-            rowList.add(getButton(
-                    "Все классы",
-                    prefix + CallbackDataPartsEnum.USER_DICTIONARY.name()
-            ));
-        }
-
+    public InlineKeyboardMarkup getInlineVendorPanelButtons() {
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(getButton("", CallbackDataPartsEnum.VENDOR_PANEL_.name() + ""));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;

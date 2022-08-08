@@ -1,6 +1,6 @@
 package com.shop.ShopBot.bot;
 
-import com.shop.ShopBot.constant.BotMessageEnum;
+import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.handler.CallbackQueryHandler;
 import com.shop.ShopBot.handler.MessageHandler;
 import lombok.AccessLevel;
@@ -33,9 +33,10 @@ public class ShopBot extends SpringWebhookBot {
 
     private CallbackQueryHandler callbackQueryHandler;
 
-    public ShopBot(SetWebhook setWebhook, MessageHandler messageHandler) {
+    public ShopBot(SetWebhook setWebhook, MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler) {
         super(setWebhook);
         this.messageHandler = messageHandler;
+        this.callbackQueryHandler = callbackQueryHandler;
 
     }
 
@@ -43,12 +44,9 @@ public class ShopBot extends SpringWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         try {
             return handleUpdate(update);
-        } catch (IllegalArgumentException e) {
-            return new SendMessage(update.getMessage().getChatId().toString(),
-                    BotMessageEnum.EXCEPTION_ILLEGAL_MESSAGE.getMessage());
         } catch (Exception e) {
             return new SendMessage(update.getMessage().getChatId().toString(),
-                    BotMessageEnum.EXCEPTION_WHAT_THE_FUCK.getMessage());
+                    MessageEnum.UNKNOWN_MESSAGE.getMessage());
         }
     }
 

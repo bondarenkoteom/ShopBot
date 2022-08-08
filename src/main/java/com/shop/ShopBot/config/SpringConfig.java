@@ -1,5 +1,6 @@
 package com.shop.ShopBot.config;
 
+import com.shop.ShopBot.handler.CallbackQueryHandler;
 import com.shop.ShopBot.handler.MessageHandler;
 import com.shop.ShopBot.bot.ShopBot;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,9 @@ public class SpringConfig {
 
     @Bean
     public ShopBot springWebhookBot(SetWebhook setWebhook,
-                                    MessageHandler messageHandler) {
-        ShopBot bot = new ShopBot(setWebhook, messageHandler);
+                                    MessageHandler messageHandler,
+                                    CallbackQueryHandler callbackQueryHandler) {
+        ShopBot bot = new ShopBot(setWebhook, messageHandler, callbackQueryHandler);
 
         bot.setBotPath(botConfig.getWebhookPath());
         bot.setBotUsername(botConfig.getBotName());

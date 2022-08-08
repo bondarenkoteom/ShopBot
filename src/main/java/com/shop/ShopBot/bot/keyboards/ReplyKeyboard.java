@@ -1,6 +1,6 @@
 package com.shop.ShopBot.bot.keyboards;
 
-import com.shop.ShopBot.constant.BotButtonNameEnum;
+import com.shop.ShopBot.constant.ButtonNameEnum;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -14,11 +14,11 @@ public class ReplyKeyboard {
 
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
         KeyboardRow firstRow = new KeyboardRow();
-        firstRow.add(new KeyboardButton(BotButtonNameEnum.CUSTOMER.getButtonName()));
-        firstRow.add(new KeyboardButton(BotButtonNameEnum.SELLER.getButtonName()));
+        firstRow.add(new KeyboardButton(ButtonNameEnum.USER_SETTINGS.getButtonName()));
+        firstRow.add(new KeyboardButton(ButtonNameEnum.WALLET.getButtonName()));
 
         KeyboardRow secondRow = new KeyboardRow();
-        secondRow.add(new KeyboardButton(BotButtonNameEnum.HELP.getButtonName()));
+        secondRow.add(new KeyboardButton(ButtonNameEnum.BUYER_PANEL.getButtonName()));
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         keyboardRows.add(firstRow);

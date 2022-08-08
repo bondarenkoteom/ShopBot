@@ -1,8 +1,10 @@
 package com.shop.ShopBot.handler;
 
-import com.shop.ShopBot.constant.BotMessageEnum;
+import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.constant.CallbackDataPartsEnum;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import java.io.IOException;
 
 @Component
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class CallbackQueryHandler {
 
@@ -19,13 +22,15 @@ public class CallbackQueryHandler {
 
         String data = buttonQuery.getData();
 
-        if (data.equals(CallbackDataPartsEnum.TASK_.name() + CallbackDataPartsEnum.USER_DICTIONARY.name())) {
-            return getDictionaryTasks(chatId);
-        } else if (data.equals(CallbackDataPartsEnum.DICTIONARY_.name() + CallbackDataPartsEnum.USER_DICTIONARY.name())) {
-            return null;
-        } else {
-            return new SendMessage();
-        }
+//        if (data.equals(CallbackDataPartsEnum.USER_SETTINGS_.name() + CallbackDataPartsEnum.USER_DICTIONARY.name())) {
+//            return getDictionaryTasks(chatId);
+//        } else if (data.equals(CallbackDataPartsEnum.DICTIONARY_.name() + CallbackDataPartsEnum.USER_DICTIONARY.name())) {
+//            return null;
+//        } else {
+//            return new SendMessage(chatId, "Callback");
+//        }
+
+        return new SendMessage(chatId, "Callback");
 
     }
 
@@ -38,11 +43,7 @@ public class CallbackQueryHandler {
 //        } else if (data.startsWith(CallbackDataPartsEnum.DICTIONARY_.name())) {
 //            return getDictionary(chatId, data.substring(CallbackDataPartsEnum.DICTIONARY_.name().length()));
 //        } else {
-//            return new SendMessage(chatId, BotMessageEnum.EXCEPTION_BAD_BUTTON_NAME_MESSAGE.getMessage());
+//            return new SendMessage(chatId, MessageEnum.EXCEPTION_BAD_BUTTON_NAME_MESSAGE.getMessage());
 //        }
 
-    private SendMessage getDictionaryTasks(String chatId) throws IOException {
-        return new SendMessage(chatId, BotMessageEnum.EXCEPTION_ILLEGAL_MESSAGE.getMessage());
-
-    }
 }
