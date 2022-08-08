@@ -8,6 +8,7 @@ class ShopBotApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
