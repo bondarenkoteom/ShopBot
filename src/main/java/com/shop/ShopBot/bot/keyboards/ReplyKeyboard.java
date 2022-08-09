@@ -19,6 +19,7 @@ public class ReplyKeyboard {
 
         KeyboardRow secondRow = new KeyboardRow();
         secondRow.add(new KeyboardButton(ButtonNameEnum.BUYER_PANEL.getButtonName()));
+        secondRow.add(new KeyboardButton(ButtonNameEnum.SUPPORT.getButtonName()));
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         keyboardRows.add(firstRow);

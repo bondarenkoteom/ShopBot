@@ -1,7 +1,7 @@
 package com.shop.ShopBot.handler;
 
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
-import com.shop.ShopBot.constant.ButtonNameEnum;
+import com.shop.ShopBot.constant.MessageEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,12 +27,27 @@ public class CallbackQueryHandler {
         String data = buttonQuery.getData();
 
         if (data.equals("HELP_BTC")) {
-            EditMessageText sendMessage = new EditMessageText();
-            sendMessage.setMessageId(messageId);
-            sendMessage.setChatId(chatId);
-            sendMessage.setText(ButtonNameEnum.WALLET.getButtonName());
-            sendMessage.setReplyMarkup(inlineKeyboard.getInlineWalletButtons());
-            return sendMessage;
+            EditMessageText editMessage = new EditMessageText();
+            editMessage.setMessageId(messageId);
+            editMessage.setChatId(chatId);
+            editMessage.setText(MessageEnum.WHAT_IS_BTC.getMessage());
+            editMessage.setReplyMarkup(inlineKeyboard.getInlineNextPageButton("HELP_SELL"));
+            return editMessage;
+        } else if (data.equals("HELP_SELL")) {
+            EditMessageText editMessage = new EditMessageText();
+            editMessage.setMessageId(messageId);
+            editMessage.setChatId(chatId);
+            editMessage.setText(MessageEnum.WHAT_CAN_I_SELL.getMessage());
+            editMessage.setReplyMarkup(inlineKeyboard.getInlineNextPageButton("HELP_BUYER"));
+            return editMessage;
+        } else if (data.equals("HELP_BUYER")) {
+            EditMessageText editMessage = new EditMessageText();
+            editMessage.setMessageId(messageId);
+            editMessage.setChatId(chatId);
+            editMessage.setText(MessageEnum.WHAT_IS_BTC.getMessage());
+            editMessage.setText(MessageEnum.BUYERS_FEATURES.getMessage());
+            editMessage.setReplyMarkup(inlineKeyboard.getInlineNextPageButton("HELP_BUYER"));
+            return editMessage;
         }
 
         return new SendMessage(chatId, "Callback");

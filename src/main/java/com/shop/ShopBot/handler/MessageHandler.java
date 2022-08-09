@@ -29,11 +29,11 @@ public class MessageHandler {
 
         return switch (inputText) {
             case "/start" -> getStartMessage(chatId);
-            case "/help" -> getHelpMessage(chatId);
             case String s && s.equals(ButtonNameEnum.USER_SETTINGS.getButtonName()) -> getUserSettingsMessage(chatId);
             case String s && s.equals(ButtonNameEnum.WALLET.getButtonName()) -> getWalletMessage(chatId);
             case String s && s.equals(ButtonNameEnum.BUYER_PANEL.getButtonName()) -> getBuyerPanelMessage(chatId);
             case String s && s.equals(ButtonNameEnum.VENDOR_PANEL.getButtonName()) -> getVendorPanelMessage(chatId);
+            case String s && s.equals(ButtonNameEnum.SUPPORT.getButtonName()) -> getHelpMessage(chatId);
             case null -> throw new IllegalArgumentException();
             default -> new SendMessage(chatId, MessageEnum.UNKNOWN_MESSAGE.getMessage());
         };

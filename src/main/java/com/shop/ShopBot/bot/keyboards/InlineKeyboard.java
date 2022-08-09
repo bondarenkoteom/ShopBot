@@ -1,10 +1,8 @@
 package com.shop.ShopBot.bot.keyboards;
 
-import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.constant.CallbackDataPartsEnum;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
@@ -17,7 +15,15 @@ public class InlineKeyboard {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(getButton("What is BTC?", CallbackDataPartsEnum.HELP_.name() + "BTC"));
         rowList.add(getButton("What can I sell", CallbackDataPartsEnum.HELP_.name() + "SELL"));
-        rowList.add(getButton("Support", CallbackDataPartsEnum.HELP_.name() + "SUPPORT"));
+        rowList.add(getButton("Buyer's features", CallbackDataPartsEnum.HELP_.name() + "BUYER"));
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getInlineNextPageButton(String buttonNext) {
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(getButton("Next page", buttonNext));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
