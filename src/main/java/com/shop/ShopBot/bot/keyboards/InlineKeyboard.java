@@ -13,6 +13,16 @@ import java.util.List;
 @Component
 public class InlineKeyboard {
 
+    public InlineKeyboardMarkup getInlineHelpButtons() {
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(getButton("What is BTC?", CallbackDataPartsEnum.HELP_.name() + "BTC"));
+        rowList.add(getButton("What can I sell", CallbackDataPartsEnum.HELP_.name() + "SELL"));
+        rowList.add(getButton("Support", CallbackDataPartsEnum.HELP_.name() + "SUPPORT"));
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
+
     public InlineKeyboardMarkup getInlineUserSettingsButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(getButton("Switch mode", CallbackDataPartsEnum.USER_SETTINGS_.name() + ""));

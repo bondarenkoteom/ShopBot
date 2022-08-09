@@ -1,4 +1,4 @@
-package com.shop.ShopBot.database.service.impl;
+package com.shop.ShopBot.database.service;
 
 import com.shop.ShopBot.database.entity.CostumerEntity;
 import com.shop.ShopBot.database.repository.CostumerRepository;
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CostumerServiceImpl {
+public class CostumerService {
 
     private final CostumerRepository costumerRepository;
 
-    public CostumerServiceImpl(CostumerRepository costumerRepository) {
+    public CostumerService(CostumerRepository costumerRepository) {
         this.costumerRepository = costumerRepository;
     }
 

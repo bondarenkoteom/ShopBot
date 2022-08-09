@@ -45,6 +45,7 @@ public class ShopBot extends SpringWebhookBot {
         try {
             return handleUpdate(update);
         } catch (Exception e) {
+            e.printStackTrace();
             return new SendMessage(update.getMessage().getChatId().toString(),
                     MessageEnum.UNKNOWN_MESSAGE.getMessage());
         }

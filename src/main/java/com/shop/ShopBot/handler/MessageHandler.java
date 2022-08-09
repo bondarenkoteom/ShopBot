@@ -49,6 +49,7 @@ public class MessageHandler {
     private SendMessage getHelpMessage(String chatId) {
         SendMessage sendMessage = new SendMessage(chatId, MessageEnum.HELP_MESSAGE.getMessage());
         sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(inlineKeyboard.getInlineHelpButtons());
         return sendMessage;
     }
 

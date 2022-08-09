@@ -1,13 +1,14 @@
 package com.shop.ShopBot.handler;
 
-import com.shop.ShopBot.constant.MessageEnum;
-import com.shop.ShopBot.constant.CallbackDataPartsEnum;
+import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
+import com.shop.ShopBot.constant.ButtonNameEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 import java.io.IOException;
@@ -17,33 +18,25 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CallbackQueryHandler {
 
+    InlineKeyboard inlineKeyboard;
+
     public BotApiMethod<?> processCallbackQuery(CallbackQuery buttonQuery) throws IOException {
-        final String chatId = buttonQuery.getMessage().getChatId().toString();
+        String chatId = buttonQuery.getMessage().getChatId().toString();
+        Integer messageId = buttonQuery.getMessage().getMessageId();
 
         String data = buttonQuery.getData();
 
-//        if (data.equals(CallbackDataPartsEnum.USER_SETTINGS_.name() + CallbackDataPartsEnum.USER_DICTIONARY.name())) {
-//            return getDictionaryTasks(chatId);
-//        } else if (data.equals(CallbackDataPartsEnum.DICTIONARY_.name() + CallbackDataPartsEnum.USER_DICTIONARY.name())) {
-//            return null;
-//        } else {
-//            return new SendMessage(chatId, "Callback");
-//        }
+        if (data.equals("HELP_BTC")) {
+            EditMessageText sendMessage = new EditMessageText();
+            sendMessage.setMessageId(messageId);
+            sendMessage.setChatId(chatId);
+            sendMessage.setText(ButtonNameEnum.WALLET.getButtonName());
+            sendMessage.setReplyMarkup(inlineKeyboard.getInlineWalletButtons());
+            return sendMessage;
+        }
 
         return new SendMessage(chatId, "Callback");
 
     }
-
-//    private SendMessage handleDefaultDictionary(String chatId, String data) throws IOException {
-//        if (data.startsWith(CallbackDataPartsEnum.TASK_.name())) {
-//            DictionaryResourcePathEnum resourcePath = DictionaryResourcePathEnum.valueOf(
-//                    data.substring(CallbackDataPartsEnum.TASK_.name().length())
-//            );
-//            return getDictionaryTasks(chatId, resourcePath.name(), resourcePath.getFileName());
-//        } else if (data.startsWith(CallbackDataPartsEnum.DICTIONARY_.name())) {
-//            return getDictionary(chatId, data.substring(CallbackDataPartsEnum.DICTIONARY_.name().length()));
-//        } else {
-//            return new SendMessage(chatId, MessageEnum.EXCEPTION_BAD_BUTTON_NAME_MESSAGE.getMessage());
-//        }
 
 }
