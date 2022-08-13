@@ -2,7 +2,6 @@ package com.shop.ShopBot.handler;
 
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
 import com.shop.ShopBot.bot.keyboards.ReplyKeyboard;
-import com.shop.ShopBot.constant.ButtonNameEnum;
 import com.shop.ShopBot.constant.MessageEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +28,11 @@ public class MessageHandler {
 
         return switch (inputText) {
             case "/start" -> getStartMessage(chatId);
-            case String s && s.equals(ButtonNameEnum.USER_SETTINGS.getButtonName()) -> getUserSettingsMessage(chatId);
-            case String s && s.equals(ButtonNameEnum.WALLET.getButtonName()) -> getWalletMessage(chatId);
-            case String s && s.equals(ButtonNameEnum.BUYER_PANEL.getButtonName()) -> getBuyerPanelMessage(chatId);
-            case String s && s.equals(ButtonNameEnum.VENDOR_PANEL.getButtonName()) -> getVendorPanelMessage(chatId);
-            case String s && s.equals(ButtonNameEnum.SUPPORT.getButtonName()) -> getHelpMessage(chatId);
+            case "User settings" -> getUserSettingsMessage(chatId);
+            case "Wallet" -> getWalletMessage(chatId);
+            case "Buyer panel" -> getBuyerPanelMessage(chatId);
+            case "Vendor panel" -> getVendorPanelMessage(chatId);
+            case "Support" -> getHelpMessage(chatId);
             case null -> throw new IllegalArgumentException();
             default -> new SendMessage(chatId, MessageEnum.UNKNOWN_MESSAGE.getMessage());
         };
