@@ -1,6 +1,8 @@
 package com.shop.ShopBot.handler;
 
-import com.shop.ShopBot.handler.inline_button_handler.InlineButtonHandler;
+import com.shop.ShopBot.bot.messages.InlineMessage;
+import com.shop.ShopBot.constant.Trigger;
+import com.shop.ShopBot.database.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,19 +15,27 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 @RequiredArgsConstructor
 public class CallbackQueryHandler {
 
-    InlineButtonHandler inlineButtonHandler;
+    InlineMessage inlineMessage;
+
+    UserService userService;
 
     public BotApiMethod<?> processCallbackQuery(CallbackQuery buttonQuery) {
 
-        return switch (buttonQuery.getData()) {
-            case "HELP_BTC" -> inlineButtonHandler.getWhatIsBTCMessage(buttonQuery);
-            case "HELP_SELL" -> inlineButtonHandler.getWhatCanISellMessage(buttonQuery);
-            case "HELP_BUYER" -> inlineButtonHandler.getBuyersFeaturesMessage(buttonQuery);
-            case "BUYER_PANEL_PURCHASES" -> inlineButtonHandler.getPurchases(buttonQuery);
-            case String s && s.startsWith("PURCHASE_") -> inlineButtonHandler.getPurchaseInfo(buttonQuery);
-            default -> inlineButtonHandler.getErrorMessage(buttonQuery);
-        };
+        userService.setWaitFor(buttonQuery.getFrom().getId(), Trigger.UNDEFINED);
 
+        return switch (buttonQuery.getData()) {
+            case "HELP_BTC" -> inlineMessage.getWhatIsBTCMessage(buttonQuery);
+            case "HELP_SELL" -> inlineMessage.getWhatCanISellMessage(buttonQuery);
+            case "HELP_BUYER" -> inlineMessage.getBuyersFeaturesMessage(buttonQuery);
+
+            case "BUYER_PANEL_PURCHASES" -> inlineMessage.getPurchasesMessage(buttonQuery);
+            case String s && s.startsWith("PURCHASE_") -> inlineMessage.getPurchaseInfoMessage(buttonQuery);
+
+            case "SET_USERNAME" -> inlineMessage.getSetUsernameMessage(buttonQuery);
+            case "USER_INFO" -> inlineMessage.getUserInfoMessage(buttonQuery);
+            case null -> throw new IllegalArgumentException();
+            default -> inlineMessage.getErrorMessage(buttonQuery);
+        };
     }
 }
 

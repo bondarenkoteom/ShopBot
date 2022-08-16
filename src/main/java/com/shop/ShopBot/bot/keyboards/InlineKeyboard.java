@@ -31,8 +31,9 @@ public class InlineKeyboard {
 
     public InlineKeyboardMarkup getInlineUserSettingsButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("Switch mode", CallbackDataPartsEnum.USER_SETTINGS_.name() + ""));
-        rowList.add(getButtonList("Set name", CallbackDataPartsEnum.USER_SETTINGS_.name() + ""));
+        rowList.add(getButtonList("Switch mode", "SWITCH_MODE"));
+        rowList.add(getButtonList("Set name", "SET_USERNAME"));
+        rowList.add(getButtonList("User info", "USER_INFO"));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;

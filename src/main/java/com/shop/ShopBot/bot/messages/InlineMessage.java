@@ -1,7 +1,10 @@
-package com.shop.ShopBot.handler.inline_button_handler;
+package com.shop.ShopBot.bot.messages;
 
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
 import com.shop.ShopBot.constant.MessageEnum;
+import com.shop.ShopBot.constant.Trigger;
+import com.shop.ShopBot.database.model.User;
+import com.shop.ShopBot.database.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -11,10 +14,13 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class InlineButtonHandler {
+public class InlineMessage {
 
     @Autowired
     private InlineKeyboard inlineKeyboard;
+
+    @Autowired
+    UserService userService;
 
     private String chatId;
 
@@ -86,7 +92,7 @@ public class InlineButtonHandler {
         }
     }
 
-    public BotApiMethod<?> getPurchases(CallbackQuery buttonQuery) {
+    public BotApiMethod<?> getPurchasesMessage(CallbackQuery buttonQuery) {
         InlineKeyboardMarkup keyboardMarkup = inlineKeyboard.getInlinePurchasesButtons();
         chatId = buttonQuery.getMessage().getChatId().toString();
         messageId = buttonQuery.getMessage().getMessageId();
@@ -98,7 +104,7 @@ public class InlineButtonHandler {
         return sendMessage;
     }
 
-    public BotApiMethod<?> getPurchaseInfo(CallbackQuery buttonQuery) {
+    public BotApiMethod<?> getPurchaseInfoMessage(CallbackQuery buttonQuery) {
         InlineKeyboardMarkup keyboardMarkup = inlineKeyboard.getInlinePurchaseInfoButtons();
         chatId = buttonQuery.getMessage().getChatId().toString();
         messageId = buttonQuery.getMessage().getMessageId();
@@ -120,4 +126,32 @@ public class InlineButtonHandler {
         return sendMessage;
     }
 
+    public BotApiMethod<?> getSetUsernameMessage(CallbackQuery buttonQuery) {
+        chatId = buttonQuery.getMessage().getChatId().toString();
+        messageId = buttonQuery.getMessage().getMessageId();
+
+        userService.setWaitFor(buttonQuery.getFrom().getId(), Trigger.USERNAME);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText("Enter username");
+        return sendMessage;
+    }
+
+    public BotApiMethod<?> getUserInfoMessage(CallbackQuery buttonQuery) {
+        chatId = buttonQuery.getMessage().getChatId().toString();
+
+        User user = userService.getUser(buttonQuery.getFrom().getId());
+        String text;
+        if (user == null) {
+            text = "Fuck off, scum";
+        } else {
+            text = String.join("\n", user.getUsername(), user.getId().toString());
+        }
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(text);
+        return sendMessage;
+    }
 }
