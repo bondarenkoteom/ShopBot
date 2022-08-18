@@ -2,6 +2,7 @@ package com.shop.ShopBot.hookControler;
 
 import com.shop.ShopBot.bot.ShopBot;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,11 @@ public class WebhookController {
     @PostMapping("/")
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
         return shopBot.onWebhookUpdateReceived(update);
+    }
+
+    @GetMapping("/")
+    public void onUpdateReceived2() {
+        System.out.println();
     }
 
 }

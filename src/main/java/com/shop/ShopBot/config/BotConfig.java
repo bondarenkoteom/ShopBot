@@ -11,13 +11,19 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BotConfig {
 
-    @Value("${bot.webhook-path}")
-    String webhookPath;
+    @Value("${bot.path}")
+    String botPath;
 
-    @Value("${bot.name}")
-    String botName;
+    @Value("${bot.username}")
+    String botUsername;
 
     @Value("${bot.token}")
     String botToken;
+
+    @Value("${bot.webhook.url}")
+    String botWebhookUrl;
+
+    @Value("${bot.internal.url}")
+    String botInternalUrl;
 
 }
