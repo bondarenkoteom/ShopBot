@@ -27,6 +27,19 @@ public class TelegramApiClient {
         this.restTemplate = new RestTemplate();
     }
 
+    public void webAppMessage(String chatId, Integer messageId) {
+        try {
+            restTemplate.execute(
+                    MessageFormat.format("{0}bot{1}/deleteMessage?chat_id={2}&message_id={3}", URL, botToken, chatId, messageId),
+                    HttpMethod.GET,
+                    null,
+                    null
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void deleteMessage(String chatId, Integer messageId) {
         try {
             restTemplate.execute(

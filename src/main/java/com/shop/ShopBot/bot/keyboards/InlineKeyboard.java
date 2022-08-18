@@ -1,6 +1,7 @@
 package com.shop.ShopBot.bot.keyboards;
 
 import com.shop.ShopBot.constant.CallbackDataPartsEnum;
+import com.shop.ShopBot.entity.AppInlineKeyboardButton;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -34,6 +35,7 @@ public class InlineKeyboard {
         rowList.add(getButtonList("Switch mode", "SWITCH_MODE"));
         rowList.add(getButtonList("Set name", "SET_USERNAME"));
         rowList.add(getButtonList("User info", "USER_INFO"));
+        rowList.add(getWebAppButton("Webapp"));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
@@ -104,5 +106,13 @@ public class InlineKeyboard {
         button.setText(buttonName);
         button.setCallbackData(buttonCallBackData);
         return button;
+    }
+
+    private List<InlineKeyboardButton> getWebAppButton(String buttonName) {
+        AppInlineKeyboardButton button = new AppInlineKeyboardButton("https://webappcontent.telegram.org/cafe/");
+        button.setText(buttonName);
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+        keyboardButtonsRow.add(button);
+        return keyboardButtonsRow;
     }
 }
