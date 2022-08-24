@@ -25,7 +25,7 @@ public class MessageHandler {
 
         String chatId = message.getChatId().toString();
 
-        String inputText = message.getText();
+        String inputText = message.getText() == null ? message.getPhoto().get(0).getFileId() : message.getText();
 
         switch (inputText) {
             case "/start" -> {
@@ -52,7 +52,7 @@ public class MessageHandler {
                 returnTriggerValue(trigger, message);
                 return replyMessage.getHelpMessage(chatId);
             }
-            case null -> throw new IllegalArgumentException();
+//            case null -> throw new IllegalArgumentException();
             default -> {
                 return replyMessage.getUserMessage(trigger, message);
             }
@@ -62,4 +62,5 @@ public class MessageHandler {
     private void returnTriggerValue(Trigger trigger, Message message) {
         if (!trigger.equals(Trigger.UNDEFINED)) userService.setWaitFor(message.getFrom().getId(), Trigger.UNDEFINED);
     }
+
 }

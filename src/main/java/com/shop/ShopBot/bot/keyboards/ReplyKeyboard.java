@@ -16,11 +16,12 @@ public class ReplyKeyboard {
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
         KeyboardRow firstRow = new KeyboardRow();
         firstRow.add(new AppKeyboardButton("Test", "https://walletbot.me/main"));
-        firstRow.add(new KeyboardButton(ButtonNameEnum.USER_SETTINGS.getButtonName()));
-        firstRow.add(new KeyboardButton(ButtonNameEnum.WALLET.getButtonName()));
+        firstRow.add(new KeyboardButton(ButtonNameEnum.BUYER_PANEL.getButtonName()));
+        firstRow.add(new KeyboardButton(ButtonNameEnum.VENDOR_PANEL.getButtonName()));
 
         KeyboardRow secondRow = new KeyboardRow();
-        secondRow.add(new KeyboardButton(ButtonNameEnum.BUYER_PANEL.getButtonName()));
+        secondRow.add(new KeyboardButton(ButtonNameEnum.USER_SETTINGS.getButtonName()));
+        secondRow.add(new KeyboardButton(ButtonNameEnum.WALLET.getButtonName()));
         secondRow.add(new KeyboardButton(ButtonNameEnum.SUPPORT.getButtonName()));
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();

@@ -5,7 +5,6 @@ import com.shop.ShopBot.database.model.User;
 import com.shop.ShopBot.database.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +39,7 @@ public class UserService {
             User user = optional.get();
             String waitFor = user.getWaitFor();
             if (waitFor.equals(Trigger.USERNAME.name())) return Trigger.USERNAME;
+            else if (waitFor.equals(Trigger.ADD_GOODS_IMAGE.name())) return Trigger.ADD_GOODS_IMAGE;
         }
         return Trigger.UNDEFINED;
     }

@@ -1,10 +1,13 @@
 package com.shop.ShopBot.bot.messages;
 
+import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
 import com.shop.ShopBot.bot.keyboards.ReplyKeyboard;
 import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.constant.Trigger;
+import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.database.model.User;
+import com.shop.ShopBot.database.service.ProductService;
 import com.shop.ShopBot.database.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,12 @@ public class ReplyMessage {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    TelegramApiClient telegramApiClient;
 
     public SendMessage getStartMessage(Message message) {
         userService.createIfAbsent(message.getFrom().getId(), message.getFrom().getUserName());
@@ -70,9 +79,19 @@ public class ReplyMessage {
                 userService.save(user);
                 return new SendMessage(message.getChatId().toString(), "Username successfully changed");
             }
+            case ADD_GOODS_IMAGE -> {
+                User user = userService.getUser(message.getFrom().getId());
+                String imageFilePath = telegramApiClient.getImageFilePath(message.getPhoto().get(0).getFileId());
+                byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
+                Product product = new Product();
+                product.setBytea(bytea);
+                productService.save(product);
+                return new SendMessage(message.getChatId().toString(), "Image successfully add");
+            }
             default -> {
                 return new SendMessage(message.getChatId().toString(), "Unknown command");
             }
         }
     }
+
 }

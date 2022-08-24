@@ -6,6 +6,7 @@ public enum ButtonNameEnum {
     WALLET("Wallet"),
     BUYER_PANEL("Buyer panel"),
     SUPPORT("Support"),
+
     VENDOR_PANEL("Vendor panel");
 
     private String buttonName;

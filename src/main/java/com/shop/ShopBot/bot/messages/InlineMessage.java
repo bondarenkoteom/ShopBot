@@ -135,6 +135,19 @@ public class InlineMessage {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText("Enter username");
+
+        return sendMessage;
+    }
+
+    public BotApiMethod<?> getAddGoodsImageMessage(CallbackQuery buttonQuery) {
+        chatId = buttonQuery.getMessage().getChatId().toString();
+        messageId = buttonQuery.getMessage().getMessageId();
+
+        userService.setWaitFor(buttonQuery.getFrom().getId(), Trigger.ADD_GOODS_IMAGE);
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText("Enter goods image");
         return sendMessage;
     }
 

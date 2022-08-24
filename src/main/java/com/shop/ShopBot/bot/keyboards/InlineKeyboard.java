@@ -85,7 +85,8 @@ public class InlineKeyboard {
 
     public InlineKeyboardMarkup getInlineVendorPanelButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("", CallbackDataPartsEnum.VENDOR_PANEL_.name() + ""));
+        rowList.add(getButtonList("Add good", CallbackDataPartsEnum.VENDOR_PANEL_.name() + "GOODS"));
+        rowList.add(getButtonList("Add image", CallbackDataPartsEnum.VENDOR_PANEL_.name() + "IMAGE"));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;

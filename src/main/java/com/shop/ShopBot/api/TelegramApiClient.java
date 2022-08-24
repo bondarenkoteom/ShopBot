@@ -2,13 +2,14 @@ package com.shop.ShopBot.api;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.objects.ApiResponse;
+import org.telegram.telegrambots.meta.api.objects.File;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -40,27 +41,45 @@ public class TelegramApiClient {
         }
     }
 
-    public void deleteMessage(String chatId, Integer messageId) {
+    public String getImageFilePath(String fileId) {
+        File file;
         try {
-            restTemplate.execute(
-                    MessageFormat.format("{0}bot{1}/deleteMessage?chat_id={2}&message_id={3}", URL, botToken, chatId, messageId),
+            file = restTemplate.getForObject(
+                    MessageFormat.format("{0}bot{1}/getFile?file_id={2}", URL, botToken, fileId),
+                    File.class);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assert file != null;
+        return file.getFilePath();
+    }
+
+    public byte[] getDownloadImage(String filePath) {
+        byte[] bytea;
+        try {
+            bytea = restTemplate.execute(
+                    MessageFormat.format("{0}/file/bot{1}/{2}", URL, botToken, filePath),
                     HttpMethod.GET,
                     null,
                     null
+
             );
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return bytea;
     }
 
-    public File getDocumentFile(String fileId) {
+    public java.io.File getDocumentFile(String fileId) {
         try {
             return restTemplate.execute(
                     Objects.requireNonNull(getDocumentTelegramFileUrl(fileId)),
                     HttpMethod.GET,
                     null,
                     clientHttpResponse -> {
-                        File ret = File.createTempFile("download", "tmp");
+                        java.io.File ret = java.io.File.createTempFile("download", "tmp");
                         StreamUtils.copy(clientHttpResponse.getBody(), new FileOutputStream(ret));
                         return ret;
                     });
