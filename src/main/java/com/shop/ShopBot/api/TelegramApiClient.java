@@ -1,8 +1,11 @@
 package com.shop.ShopBot.api;
 
+import com.shop.ShopBot.entity.FileResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
@@ -42,30 +45,25 @@ public class TelegramApiClient {
     }
 
     public String getImageFilePath(String fileId) {
-        File file;
+        FileResponse fileResponse;
         try {
-            file = restTemplate.getForObject(
+            fileResponse = restTemplate.getForObject(
                     MessageFormat.format("{0}bot{1}/getFile?file_id={2}", URL, botToken, fileId),
-                    File.class);
+                    FileResponse.class);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assert file != null;
-        return file.getFilePath();
+        assert fileResponse != null;
+        if (fileResponse.isOk()) return fileResponse.getResult().getFilePath();
+        else throw new IllegalStateException();
     }
 
     public byte[] getDownloadImage(String filePath) {
         byte[] bytea;
         try {
-            bytea = restTemplate.execute(
-                    MessageFormat.format("{0}/file/bot{1}/{2}", URL, botToken, filePath),
-                    HttpMethod.GET,
-                    null,
-                    null
-
-            );
+            bytea = restTemplate.getForObject(MessageFormat.format("{0}/file/bot{1}/{2}", URL, botToken, filePath), byte[].class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
