@@ -35,6 +35,7 @@ public class CallbackQueryHandler {
             case "USER_INFO" -> inlineMessage.getUserInfoMessage(buttonQuery);
 
             case "VENDOR_PANEL_IMAGE" -> inlineMessage.getAddGoodsImageMessage(buttonQuery);
+            case "VENDOR_PANEL_PRICE" -> inlineMessage.getAddGoodsPriceMessage(buttonQuery);
             case null -> throw new IllegalArgumentException();
             default -> inlineMessage.getErrorMessage(buttonQuery);
         };

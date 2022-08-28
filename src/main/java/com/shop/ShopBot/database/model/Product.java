@@ -18,7 +18,16 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "t_productName")
+    @Column(name = "ownerId")
+    private Long ownerId;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "price")
+    private String price;
+
+    @Column(name = "productName")
     private String productName;
 
     @Lob

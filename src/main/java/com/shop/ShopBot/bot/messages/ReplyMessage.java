@@ -80,13 +80,20 @@ public class ReplyMessage {
                 return new SendMessage(message.getChatId().toString(), "Username successfully changed");
             }
             case ADD_GOODS_IMAGE -> {
-                User user = userService.getUser(message.getFrom().getId());
                 String imageFilePath = telegramApiClient.getImageFilePath(message.getPhoto().get(0).getFileId());
                 byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
                 Product product = new Product();
                 product.setBytea(bytea);
+                product.setOwnerId(message.getFrom().getId());
+                product.setPrice(message.getText());
                 productService.save(product);
                 return new SendMessage(message.getChatId().toString(), "Image successfully add");
+            }
+            case ADD_PRICE -> {
+                Product product = new Product();
+                product.setPrice(message.getText());
+                productService.save(product);
+                return new SendMessage(message.getChatId().toString(), "Price successfully add");
             }
             default -> {
                 return new SendMessage(message.getChatId().toString(), "Unknown command");

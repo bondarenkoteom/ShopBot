@@ -40,6 +40,7 @@ public class UserService {
             String waitFor = user.getWaitFor();
             if (waitFor.equals(Trigger.USERNAME.name())) return Trigger.USERNAME;
             else if (waitFor.equals(Trigger.ADD_GOODS_IMAGE.name())) return Trigger.ADD_GOODS_IMAGE;
+            else if (waitFor.equals(Trigger.ADD_PRICE.name())) return Trigger.ADD_PRICE;
         }
         return Trigger.UNDEFINED;
     }

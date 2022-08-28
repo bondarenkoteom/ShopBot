@@ -32,8 +32,6 @@ public enum MessageEnum {
     BUYER_DEFAULT_MESSAGE("Please choose the option"),
     VENDOR_DEFAULT_MESSAGE("Please choose the option"),
 
-    ADD_IMAGE_MESSAGE("Please add goods image"),
-
     WHAT_IS_BTC("BCH is a great crypto currency (CC) wich is much much better than fiat money (like dollars or something).\n" +
             "\n" +
             "If you still don't have any BCH coins yet you can get it via @iqwalletbot\n" +
