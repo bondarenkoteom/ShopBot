@@ -89,10 +89,9 @@ public class ReplyMessage {
                 String imageFilePath = telegramApiClient.getImageFilePath(message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId());
                 byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
 
-                String description = getValueColumn(message.getCaption(), "price");
-
-//                String price = getValueColumn(message.getCaption());
-//                String productName = getValueColumn(message.getCaption());
+                String name = getValueColumn(message.getCaption(), "name");
+                String description = getValueColumn(message.getCaption(), "description");
+                String price = getValueColumn(message.getCaption(), "price");
 
                 Product product = new Product();
                 product.setBytea(bytea);
@@ -110,18 +109,13 @@ public class ReplyMessage {
         }
     }
 
-    private String getValueColumn(String message, String text) throws JsonProcessingException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String mapper = objectMapper.writeValueAsString(message);
-//
-//        Pattern pattern = Pattern.compile("price:(.*)");
-//        Matcher matcher = pattern.matcher(mapper);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-//        String mapper = objectMapper.writeValueAsString(message);
-
-        Pattern pattern = Pattern.compile("price:(.*)");
-        Matcher matcher = pattern.matcher("description: key\nprice: 2$\nproduct name: Halo");
-        return matcher.group(1);
+    private String getValueColumn(String message, String field) {
+        Pattern pattern = Pattern.compile(field + ":(.*)");
+        Matcher matcher = pattern.matcher(message);
+        String result = "";
+        if(matcher.find()) {
+            result = matcher.group(1);
+        }
+        return result.trim();
     }
 }

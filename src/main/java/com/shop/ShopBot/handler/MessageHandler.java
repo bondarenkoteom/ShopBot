@@ -26,7 +26,7 @@ public class MessageHandler {
 
         String chatId = message.getChatId().toString();
 
-        String inputText = null;
+        String inputText;
 
         boolean isSimpleMessage = (message.getPhoto() == null || message.getDocument() == null) && message.getText() != null;
 
