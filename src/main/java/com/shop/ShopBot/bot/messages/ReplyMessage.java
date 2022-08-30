@@ -1,5 +1,7 @@
 package com.shop.ShopBot.bot.messages;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
 import com.shop.ShopBot.bot.keyboards.ReplyKeyboard;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class ReplyMessage {
@@ -71,7 +76,7 @@ public class ReplyMessage {
         return sendMessage;
     }
 
-    public SendMessage getUserMessage(Trigger trigger, Message message) {
+    public SendMessage getUserMessage(Trigger trigger, Message message) throws JsonProcessingException {
         switch (trigger) {
             case USERNAME -> {
                 User user = userService.getUser(message.getFrom().getId());
@@ -79,26 +84,44 @@ public class ReplyMessage {
                 userService.save(user);
                 return new SendMessage(message.getChatId().toString(), "Username successfully changed");
             }
-            case ADD_GOODS_IMAGE -> {
-                String imageFilePath = telegramApiClient.getImageFilePath(message.getPhoto().get(0).getFileId());
+            case ADD_PRODUCT_INFORMATION -> {
+
+                String imageFilePath = telegramApiClient.getImageFilePath(message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId());
                 byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
+
+                String description = getValueColumn(message.getCaption(), "price");
+
+//                String price = getValueColumn(message.getCaption());
+//                String productName = getValueColumn(message.getCaption());
+
                 Product product = new Product();
                 product.setBytea(bytea);
                 product.setOwnerId(message.getFrom().getId());
-                product.setPrice(message.getText());
+                product.setDescription(description);
+//                product.setPrice(price);
+//                product.setProductName(productName);
                 productService.save(product);
-                return new SendMessage(message.getChatId().toString(), "Image successfully add");
+                return new SendMessage(message.getChatId().toString(), "Information successfully add");
             }
-            case ADD_PRICE -> {
-                Product product = new Product();
-                product.setPrice(message.getText());
-                productService.save(product);
-                return new SendMessage(message.getChatId().toString(), "Price successfully add");
-            }
+
             default -> {
                 return new SendMessage(message.getChatId().toString(), "Unknown command");
             }
         }
     }
 
+    private String getValueColumn(String message, String text) throws JsonProcessingException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String mapper = objectMapper.writeValueAsString(message);
+//
+//        Pattern pattern = Pattern.compile("price:(.*)");
+//        Matcher matcher = pattern.matcher(mapper);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+//        String mapper = objectMapper.writeValueAsString(message);
+
+        Pattern pattern = Pattern.compile("price:(.*)");
+        Matcher matcher = pattern.matcher("description: key\nprice: 2$\nproduct name: Halo");
+        return matcher.group(1);
+    }
 }

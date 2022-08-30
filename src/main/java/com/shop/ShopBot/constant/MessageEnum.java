@@ -60,7 +60,14 @@ public enum MessageEnum {
             "✅ Enjoy our great service.\n" +
             "\n" +
             "Commissions:\n" +
-            "All commissions are paid by the Seller, but if you want withdraw BCH from your wallet we will take 1 percent commission (including BCH network fee).");
+            "All commissions are paid by the Seller, but if you want withdraw BCH from your wallet we will take 1 percent commission (including BCH network fee)."),
+
+    ADD_INFORMATION_ABOUT_PRODUCT("Enter information about product\n" +
+            "\n" +
+            "1. Attach a photo\n" +
+            "2. description: Enter description your product\n" +
+            "3. price: Enter your price\n" +
+            "4. product name: Enter your product name");
 
     private String message;
 

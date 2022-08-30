@@ -34,8 +34,7 @@ public class CallbackQueryHandler {
             case "SET_USERNAME" -> inlineMessage.getSetUsernameMessage(buttonQuery);
             case "USER_INFO" -> inlineMessage.getUserInfoMessage(buttonQuery);
 
-            case "VENDOR_PANEL_IMAGE" -> inlineMessage.getAddGoodsImageMessage(buttonQuery);
-            case "VENDOR_PANEL_PRICE" -> inlineMessage.getAddGoodsPriceMessage(buttonQuery);
+            case "VENDOR_PANEL_PRODUCT" -> inlineMessage.getAddGoodsImageMessage(buttonQuery);
             case null -> throw new IllegalArgumentException();
             default -> inlineMessage.getErrorMessage(buttonQuery);
         };

@@ -1,5 +1,6 @@
 package com.shop.ShopBot.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shop.ShopBot.bot.messages.ReplyMessage;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.UserService;
@@ -19,13 +20,22 @@ public class MessageHandler {
 
     UserService userService;
 
-    public BotApiMethod<?> answerMessage(Message message) {
+    public BotApiMethod<?> answerMessage(Message message) throws JsonProcessingException {
 
         Trigger trigger = userService.getWaitFor(message.getFrom().getId());
 
         String chatId = message.getChatId().toString();
 
-        String inputText = message.getText() == null ? message.getPhoto().get(0).getFileId() : message.getText();
+        String inputText = null;
+
+        boolean isSimpleMessage = (message.getPhoto() == null || message.getDocument() == null) && message.getText() != null;
+
+        if (!isSimpleMessage) {
+            inputText = message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId();
+        } else {
+            inputText = message.getText();
+        }
+
 
         switch (inputText) {
             case "/start" -> {

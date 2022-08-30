@@ -8,14 +8,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -37,7 +43,13 @@ public class ShopBot extends SpringWebhookBot {
         super(setWebhook);
         this.messageHandler = messageHandler;
         this.callbackQueryHandler = callbackQueryHandler;
-
+        List<BotCommand> listCommands = new ArrayList<>();
+        listCommands.add(new BotCommand("/start", "get start bot"));
+        try {
+            this.execute(new SetMyCommands(listCommands, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException e) {
+            System.out.println(e);
+        }
     }
 
     @Override

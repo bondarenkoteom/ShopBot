@@ -143,23 +143,11 @@ public class InlineMessage {
         chatId = buttonQuery.getMessage().getChatId().toString();
         messageId = buttonQuery.getMessage().getMessageId();
 
-        userService.setWaitFor(buttonQuery.getFrom().getId(), Trigger.ADD_GOODS_IMAGE);
+        userService.setWaitFor(buttonQuery.getFrom().getId(), Trigger.ADD_PRODUCT_INFORMATION);
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        sendMessage.setText("Enter goods image");
-        return sendMessage;
-    }
-
-    public BotApiMethod<?> getAddGoodsPriceMessage(CallbackQuery buttonQuery) {
-        chatId = buttonQuery.getMessage().getChatId().toString();
-        messageId = buttonQuery.getMessage().getMessageId();
-
-        userService.setWaitFor(buttonQuery.getFrom().getId(), Trigger.ADD_PRICE);
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Enter goods price");
+        sendMessage.setText(MessageEnum.ADD_INFORMATION_ABOUT_PRODUCT.getMessage());
         return sendMessage;
     }
 
