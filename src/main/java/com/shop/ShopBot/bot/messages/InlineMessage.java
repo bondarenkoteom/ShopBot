@@ -1,17 +1,23 @@
 package com.shop.ShopBot.bot.messages;
 
+import com.shop.ShopBot.ShopBot;
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
 import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.model.User;
+import com.shop.ShopBot.database.service.ProductService;
 import com.shop.ShopBot.database.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+
+import java.io.File;
 
 @Component
 public class InlineMessage {
@@ -21,6 +27,12 @@ public class InlineMessage {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    ShopBot shopBot;
 
     private String chatId;
 
@@ -126,6 +138,27 @@ public class InlineMessage {
         return sendMessage;
     }
 
+    public SendPhoto getVendorProductInfoMessage(CallbackQuery buttonQuery) {
+
+
+        chatId = buttonQuery.getMessage().getChatId().toString();
+        messageId = buttonQuery.getMessage().getMessageId();
+
+        InputFile photo = new InputFile("http://localhost:5555/get-image-with-media-type");
+        SendPhoto sPhoto = new SendPhoto();
+        sPhoto.setPhoto(photo);
+        sPhoto.setChatId(chatId.toString());
+        sPhoto.setCaption(productService.getInformationAboutProduct().toString());
+
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setChatId(buttonQuery.getMessage().getChatId().toString());
+        try {
+            sendPhoto.setPhoto(new InputFile(new File("/root/index.png")));
+        } catch (Throwable throwable) {
+        }
+        return sPhoto;
+    }
+
     public BotApiMethod<?> getSetUsernameMessage(CallbackQuery buttonQuery) {
         chatId = buttonQuery.getMessage().getChatId().toString();
         messageId = buttonQuery.getMessage().getMessageId();
@@ -167,4 +200,6 @@ public class InlineMessage {
         sendMessage.setText(text);
         return sendMessage;
     }
+
+
 }

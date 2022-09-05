@@ -11,11 +11,17 @@ import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.database.model.User;
 import com.shop.ShopBot.database.service.ProductService;
 import com.shop.ShopBot.database.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,7 +95,7 @@ public class ReplyMessage {
                 String imageFilePath = telegramApiClient.getImageFilePath(message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId());
                 byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
 
-                String name = getValueColumn(message.getCaption(), "name");
+                String productName = getValueColumn(message.getCaption(), "name");
                 String description = getValueColumn(message.getCaption(), "description");
                 String price = getValueColumn(message.getCaption(), "price");
 
@@ -97,8 +103,8 @@ public class ReplyMessage {
                 product.setBytea(bytea);
                 product.setOwnerId(message.getFrom().getId());
                 product.setDescription(description);
-//                product.setPrice(price);
-//                product.setProductName(productName);
+                product.setPrice(price);
+                product.setProductName(productName);
                 productService.save(product);
                 return new SendMessage(message.getChatId().toString(), "Information successfully add");
             }

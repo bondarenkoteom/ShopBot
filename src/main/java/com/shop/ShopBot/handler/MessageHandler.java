@@ -1,14 +1,17 @@
 package com.shop.ShopBot.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.shop.ShopBot.ShopBot;
 import com.shop.ShopBot.bot.messages.ReplyMessage;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
@@ -19,6 +22,9 @@ public class MessageHandler {
     ReplyMessage replyMessage;
 
     UserService userService;
+
+    @Autowired
+    ShopBot shopBot;
 
     public BotApiMethod<?> answerMessage(Message message) throws JsonProcessingException {
 
@@ -69,8 +75,23 @@ public class MessageHandler {
         }
     }
 
+    public SendMessage handleInputMessage(Message message) {
+        String inputMsg = message.getText();
+        String chatId = message.getChatId().toString();
+        SendMessage replyMessage = null;
+
+        switch (inputMsg) {
+            case "/Get information about product":
+                shopBot.sendPhoto(chatId, message.getCaption());
+                break;
+        }
+        return replyMessage;
+    }
+
+
     private void returnTriggerValue(Trigger trigger, Message message) {
         if (!trigger.equals(Trigger.UNDEFINED)) userService.setWaitFor(message.getFrom().getId(), Trigger.UNDEFINED);
     }
+
 
 }

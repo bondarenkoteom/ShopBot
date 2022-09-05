@@ -1,28 +1,33 @@
 package com.shop.ShopBot.hookControler;
 
-import com.shop.ShopBot.bot.ShopBot;
+import com.shop.ShopBot.ShopBot;
+import com.shop.ShopBot.database.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
 public class WebhookController {
     private final ShopBot shopBot;
 
+    @Autowired
+    ProductRepository productRepository;
+
     @PostMapping("/")
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
         return shopBot.onWebhookUpdateReceived(update);
     }
 
-    @GetMapping("/")
-    public void onUpdateReceived2() {
-        System.out.println();
+    @GetMapping(value = "/get-image-with-media-type",
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getImage() throws IOException {
+        return productRepository.getReferenceById(9L).getBytea();
     }
-
 }
 
