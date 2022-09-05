@@ -6,43 +6,37 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 import java.io.File;
-
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ShopBot extends TelegramWebhookBot {
+public class ShopBot extends SpringWebhookBot {
 
-    private String botPath;
+    String botPath;
 
-    private String botUsername;
+    String botUsername;
 
-    private String botToken;
+    String botToken;
 
-    @Autowired
     TelegramFacade telegramFacade;
 
-    public ShopBot(DefaultBotOptions botOptions, TelegramFacade telegramFacade) {
-        super(botOptions);
+    public ShopBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
+        super(setWebhook);
         this.telegramFacade = telegramFacade;
     }
 
     @Override
-    @SneakyThrows
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        final BotApiMethod<?> replyMessageToUser = telegramFacade.handleUpdate(update);
-
-        return replyMessageToUser;
+        return telegramFacade.handleUpdate(update);
     }
 
     @SneakyThrows
@@ -53,6 +47,4 @@ public class ShopBot extends TelegramWebhookBot {
         sendPhoto.setChatId(chatId);
         execute(sendPhoto);
     }
-
-
 }

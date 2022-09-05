@@ -82,7 +82,7 @@ public class ReplyMessage {
         return sendMessage;
     }
 
-    public SendMessage getUserMessage(Trigger trigger, Message message) throws JsonProcessingException {
+    public SendMessage getUserMessage(Trigger trigger, Message message) {
         switch (trigger) {
             case USERNAME -> {
                 User user = userService.getUser(message.getFrom().getId());

@@ -1,6 +1,5 @@
 package com.shop.ShopBot.bot.messages;
 
-import com.shop.ShopBot.ShopBot;
 import com.shop.ShopBot.bot.keyboards.InlineKeyboard;
 import com.shop.ShopBot.constant.MessageEnum;
 import com.shop.ShopBot.constant.Trigger;
@@ -9,6 +8,7 @@ import com.shop.ShopBot.database.service.ProductService;
 import com.shop.ShopBot.database.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -18,12 +18,13 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 @Component
 public class InlineMessage {
 
     @Autowired
-    private InlineKeyboard inlineKeyboard;
+    InlineKeyboard inlineKeyboard;
 
     @Autowired
     UserService userService;
@@ -133,25 +134,6 @@ public class InlineMessage {
                 "Deal current status: Completed");
         sendMessage.setReplyMarkup(keyboardMarkup);
         return sendMessage;
-    }
-
-    public SendPhoto getVendorProductInfoMessage(CallbackQuery buttonQuery) {
-        chatId = buttonQuery.getMessage().getChatId().toString();
-        messageId = buttonQuery.getMessage().getMessageId();
-
-        InputFile photo = new InputFile("http://localhost:5555/get-image-with-media-type");
-        SendPhoto sPhoto = new SendPhoto();
-        sPhoto.setPhoto(photo);
-        sPhoto.setChatId(chatId.toString());
-        sPhoto.setCaption(productService.getInformationAboutProduct().toString());
-
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(buttonQuery.getMessage().getChatId().toString());
-        try {
-            sendPhoto.setPhoto(new InputFile(new File("/root/index.png")));
-        } catch (Throwable throwable) {
-        }
-        return sPhoto;
     }
 
     public BotApiMethod<?> getSetUsernameMessage(CallbackQuery buttonQuery) {
