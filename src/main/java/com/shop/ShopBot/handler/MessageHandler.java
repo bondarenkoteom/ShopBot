@@ -6,6 +6,8 @@ import com.shop.ShopBot.bot.messages.ReplyMessage;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.UserService;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class MessageHandler {
-
+    @Autowired
     ReplyMessage replyMessage;
-
+    @Autowired
     UserService userService;
-
     @Autowired
     ShopBot shopBot;
 
@@ -82,7 +83,7 @@ public class MessageHandler {
 
         switch (inputMsg) {
             case "/Get information about product":
-                shopBot.sendPhoto(chatId, message.getCaption());
+                shopBot.sendPhoto(chatId, "http://localhost:5555/get-image-with-media-type");
                 break;
         }
         return replyMessage;

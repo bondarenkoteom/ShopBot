@@ -31,9 +31,6 @@ public class InlineMessage {
     @Autowired
     ProductService productService;
 
-    @Autowired
-    ShopBot shopBot;
-
     private String chatId;
 
     private Integer messageId;
@@ -139,8 +136,6 @@ public class InlineMessage {
     }
 
     public SendPhoto getVendorProductInfoMessage(CallbackQuery buttonQuery) {
-
-
         chatId = buttonQuery.getMessage().getChatId().toString();
         messageId = buttonQuery.getMessage().getMessageId();
 
