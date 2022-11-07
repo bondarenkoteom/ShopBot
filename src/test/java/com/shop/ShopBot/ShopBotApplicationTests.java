@@ -13,7 +13,7 @@ class ShopBotApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(productService.getInformationAboutProduct());
+//        System.out.println(productService.getInformationAboutProduct());
     }
 
 }

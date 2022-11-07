@@ -19,7 +19,7 @@ public class UserService {
     public void createIfAbsent(Long userId, String username) {
         Optional<User> optional = userRepository.findById(userId);
         if (optional.isEmpty()) {
-            User user = new User(userId, username, Trigger.UNDEFINED.name());
+            User user = new User(userId, username, Trigger.UNDEFINED);
             userRepository.save(user);
         }
     }
@@ -28,20 +28,14 @@ public class UserService {
         Optional<User> optional = userRepository.findById(userId);
         if (optional.isPresent()) {
             User user = optional.get();
-            user.setWaitFor(trigger.name());
+            user.setWaitFor(trigger);
             userRepository.save(user);
         }
     }
 
     public Trigger getWaitFor(Long userId) {
         Optional<User> optional = userRepository.findById(userId);
-        if (optional.isPresent()) {
-            User user = optional.get();
-            String waitFor = user.getWaitFor();
-            if (waitFor.equals(Trigger.USERNAME.name())) return Trigger.USERNAME;
-            else if (waitFor.equals(Trigger.ADD_PRODUCT_INFORMATION.name())) return Trigger.ADD_PRODUCT_INFORMATION;
-        }
-        return Trigger.UNDEFINED;
+        return optional.isPresent() ? optional.get().getWaitFor() : Trigger.UNDEFINED;
     }
 
     public User getUser(Long id) {

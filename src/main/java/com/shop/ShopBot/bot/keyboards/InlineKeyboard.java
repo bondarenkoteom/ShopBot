@@ -1,6 +1,5 @@
 package com.shop.ShopBot.bot.keyboards;
 
-import com.shop.ShopBot.constant.CallbackDataPartsEnum;
 import com.shop.ShopBot.entity.AppInlineKeyboardButton;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,9 +13,9 @@ public class InlineKeyboard {
 
     public InlineKeyboardMarkup getInlineHelpButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("What is BTC?", CallbackDataPartsEnum.HELP_.name() + "BTC"));
-        rowList.add(getButtonList("What can I sell", CallbackDataPartsEnum.HELP_.name() + "SELL"));
-        rowList.add(getButtonList("Buyer's features", CallbackDataPartsEnum.HELP_.name() + "BUYER"));
+//        rowList.add(getButtonList("What is BTC?", CallbackDataPartsEnum.HELP_.name() + "BTC"));
+//        rowList.add(getButtonList("What can I sell", CallbackDataPartsEnum.HELP_.name() + "SELL"));
+//        rowList.add(getButtonList("Buyer's features", CallbackDataPartsEnum.HELP_.name() + "BUYER"));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
@@ -43,9 +42,9 @@ public class InlineKeyboard {
 
     public InlineKeyboardMarkup getInlineWalletButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("Add", CallbackDataPartsEnum.WALLET_.name() + ""));
-        rowList.add(getButtonList("History", CallbackDataPartsEnum.WALLET_.name() + ""));
-        rowList.add(getButtonList("Withdraw", CallbackDataPartsEnum.WALLET_.name() + ""));
+//        rowList.add(getButtonList("Add", CallbackDataPartsEnum.WALLET_.name() + ""));
+//        rowList.add(getButtonList("History", CallbackDataPartsEnum.WALLET_.name() + ""));
+//        rowList.add(getButtonList("Withdraw", CallbackDataPartsEnum.WALLET_.name() + ""));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
@@ -53,7 +52,7 @@ public class InlineKeyboard {
 
     public InlineKeyboardMarkup getInlineBuyerPanelButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("Purchases", CallbackDataPartsEnum.BUYER_PANEL_.name() + "PURCHASES"));
+//        rowList.add(getButtonList("Purchases", CallbackDataPartsEnum.BUYER_PANEL_.name() + "PURCHASES"));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
@@ -85,8 +84,8 @@ public class InlineKeyboard {
 
     public InlineKeyboardMarkup getInlineVendorPanelButtons() {
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("Add information about product", CallbackDataPartsEnum.VENDOR_PANEL_.name() + "PRODUCT"));
-        rowList.add(getButtonList("Get information about product", CallbackDataPartsEnum.VENDOR_PANEL_.name() + "INFORMATION_ABOUT_PRODUCT"));
+        rowList.add(getButtonList("Add information about product", "PRODUCT"));
+        rowList.add(getButtonList("Get information about product", "INFORMATION_ABOUT_PRODUCT"));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;

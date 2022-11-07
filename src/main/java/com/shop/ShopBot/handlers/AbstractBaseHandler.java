@@ -1,0 +1,101 @@
+package com.shop.ShopBot.handlers;
+
+import com.shop.ShopBot.Bot;
+import com.shop.ShopBot.annotations.BotCommand;
+import com.shop.ShopBot.api.TelegramApiClient;
+import com.shop.ShopBot.constant.Trigger;
+import com.shop.ShopBot.database.service.ProductService;
+import com.shop.ShopBot.database.service.UserService;
+import com.shop.ShopBot.entity.AppInlineKeyboardButton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public abstract class AbstractBaseHandler {
+
+    @Autowired
+    protected TelegramApiClient telegramApiClient;
+
+    @Autowired
+    protected ProductService productService;
+
+    @Autowired
+    protected UserService userService;
+
+    @Autowired
+    @Lazy
+    protected Bot bot;
+
+    protected abstract void handle(Update update);
+
+    protected List<InlineKeyboardButton> getButtonList(String buttonName, String buttonCallBackData) {
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonName);
+        button.setCallbackData(buttonCallBackData);
+
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+        keyboardButtonsRow.add(button);
+        return keyboardButtonsRow;
+    }
+
+    protected InlineKeyboardButton getButton(String buttonName, String buttonCallBackData) {
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(buttonName);
+        button.setCallbackData(buttonCallBackData);
+        return button;
+    }
+
+    protected List<InlineKeyboardButton> getWebAppButton(String buttonName) {
+        AppInlineKeyboardButton button = new AppInlineKeyboardButton("https://webappcontent.telegram.org/cafe/");
+        button.setText(buttonName);
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+        keyboardButtonsRow.add(button);
+        return keyboardButtonsRow;
+    }
+
+    protected String getValueColumn(String message, String field) {
+        Pattern pattern = Pattern.compile(field + ":(.*)");
+        Matcher matcher = pattern.matcher(message);
+        String result = "";
+        if(matcher.find()) {
+            result = matcher.group(1);
+        }
+        return result.trim();
+    }
+
+    protected void returnTriggerValue(Update update) {
+        Long id = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
+
+        Trigger trigger = userService.getWaitFor(id);
+        if (!trigger.equals(Trigger.UNDEFINED)) userService.setWaitFor(id, Trigger.UNDEFINED);
+    }
+
+    protected void setTriggerValue(Update update, Trigger newTriggerValue) {
+        Long id = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
+
+        Trigger trigger = userService.getWaitFor(id);
+        if (!trigger.equals(newTriggerValue)) userService.setWaitFor(id, newTriggerValue);
+    }
+
+    public String getMethod(Update update) {
+        if (update.hasCallbackQuery()) {
+            return update.getCallbackQuery().getData().replaceAll("^.+#", "");
+        } else {
+            return update.getMessage().getText().replaceAll("^.+#", "");
+        }
+    }
+
+    public String getAttribute(String attribute, Update update) {
+        if (update.hasCallbackQuery()) {
+            return update.getCallbackQuery().getData().replace(attribute, "").replaceAll("#.*", "");
+        } else {
+            return update.getMessage().getText().replace(attribute, "").replaceAll("#.*", "");
+        }
+    }
+}

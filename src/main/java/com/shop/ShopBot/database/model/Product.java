@@ -1,11 +1,14 @@
 package com.shop.ShopBot.database.model;
 
+import com.shop.ShopBot.constant.ProductStatus;
+import com.shop.ShopBot.utils.StringListConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +21,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ownerId")
+    @Column(name = "owner_id")
     private Long ownerId;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
+
+    @Column(name = "product_name")
+    private String productName;
 
     @Column(name = "description")
     private String description;
@@ -27,11 +37,15 @@ public class Product {
     @Column(name = "price")
     private String price;
 
-    @Column(name = "productName")
-    private String productName;
+    @Column(name = "image_id")
+    private String imageId;
 
     @Lob
-    @Type(type = "org.hibernate.type.ImageType")
-    private byte[] bytea;
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "items")
+    private List<String> items;
+
+    @Column(name = "is_editing")
+    private boolean isEditing;
 
 }

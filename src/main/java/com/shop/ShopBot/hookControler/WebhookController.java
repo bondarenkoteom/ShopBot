@@ -1,6 +1,6 @@
 package com.shop.ShopBot.hookControler;
 
-import com.shop.ShopBot.ShopBot;
+import com.shop.ShopBot.Bot;
 import com.shop.ShopBot.database.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +14,20 @@ import java.io.IOException;
 @RestController
 @AllArgsConstructor
 public class WebhookController {
-    private final ShopBot shopBot;
+//    private final Bot shopBot;
 
     @Autowired
     ProductRepository productRepository;
 
-    @PostMapping("/")
-    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
-        return shopBot.onWebhookUpdateReceived(update);
-    }
+//    @PostMapping("/")
+//    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
+//        return shopBot.onWebhookUpdateReceived(update);
+//    }
 
-    @GetMapping(value = "/get-image-with-media-type",
-            produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getImage() throws IOException {
-        return productRepository.getReferenceById(9L).getBytea();
-    }
+//    @GetMapping(value = "/get-image-with-media-type",
+//            produces = MediaType.IMAGE_JPEG_VALUE)
+//    public @ResponseBody byte[] getImage() throws IOException {
+//        return productRepository.getProductById(9L).getImage();
+//    }
 }
 
