@@ -5,6 +5,7 @@ import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.database.model.Product;
+import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
@@ -13,40 +14,69 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@BotCommand(command = "SEARCH_-?\\d+#.*", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "SEARCH .*", type = MessageType.CALLBACK_QUERY) //SEARCH -p -1 -m SEND_MESSAGE -
 public class SearchHandler extends AbstractBaseHandler {
     @Override
     public void handle(Update update) {
-        String method = getMethod(update);
+        Keys keys = getKeys(update);
 
-        int pageNumber = Integer.parseInt(getAttribute("SEARCH_", update));
+        String searchQuery = keys.get("q");
+
+        int pageNumber = Integer.parseInt(keys.get("p"));
+        int previousPage = pageNumber;
+        int nextPage = pageNumber;
 
         if (pageNumber >= 0) {
-            int countOfElements = 1;
+            int countOfElements = 2;
             Pageable firstPageWithTwoElements = PageRequest.of(pageNumber, countOfElements);
-            List<Product> products = productService.findAllProducts(firstPageWithTwoElements);
+            LinkedList<Product> products = productService.fullTextSearch(firstPageWithTwoElements, searchQuery);
+            LinkedList<Product> previousList = null;
+            LinkedList<Product> nextList = null;
+
+            if (products.isEmpty()) return;
+
+            if (--previousPage >= 0) {
+                Pageable previousPageWithTwoElements = PageRequest.of(previousPage, countOfElements);
+                previousList = productService.fullTextSearch(previousPageWithTwoElements, searchQuery);
+            }
+
+            if (++nextPage >= 0) {
+                Pageable previousPageWithTwoElements = PageRequest.of(nextPage, countOfElements);
+                nextList = productService.fullTextSearch(previousPageWithTwoElements, searchQuery);
+            }
 
             Payload payload = new Payload(update);
-            payload.setSendMethod(SendMethod.valueOf(method));
+
+            if (SendMethod.valueOf(keys.get("m")).equals(SendMethod.DELETE)) {
+                payload.setSendMethod(SendMethod.DELETE);
+                bot.process(payload);
+                payload.setSendMethod(SendMethod.SEND_MESSAGE);
+            } else {
+                payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
+            }
+
             payload.setText("Below is the list of active lots. If you want to search some lots by the name or description just enter a string to search.");
 
-            Map<String, String> buttons = products.stream()
-                    .collect(Collectors.toMap(k -> "PRODUCT_" + k.getId() + "#" + SendMethod.SEND_PHOTO, v -> "%s | %s".formatted(v.getPrice(), v.getProductName())));
+            Map<String, String> buttons = products.stream().collect(Collectors.toMap(
+                    k -> "PRODUCT -p %s -i %s -m %s -q '%s'".formatted(pageNumber, k.getId(), SendMethod.DELETE, searchQuery),
+                    v -> "%s | %s".formatted(v.getPrice(), v.getProductName()), (a, b) -> a, LinkedHashMap::new
+            ));
 
-            Map<String, String> pagination = new TreeMap<>(){{
-                put("SEARCH_%d#%s".formatted(pageNumber - 1, SendMethod.EDIT_TEXT), "« Previous");
-                put("SEARCH_%d#%s".formatted(pageNumber + 1, SendMethod.EDIT_TEXT), "Next »");
-            }};
+            Map<String, String> pagination = new LinkedHashMap<>();
+            if (previousList != null && !previousList.isEmpty()) {
+                pagination.put("SEARCH -p %s -m %s -q '%s'".formatted(pageNumber - 1, SendMethod.EDIT_TEXT, searchQuery), "« Previous");
+            }
+            if (nextList != null && !nextList.isEmpty()) {
+                pagination.put("SEARCH -p %s -m %s -q '%s'".formatted(pageNumber + 1, SendMethod.EDIT_TEXT, searchQuery), "Next »");
+            }
             payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).setButtonsHorizontal(pagination).build());
 
             bot.process(payload);
         }
+
     }
 }

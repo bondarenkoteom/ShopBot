@@ -3,46 +3,26 @@ package com.shop.ShopBot.handlers.callback_query.support;
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.MessageType;
+import com.shop.ShopBot.constant.SendMethod;
+import com.shop.ShopBot.entity.Keys;
+import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
+import com.shop.ShopBot.utils.Buttons;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
-@BotCommand(command = "HELP_BUYER", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "HELP_BUYER .*", type = MessageType.CALLBACK_QUERY)
 public class HelpBuyerHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        String chatId = callbackQuery.getMessage().getChatId().toString();
-        Integer messageId = callbackQuery.getMessage().getMessageId();
+        Keys keys = getKeys(update);
+        Payload payload = new Payload(update);
+        payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
 
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("Next page", "HELP_BUYER"));
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        inlineKeyboardMarkup.setKeyboard(rowList);
-
-        if (callbackQuery.getMessage().getText().equals(MessageText.HELP_MESSAGE.text())) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText(MessageText.WHAT_CAN_I_SELL.text());
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-            
-        } else {
-            EditMessageText editMessage = new EditMessageText();
-            editMessage.setMessageId(messageId);
-            editMessage.setChatId(chatId);
-            editMessage.setText(MessageText.WHAT_CAN_I_SELL.text());
-            editMessage.setReplyMarkup(inlineKeyboardMarkup);
-            //return editMessage;
-        }
+        payload.setText(MessageText.BUYERS_FEATURES.text());
+        payload.setKeyboardMarkup(Buttons.newBuilder().setGoBackButton("SUPPORT -m EDIT_TEXT").build());
+        bot.process(payload);
     }
 }

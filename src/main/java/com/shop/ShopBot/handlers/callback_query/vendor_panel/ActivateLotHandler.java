@@ -3,6 +3,7 @@ package com.shop.ShopBot.handlers.callback_query.vendor_panel;
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.*;
 import com.shop.ShopBot.database.model.Product;
+import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
@@ -13,13 +14,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@BotCommand(command = "ACTIVATE_LOT_\\d+", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "ACTIVATE_LOT .*", type = MessageType.CALLBACK_QUERY)
 public class ActivateLotHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        String productId = update.getCallbackQuery().getData().replace("ACTIVATE_LOT_", "");
-        Optional<Product> productOptional = productService.getById(Long.valueOf(productId));
+        Keys keys = getKeys(update);
+
+        Optional<Product> productOptional = productService.getById(Long.valueOf(keys.get("i")));
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
@@ -31,8 +33,8 @@ public class ActivateLotHandler extends AbstractBaseHandler {
             Map<String, String> firstRow = Map.of("DEACTIVATE_LOT_" + product.getId(), ButtonText.DEACTIVATE_LOT.text());
 
             Map<String, String> secondRow = Map.of(
-                    "DELETE_LOT_" + product.getId(), ButtonText.DELETE_LOT.text(),
-                    "EDIT_LOT_" + product.getId(), ButtonText.EDIT_LOT.text()
+                    "DELETE_LOT -i %s".formatted(product.getId()), ButtonText.DELETE_LOT.text(),
+                    "EDIT_LOT -i %s".formatted(product.getId()), ButtonText.EDIT_LOT.text()
             );
             payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsHorizontal(firstRow).setButtonsHorizontal(secondRow).build());
 

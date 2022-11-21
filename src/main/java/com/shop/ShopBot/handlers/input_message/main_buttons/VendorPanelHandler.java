@@ -20,7 +20,7 @@ public class VendorPanelHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         returnTriggerValue(update);
         VendorPanelCommandHandler vendorPanelCommandHandler = context.getBean(VendorPanelCommandHandler.class);
-        update.getMessage().setText("VENDOR_PANEL#SEND_MESSAGE");
+        update.getMessage().setText("VENDOR_PANEL -m SEND_MESSAGE");
         vendorPanelCommandHandler.handle(update);
     }
 }

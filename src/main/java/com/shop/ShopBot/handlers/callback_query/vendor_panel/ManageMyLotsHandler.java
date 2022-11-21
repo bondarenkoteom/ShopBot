@@ -29,12 +29,13 @@ public class ManageMyLotsHandler extends AbstractBaseHandler {
         List<Product> products = productService.getAllProducts(update.getCallbackQuery().getFrom().getId());
 
         Map<String, String> buttons = products.stream()
-                .collect(Collectors.toMap(p -> "LOT_" + p.getId() + "#" + SendMethod.SEND_PHOTO, p -> {
+                .collect(Collectors.toMap(p -> "LOT -i %s -m %s".formatted(p.getId(), SendMethod.SEND_PHOTO), p -> {
                     String status = p.getStatus().equals(ProductStatus.ACTIVE) ?
                             MessageText.LOT_IS_ACTIVE.text() : MessageText.LOT_IS_NOT_ACTIVE.text();
                     return "(%s) %s".formatted(status, p.getProductName());
                 }));
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).setBackButton("VENDOR_PANEL#" + SendMethod.EDIT_TEXT).build());
+        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons)
+                .setGoBackButton("VENDOR_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());
         bot.process(payload);
     }
 }

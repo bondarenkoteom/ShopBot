@@ -20,7 +20,7 @@ public class WalletHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         returnTriggerValue(update);
         WalletCommandHandler walletCommandHandler = context.getBean(WalletCommandHandler.class);
-        update.getMessage().setText("WALLET#SEND_MESSAGE");
+        update.getMessage().setText("WALLET -m SEND_MESSAGE");
         walletCommandHandler.handle(update);
     }
 }

@@ -3,6 +3,7 @@ package com.shop.ShopBot.database.service;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.model.User;
 import com.shop.ShopBot.database.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,16 +11,13 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     public void createIfAbsent(Long userId, String username) {
         Optional<User> optional = userRepository.findById(userId);
         if (optional.isEmpty()) {
-            User user = new User(userId, username, Trigger.UNDEFINED);
+            User user = new User(userId, username, 0, Trigger.UNDEFINED);
             userRepository.save(user);
         }
     }

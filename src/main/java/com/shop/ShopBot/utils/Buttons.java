@@ -59,9 +59,19 @@ public class Buttons {
             return this;
         }
 
-        public Builder setBackButton(String callBackQuery) {
+        public Builder setButton(String callBackQuery, String text) {
             if (Buttons.this.buttons == null) Buttons.this.buttons = new ArrayList<>();
-            Buttons.this.buttons.add(getSingleButtonRow(ButtonText.GO_BACK.text(), callBackQuery));
+            Buttons.this.buttons.add(getSingleButtonRow(text, callBackQuery));
+            return this;
+        }
+
+        public Builder setGoBackButton(String callBackQuery) {
+            setButton(callBackQuery, ButtonText.GO_BACK.text());
+            return this;
+        }
+
+        public Builder setNextPageButton(String callBackQuery) {
+            setButton(callBackQuery, ButtonText.NEXT_PAGE.text());
             return this;
         }
 

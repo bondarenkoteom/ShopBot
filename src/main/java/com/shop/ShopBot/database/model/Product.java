@@ -5,7 +5,6 @@ import com.shop.ShopBot.utils.StringListConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -40,10 +39,10 @@ public class Product {
     @Column(name = "image_id")
     private String imageId;
 
-    @Lob
-    @Convert(converter = StringListConverter.class)
-    @Column(name = "items")
-    private List<String> items;
+//    @Lob
+//    @Convert(converter = StringListConverter.class)
+//    @Column(name = "items")
+//    private List<String> items;
 
     @Column(name = "is_editing")
     private boolean isEditing;

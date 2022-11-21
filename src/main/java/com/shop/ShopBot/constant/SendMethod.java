@@ -5,5 +5,6 @@ public enum SendMethod {
     EDIT_TEXT,
     SEND_PHOTO,
     EDIT_CAPTION,
+    EDIT_MEDIA,
     DELETE
 }

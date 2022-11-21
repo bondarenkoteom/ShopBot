@@ -75,7 +75,7 @@ public class TelegramFacade {
                 .filter(h -> h.getClass().getAnnotation(BotCommand.class).type().equals(MessageType.INPUT_MESSAGE))
                 .filter(h ->
                         Stream.of(h.getClass().getAnnotation(BotCommand.class).command())
-                                .anyMatch(c -> c.equalsIgnoreCase(text))
+                                .anyMatch(c -> text.toUpperCase().matches(c))
                 )
                 .findAny().orElse(userMessageHandler);
     }

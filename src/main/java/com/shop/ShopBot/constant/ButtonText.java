@@ -5,6 +5,7 @@ public enum ButtonText {
     MANAGE_LOTS("📝 Manage my lots"),
     CREATE_LOT("✏️ Create new lot"),
     GO_BACK("🔙 Go back"),
+    NEXT_PAGE("Next page"),
     DELETE_LOT("🗑 Delete"),
     EDIT_LOT("📝 Edit"),
     ACTIVATE_LOT("✅ Activate"),
@@ -17,7 +18,10 @@ public enum ButtonText {
     HELP_BTC("What is BTC?"),
     HELP_SELL("What can I sell?"),
     HELP_BUYER("Buyer's features"),
-    PURCHASES("Purchases");
+    PURCHASES("Purchases"),
+    STATISTICS("📈 Statistics"),
+    DISPUTES("⚠️ Disputes"),
+    MESSAGES("💬 Messages");
 
     private String message;
 

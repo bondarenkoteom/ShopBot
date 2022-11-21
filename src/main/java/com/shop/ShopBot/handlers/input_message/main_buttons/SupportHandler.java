@@ -28,7 +28,7 @@ public class SupportHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         returnTriggerValue(update);
         SupportCommandHandler supportCommandHandler = context.getBean(SupportCommandHandler.class);
-        update.getMessage().setText("SUPPORT#SEND_MESSAGE");
+        update.getMessage().setText("SUPPORT -m SEND_MESSAGE");
         supportCommandHandler.handle(update);
     }
 }

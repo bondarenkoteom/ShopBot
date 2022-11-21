@@ -29,9 +29,7 @@ public enum MessageText {
             0.000000BCH
             Total received:
             0.000000BCH"""),
-    SETTINGS_DEFAULT_MESSAGE("Please choose the option"),
-    BUYER_DEFAULT_MESSAGE("Please choose the option"),
-    VENDOR_DEFAULT_MESSAGE("Please choose the option"),
+    CHOOSE_OPTION("Please choose the option"),
 
     WHAT_IS_BTC("""
             BCH is a great crypto currency (CC) which is much much better than fiat money (like dollars or something).
@@ -87,15 +85,35 @@ public enum MessageText {
             Lot rating:  👍 %s   👎 %s"""),
 
     PRODUCT("""
-            Title: <code>%s</code>
-            Description: <code>%s</code>
-            Price: <code>%s</code>
+            <b>%s</b>
+            
+            Info: %s
+            Price: <b>%s</b>
             
             Seller: /uGrinder
             
             Rating:  👍 %s   👎 %s"""),
     LOT_IS_ACTIVE("✅ Active"),
-    LOT_IS_NOT_ACTIVE("❌ Not active");
+    LOT_IS_NOT_ACTIVE("❌ Not active"),
+    PERSONAL_INFO("""
+            <b>%s</b>
+            
+            User ID: %s
+            User link: <code>/u%s</code>
+            Rating: %s
+            Sells: %s
+            Purchases: %s
+            Disputes win: %s
+            Disputes lose: %s
+            """),
+    USER_INFO("""
+            <b>%</b> %s
+            User link: <code>/u%s</code>
+            Rating: %s
+            Sells: %s
+            Disputes win: %s
+            Disputes lose: %s
+            """);
 
     private String text;
 

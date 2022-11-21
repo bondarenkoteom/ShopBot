@@ -2,6 +2,7 @@ package com.shop.ShopBot.handlers.callback_query.vendor_panel;
 
 import com.shop.ShopBot.constant.*;
 import com.shop.ShopBot.database.model.Product;
+import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.utils.Buttons;
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.entity.Payload;
@@ -13,30 +14,29 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@BotCommand(command = "LOT_\\d+#.*", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "LOT .*", type = MessageType.CALLBACK_QUERY)
 public class LotHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        String productId = update.getCallbackQuery().getData().replace("LOT_", "").replaceAll("#.*", "");
-        String method = update.getCallbackQuery().getData().replaceAll("LOT_\\d+#", "");
+        Keys keys = getKeys(update);
 
-        Optional<Product> productOptional = productService.getById(Long.valueOf(productId));
+        Optional<Product> productOptional = productService.getById(Long.valueOf(keys.get("i")));
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             Payload payload = new Payload(update);
-            payload.setSendMethod(SendMethod.valueOf(method));
+            payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
             payload.setText(getFormattedTextMessage(product));
             payload.setFileId(product.getImageId());
 
             Map<String, String> firstRow = product.getStatus().equals(ProductStatus.NOT_ACTIVE) ?
-                    Map.of("ACTIVATE_LOT_" + product.getId(), ButtonText.ACTIVATE_LOT.text()) :
-                    Map.of("DEACTIVATE_LOT_" + product.getId(), ButtonText.DEACTIVATE_LOT.text());
+                    Map.of("ACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.ACTIVATE_LOT.text()) :
+                    Map.of("DEACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.DEACTIVATE_LOT.text());
 
             Map<String, String> secondRow = Map.of(
-                    "DELETE_LOT_" + product.getId(), ButtonText.DELETE_LOT.text(),
-                    "EDIT_LOT_" + product.getId(), ButtonText.EDIT_LOT.text()
+                    "DELETE_LOT -i %s".formatted(product.getId()), ButtonText.DELETE_LOT.text(),
+                    "EDIT_LOT -i %s".formatted(product.getId()), ButtonText.EDIT_LOT.text()
             );
             payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsHorizontal(firstRow).setButtonsHorizontal(secondRow).build());
 

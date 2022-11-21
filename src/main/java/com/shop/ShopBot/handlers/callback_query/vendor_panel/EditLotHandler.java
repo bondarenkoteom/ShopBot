@@ -6,6 +6,7 @@ import com.shop.ShopBot.constant.ProductStatus;
 import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.constant.MessageType;
+import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
@@ -16,13 +17,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@BotCommand(command = "EDIT_LOT_\\d+", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "EDIT_LOT .*", type = MessageType.CALLBACK_QUERY)
 public class EditLotHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        String productId = update.getCallbackQuery().getData().replace("EDIT_LOT_", "");
-        Optional<Product> productOptional = productService.getById(Long.valueOf(productId));
+        Keys keys = getKeys(update);
+
+        Optional<Product> productOptional = productService.getById(Long.valueOf(keys.get("i")));
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
@@ -32,24 +34,24 @@ public class EditLotHandler extends AbstractBaseHandler {
             payload.setFileId(product.getImageId());
 
             Map<String, String> firstRow = Map.of(
-                    "SET_LOT_NAME_" + product.getId(), "Set lot name",
-                    "SET_LOT_DESCRIPTION_" + product.getId(), "Set lot description"
+                    "SET_LOT_NAME -i %s" + product.getId(), "Set lot name",
+                    "SET_LOT_DESCRIPTION -i %s" + product.getId(), "Set lot description"
             );
 
             Map<String, String> secondRow = Map.of(
-                    "SET_LOT_PRICE_" + product.getId(), "Set lot price",
-                    "SET_LOT_IMAGE_" + product.getId(), "Set lot image"
+                    "SET_LOT_PRICE -i %s".formatted(product.getId()), "Set lot price",
+                    "SET_LOT_IMAGE -i %s".formatted(product.getId()), "Set lot image"
             );
 
             Map<String, String> thirdRow = Map.of(
-                    "SET_LOT_ITEMS_" + product.getId(), "Set lot items"
+                    "SET_LOT_ITEMS -i %s".formatted(product.getId()), "Set lot items"
             );
 
             payload.setKeyboardMarkup(Buttons.newBuilder()
                     .setButtonsHorizontal(firstRow)
                     .setButtonsHorizontal(secondRow)
                     .setButtonsHorizontal(thirdRow)
-                    .setBackButton("LOT_" + product.getId() + "#" + SendMethod.EDIT_CAPTION)
+                    .setGoBackButton("LOT -i %s -m %s".formatted(product.getId(), SendMethod.EDIT_CAPTION))
                     .build()
             );
 

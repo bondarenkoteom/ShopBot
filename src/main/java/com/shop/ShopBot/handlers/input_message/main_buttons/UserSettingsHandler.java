@@ -28,7 +28,7 @@ public class UserSettingsHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         returnTriggerValue(update);
         UserSettingsCommandHandler userSettingsCommandHandler = context.getBean(UserSettingsCommandHandler.class);
-        update.getMessage().setText("USER_SETTINGS#SEND_MESSAGE");
+        update.getMessage().setText("USER_SETTINGS -m SEND_MESSAGE");
         userSettingsCommandHandler.handle(update);
     }
 }

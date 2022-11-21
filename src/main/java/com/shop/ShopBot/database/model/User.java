@@ -20,6 +20,9 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "rating")
+    private Integer rating;
+
     @Column(name = "wait_for_input")
     @Enumerated(EnumType.STRING)
     private Trigger waitFor;

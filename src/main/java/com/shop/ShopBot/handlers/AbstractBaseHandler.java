@@ -1,12 +1,12 @@
 package com.shop.ShopBot.handlers;
 
 import com.shop.ShopBot.Bot;
-import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.ProductService;
 import com.shop.ShopBot.database.service.UserService;
 import com.shop.ShopBot.entity.AppInlineKeyboardButton;
+import com.shop.ShopBot.entity.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -83,19 +83,21 @@ public abstract class AbstractBaseHandler {
         if (!trigger.equals(newTriggerValue)) userService.setWaitFor(id, newTriggerValue);
     }
 
-    public String getMethod(Update update) {
-        if (update.hasCallbackQuery()) {
-            return update.getCallbackQuery().getData().replaceAll("^.+#", "");
-        } else {
-            return update.getMessage().getText().replaceAll("^.+#", "");
+    protected Keys getKeys(Update update) {
+        String query = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
+        Keys keys = new Keys();
+        Pattern pattern = Pattern.compile("(-[A-Za-z]{1} (?:[^\"\\s]+|\".*?\"))");
+        Matcher matcher = pattern.matcher(query);
+
+        while (matcher.find()) {
+            String group = matcher.group();
+            keys.put(group.substring(1, 2), group.substring(3).replaceAll("'", ""));
         }
+        return keys;
     }
 
-    public String getAttribute(String attribute, Update update) {
-        if (update.hasCallbackQuery()) {
-            return update.getCallbackQuery().getData().replace(attribute, "").replaceAll("#.*", "");
-        } else {
-            return update.getMessage().getText().replace(attribute, "").replaceAll("#.*", "");
-        }
+    protected Long getUserId(Update update) {
+        return update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
     }
+
 }

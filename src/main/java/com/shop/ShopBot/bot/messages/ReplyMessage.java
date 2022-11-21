@@ -51,7 +51,7 @@ public class ReplyMessage {
     }
 
     public SendMessage getUserSettingsMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, MessageText.SETTINGS_DEFAULT_MESSAGE.text());
+        SendMessage sendMessage = new SendMessage(chatId, MessageText.CHOOSE_OPTION.text());
         sendMessage.setReplyMarkup(inlineKeyboard.getInlineUserSettingsButtons());
         return sendMessage;
     }
@@ -63,13 +63,13 @@ public class ReplyMessage {
     }
 
     public SendMessage getBuyerPanelMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, MessageText.BUYER_DEFAULT_MESSAGE.text());
+        SendMessage sendMessage = new SendMessage(chatId, MessageText.CHOOSE_OPTION.text());
         sendMessage.setReplyMarkup(inlineKeyboard.getInlineBuyerPanelButtons());
         return sendMessage;
     }
 
     public SendMessage getVendorPanelMessage(String chatId) {
-        SendMessage sendMessage = new SendMessage(chatId, MessageText.VENDOR_DEFAULT_MESSAGE.text());
+        SendMessage sendMessage = new SendMessage(chatId, MessageText.CHOOSE_OPTION.text());
         sendMessage.setReplyMarkup(inlineKeyboard.getInlineVendorPanelButtons());
         return sendMessage;
     }

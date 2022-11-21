@@ -28,7 +28,7 @@ public class BuyerPanelHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         returnTriggerValue(update);
         BuyerPanelCommandHandler buyerPanelCommandHandler = context.getBean(BuyerPanelCommandHandler.class);
-        update.getMessage().setText("BUYER_PANEL#SEND_MESSAGE");
+        update.getMessage().setText("BUYER_PANEL -m SEND_MESSAGE");
         buyerPanelCommandHandler.handle(update);
     }
 }

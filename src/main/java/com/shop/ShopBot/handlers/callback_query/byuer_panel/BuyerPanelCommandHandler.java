@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Map;
 
 @Component
-@BotCommand(command = "BUYER_PANEL#.+", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "BUYER_PANEL .*", type = MessageType.CALLBACK_QUERY)
 public class BuyerPanelCommandHandler extends AbstractBaseHandler {
 
     @Override
@@ -23,7 +23,7 @@ public class BuyerPanelCommandHandler extends AbstractBaseHandler {
 
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
-        payload.setText(MessageText.BUYER_DEFAULT_MESSAGE.text());
+        payload.setText(MessageText.CHOOSE_OPTION.text());
 
         Map<String, String> buttons = Map.of(
                 "PURCHASES", ButtonText.PURCHASES.text()

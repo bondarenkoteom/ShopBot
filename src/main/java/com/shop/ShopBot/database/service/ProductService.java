@@ -2,20 +2,23 @@ package com.shop.ShopBot.database.service;
 
 import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.database.repository.ProductRepository;
+import com.shop.ShopBot.database.repository.SearchRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    @Autowired
+    private SearchRepository searchRepository;
 
     public Product save(Product product) {
         return productRepository.save(product);
@@ -41,11 +44,11 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public LinkedList<Product> findAllProducts(Pageable pageable) {
+        return productRepository.findAllProducts(pageable);
     }
 
-    public List<Product> findAllProducts(Pageable pageable) {
-        return productRepository.findAllProducts(pageable);
+    public LinkedList<Product> fullTextSearch(Pageable pageable, String text) {
+        return searchRepository.fullTextSearch(pageable, text);
     }
 }

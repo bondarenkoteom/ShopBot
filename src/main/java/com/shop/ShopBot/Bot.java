@@ -13,9 +13,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
 @Getter
 @Setter
@@ -45,6 +48,7 @@ public class Bot extends TelegramLongPollingBot {
             case EDIT_TEXT -> executeEditText(payload);
             case SEND_PHOTO -> sendPhoto(payload);
             case EDIT_CAPTION -> executeEditCaption(payload);
+            case EDIT_MEDIA -> executeEditMedia(payload);
             case DELETE -> executeDelete(payload);
         }
     }
@@ -55,6 +59,7 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.setChatId(payload.getChatId());
         sendMessage.setText(payload.getText());
         sendMessage.setReplyMarkup(payload.getKeyboardMarkup());
+        sendMessage.setParseMode(payload.getParseMode());
         execute(sendMessage);
     }
 
@@ -88,6 +93,19 @@ public class Bot extends TelegramLongPollingBot {
         editMessageCaption.setReplyMarkup(payload.getKeyboardMarkup());
         editMessageCaption.setParseMode(ParseMode.HTML);
         execute(editMessageCaption);
+    }
+
+    @SneakyThrows
+    private void executeEditMedia(Payload payload) {
+        EditMessageMedia editMessageMedia = new EditMessageMedia();
+        InputMediaPhoto inputMediaPhoto = new InputMediaPhoto(payload.getFileId());
+        inputMediaPhoto.setCaption(payload.getText());
+        inputMediaPhoto.setParseMode(ParseMode.HTML);
+        editMessageMedia.setMedia(inputMediaPhoto);
+        editMessageMedia.setChatId(payload.getChatId());
+        editMessageMedia.setMessageId(payload.getMessageId());
+        editMessageMedia.setReplyMarkup(payload.getKeyboardMarkup());
+        execute(editMessageMedia);
     }
 
     @SneakyThrows

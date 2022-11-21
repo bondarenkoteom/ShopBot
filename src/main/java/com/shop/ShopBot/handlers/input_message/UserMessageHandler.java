@@ -8,6 +8,8 @@ import com.shop.ShopBot.database.model.User;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.handlers.callback_query.search.SearchHandler;
+import com.shop.ShopBot.handlers.callback_query.user_settings.UserSettingsCommandHandler;
+import com.shop.ShopBot.handlers.callback_query.vendor_panel.VendorPanelCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,16 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 user.setUsername(message.getText());
                 user.setWaitFor(Trigger.UNDEFINED);
                 userService.save(user);
+
+                Payload payload = new Payload(update);
+                payload.setSendMethod(SendMethod.SEND_MESSAGE);
+                payload.setText("""
+                        👍 The value was set successfully.""");
+                bot.process(payload);
+
+                UserSettingsCommandHandler userSettingsCommandHandler = context.getBean(UserSettingsCommandHandler.class);
+                update.getMessage().setText("USER_SETTINGS -m SEND_MESSAGE");
+                userSettingsCommandHandler.handle(update);
             }
             case NEW_PRODUCT_IMAGE -> {
                 productService.deleteAllEditing();
@@ -162,7 +174,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
             }
             case NEW_PRODUCT_ITEMS -> {
                 Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
-                product.setItems(Arrays.asList(message.getText().split(" ")));
+//                product.setItems(Arrays.asList(message.getText().split(" ")));
                 product.setEditing(false);
                 productService.save(product);
 
@@ -175,10 +187,14 @@ public class UserMessageHandler extends AbstractBaseHandler {
                                                 
                         Great! Your new lot has been created successfully! To Activate your lot please go to "Manage my lots" section and set appropriate lot status.""");
                 bot.process(payload);
+
+                VendorPanelCommandHandler vendorPanelCommandHandler = context.getBean(VendorPanelCommandHandler.class);
+                update.getMessage().setText("VENDOR_PANEL -m SEND_MESSAGE");
+                vendorPanelCommandHandler.handle(update);
             }
             case EDIT_PRODUCT_ITEMS -> {
                 Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
-                product.setItems(Arrays.asList(message.getText().split(" ")));
+//                product.setItems(Arrays.asList(message.getText().split(" ")));
                 product.setEditing(false);
                 productService.save(product);
 
@@ -191,7 +207,8 @@ public class UserMessageHandler extends AbstractBaseHandler {
 
             default -> {
                 SearchHandler searchHandler = context.getBean(SearchHandler.class);
-                update.getMessage().setText("SEARCH_0#SEND_MESSAGE");
+                String searchQuery = update.getMessage().getText();
+                update.getMessage().setText("SEARCH -p 0 -m %s -q '%s'".formatted(SendMethod.SEND_MESSAGE, searchQuery));
                 searchHandler.handle(update);
             }
         }

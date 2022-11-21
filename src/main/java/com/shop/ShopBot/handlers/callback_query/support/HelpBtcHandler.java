@@ -1,9 +1,14 @@
 package com.shop.ShopBot.handlers.callback_query.support;
 
 import com.shop.ShopBot.annotations.BotCommand;
+import com.shop.ShopBot.constant.ButtonText;
 import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.MessageType;
+import com.shop.ShopBot.constant.SendMethod;
+import com.shop.ShopBot.entity.Keys;
+import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
+import com.shop.ShopBot.utils.Buttons;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -14,35 +19,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
-@BotCommand(command = "HELP_BTC", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "HELP_BTC .*", type = MessageType.CALLBACK_QUERY)
 public class HelpBtcHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        String chatId = callbackQuery.getMessage().getChatId().toString();
-        Integer messageId = callbackQuery.getMessage().getMessageId();
+        Keys keys = getKeys(update);
+        Payload payload = new Payload(update);
+        payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
 
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("Next page", "HELP_SELL"));
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        inlineKeyboardMarkup.setKeyboard(rowList);
-
-        if (callbackQuery.getMessage().getText().equals(MessageText.HELP_MESSAGE.text())) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText(MessageText.WHAT_IS_BTC.text());
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-            
-        } else {
-            EditMessageText editMessage = new EditMessageText();
-            editMessage.setMessageId(messageId);
-            editMessage.setChatId(chatId);
-            editMessage.setText(MessageText.WHAT_IS_BTC.text());
-            editMessage.setReplyMarkup(inlineKeyboardMarkup);
-            //return editMessage;
-        }
+        payload.setText(MessageText.WHAT_IS_BTC.text());
+        payload.setKeyboardMarkup(Buttons.newBuilder().setNextPageButton("HELP_SELL -m EDIT_TEXT").build());
+        bot.process(payload);
     }
 }

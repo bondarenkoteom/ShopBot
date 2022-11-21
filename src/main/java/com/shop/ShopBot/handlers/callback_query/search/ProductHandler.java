@@ -1,52 +1,102 @@
 package com.shop.ShopBot.handlers.callback_query.search;
 
 import com.shop.ShopBot.annotations.BotCommand;
-import com.shop.ShopBot.constant.*;
+import com.shop.ShopBot.constant.MessageText;
+import com.shop.ShopBot.constant.MessageType;
+import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.database.model.Product;
+import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
-@BotCommand(command = "PRODUCT_\\d+#.*", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "PRODUCT .*", type = MessageType.CALLBACK_QUERY)
 public class ProductHandler extends AbstractBaseHandler {
     @Override
     public void handle(Update update) {
-        String productId = update.getCallbackQuery().getData().replace("PRODUCT_", "").replaceAll("#.*", "");
-        String method = update.getCallbackQuery().getData().replaceAll("PRODUCT_\\d+#", "");
+        Keys keys = getKeys(update);
 
-        Optional<Product> productOptional = productService.getById(Long.valueOf(productId));
+        String searchQuery = keys.get("q");
 
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            Payload payload = new Payload(update);
+        int pageNumber = Integer.parseInt(keys.get("p"));
+        int previousPage = pageNumber;
+        int nextPage = pageNumber;
 
-            payload.setSendMethod(SendMethod.DELETE);
-            bot.process(payload);
+        if (pageNumber >= 0) {
+            int countOfElements = 2;
+            Pageable firstPageWithTwoElements = PageRequest.of(pageNumber, countOfElements);
+            LinkedList<Product> products = productService.fullTextSearch(firstPageWithTwoElements, searchQuery);
 
-            payload.setSendMethod(SendMethod.valueOf(method));
-            payload.setText(getFormattedTextMessage(product));
-            payload.setFileId(product.getImageId());
+            if (products.isEmpty()) return;
 
-            Map<String, String> button = Map.of("ACTIVATE_LOT_" + product.getId(), "Buy");
+            Product previousProduct = null;
+            Product currentProduct = null;
+            Product nextProduct = null;
+            ListIterator<Product> iterator1 = products.listIterator();
+            ListIterator<Product> iterator2 = products.listIterator();
+            while(iterator1.hasNext()) {
+                Product product = iterator1.next();
+                iterator2.next();
+                if (product.getId().equals(Long.parseLong(keys.get("i")))) {
+                    currentProduct = product;
+                    iterator1.previous();
+                    previousProduct = iterator1.hasPrevious() ? iterator1.previous() : null;
+                    nextProduct = iterator2.hasNext() ? iterator2.next() : null;
+                    break;
+                }
+            }
 
-            Map<String, String> pagination = Map.of(
-                    "PREVIOUS_", "« Previous",
-                    "NEXT_", "Next »"
-            );
-            payload.setKeyboardMarkup(Buttons.newBuilder()
-                    .setButtonsHorizontal(button)
-                    .setButtonsHorizontal(pagination)
-                    .setBackButton("SEARCH_" + product.getId() + "#" + SendMethod.SEND_MESSAGE)
-                    .build()
-            );
+            if (previousProduct == null && --previousPage >= 0) {
+                Pageable previousPageWithTwoElements = PageRequest.of(previousPage, countOfElements);
+                previousProduct = productService.fullTextSearch(previousPageWithTwoElements, searchQuery).getLast();
+            }
 
-            bot.process(payload);
+            if (nextProduct == null && ++nextPage >= 0) {
+                Pageable previousPageWithTwoElements = PageRequest.of(nextPage, countOfElements);
+                LinkedList<Product> nextList = productService.fullTextSearch(previousPageWithTwoElements, searchQuery);
+                nextProduct = nextList.isEmpty() ? null : nextList.getFirst();
+            }
+
+            if (currentProduct != null) {
+                Payload payload = new Payload(update);
+
+                if (SendMethod.valueOf(keys.get("m")).equals(SendMethod.DELETE)) {
+                    payload.setSendMethod(SendMethod.DELETE);
+                    bot.process(payload);
+                    payload.setSendMethod(SendMethod.SEND_PHOTO);
+                } else {
+                    payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
+                }
+
+                payload.setText(getFormattedTextMessage(currentProduct));
+                payload.setFileId(currentProduct.getImageId());
+
+                Map<String, String> button = Map.of("ACTIVATE_LOT -i %s".formatted(currentProduct.getId()), "Buy");
+
+                Map<String, String> pagination = new LinkedHashMap<>();
+                if (previousProduct != null) {
+                    pagination.put("PRODUCT -p %s -i %s -m %s -q '%s'".formatted(previousPage, previousProduct.getId(), SendMethod.EDIT_MEDIA, searchQuery), "« Previous");
+                }
+                if (nextProduct != null) {
+                    pagination.put("PRODUCT -p %s -i %s -m %s -q '%s'".formatted(nextPage, nextProduct.getId(), SendMethod.EDIT_MEDIA, searchQuery), "Next »");
+                }
+
+                payload.setKeyboardMarkup(Buttons.newBuilder()
+                        .setButtonsHorizontal(button)
+                        .setButtonsHorizontal(pagination)
+                        .setGoBackButton("SEARCH -p %s -m %s -q '%s'".formatted(pageNumber, SendMethod.DELETE, searchQuery))
+                        .build()
+                );
+
+                bot.process(payload);
+            }
         }
     }
 

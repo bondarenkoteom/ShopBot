@@ -1,13 +1,17 @@
 package com.shop.ShopBot.handlers.callback_query.user_settings;
 
 import com.shop.ShopBot.annotations.BotCommand;
-import com.shop.ShopBot.constant.Trigger;
-import com.shop.ShopBot.constant.MessageType;
+import com.shop.ShopBot.constant.*;
+import com.shop.ShopBot.entity.Keys;
+import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
+import com.shop.ShopBot.utils.Buttons;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.Map;
 
 @Component
 @BotCommand(command = "SET_USERNAME", type = MessageType.CALLBACK_QUERY)
@@ -15,14 +19,12 @@ public class SetUsernameHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        String chatId = callbackQuery.getMessage().getChatId().toString();
-        Integer messageId = callbackQuery.getMessage().getMessageId();
+        setTriggerValue(update, Trigger.USERNAME);
 
-        userService.setWaitFor(callbackQuery.getFrom().getId(), Trigger.USERNAME);
+        Payload payload = new Payload(update);
+        payload.setSendMethod(SendMethod.SEND_MESSAGE);
 
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Enter username");
+        payload.setText("Enter username");
+        bot.process(payload);
     }
 }
