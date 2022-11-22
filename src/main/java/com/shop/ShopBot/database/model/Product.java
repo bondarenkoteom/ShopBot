@@ -1,16 +1,12 @@
 package com.shop.ShopBot.database.model;
 
 import com.shop.ShopBot.constant.ProductStatus;
-import com.shop.ShopBot.utils.StringListConverter;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "t_product")

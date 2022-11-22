@@ -12,6 +12,7 @@ import java.util.LinkedList;
 @Repository
 public interface SearchRepository extends CrudRepository<Product, Long> {
 
-    @Query("SELECT p FROM Product p WHERE fts(:text) = true")
+    @Query(value = "SELECT * FROM t_product, to_tsquery(:text) query, ts_rank_cd(product_vector, query) rank WHERE query @@ product_vector",
+            nativeQuery = true)
     LinkedList<Product> fullTextSearch(Pageable pageable, @Param("text") String text);
 }

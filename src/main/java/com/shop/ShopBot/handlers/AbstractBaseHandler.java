@@ -86,7 +86,7 @@ public abstract class AbstractBaseHandler {
     protected Keys getKeys(Update update) {
         String query = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
         Keys keys = new Keys();
-        Pattern pattern = Pattern.compile("(-[A-Za-z]{1} (?:[^\"\\s]+|\".*?\"))");
+        Pattern pattern = Pattern.compile("(-[A-Za-z]{1} (?:[^'\\s]+|'.*?'))");
         Matcher matcher = pattern.matcher(query);
 
         while (matcher.find()) {

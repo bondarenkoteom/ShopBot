@@ -11,6 +11,7 @@ import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -25,13 +26,15 @@ public class ProductHandler extends AbstractBaseHandler {
 
         String searchQuery = keys.get("q");
 
+        Sort sort = Sort.by(Sort.Direction.DESC, "rank");
+
         int pageNumber = Integer.parseInt(keys.get("p"));
         int previousPage = pageNumber;
         int nextPage = pageNumber;
 
         if (pageNumber >= 0) {
             int countOfElements = 2;
-            Pageable firstPageWithTwoElements = PageRequest.of(pageNumber, countOfElements);
+            Pageable firstPageWithTwoElements = PageRequest.of(pageNumber, countOfElements, sort);
             LinkedList<Product> products = productService.fullTextSearch(firstPageWithTwoElements, searchQuery);
 
             if (products.isEmpty()) return;
@@ -54,12 +57,12 @@ public class ProductHandler extends AbstractBaseHandler {
             }
 
             if (previousProduct == null && --previousPage >= 0) {
-                Pageable previousPageWithTwoElements = PageRequest.of(previousPage, countOfElements);
+                Pageable previousPageWithTwoElements = PageRequest.of(previousPage, countOfElements, sort);
                 previousProduct = productService.fullTextSearch(previousPageWithTwoElements, searchQuery).getLast();
             }
 
             if (nextProduct == null && ++nextPage >= 0) {
-                Pageable previousPageWithTwoElements = PageRequest.of(nextPage, countOfElements);
+                Pageable previousPageWithTwoElements = PageRequest.of(nextPage, countOfElements, sort);
                 LinkedList<Product> nextList = productService.fullTextSearch(previousPageWithTwoElements, searchQuery);
                 nextProduct = nextList.isEmpty() ? null : nextList.getFirst();
             }
