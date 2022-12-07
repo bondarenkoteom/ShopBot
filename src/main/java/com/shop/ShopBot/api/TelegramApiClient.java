@@ -44,7 +44,7 @@ public class TelegramApiClient {
         }
     }
 
-    public String getImageFilePath(String fileId) {
+    public String getFilePath(String fileId) {
         FileResponse fileResponse;
         try {
             fileResponse = restTemplate.getForObject(
@@ -60,7 +60,7 @@ public class TelegramApiClient {
         else throw new IllegalStateException();
     }
 
-    public byte[] getDownloadImage(String filePath) {
+    public byte[] getDownloadFile(String filePath) {
         byte[] bytea;
         try {
             bytea = restTemplate.getForObject(MessageFormat.format("{0}/file/bot{1}/{2}", URL, botToken, filePath), byte[].class);

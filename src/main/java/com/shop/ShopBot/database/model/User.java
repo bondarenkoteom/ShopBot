@@ -8,11 +8,18 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "t_user")
 public class User {
+
+    public User(Long id, String username) {
+        this.id = id;
+        this.username = username;
+        this.rating = 0;
+        this.waitFor = Trigger.UNDEFINED;
+        this.balance = 0.0;
+    }
 
     @Id
     private Long id;
@@ -26,5 +33,8 @@ public class User {
     @Column(name = "wait_for_input")
     @Enumerated(EnumType.STRING)
     private Trigger waitFor;
+
+    @Column(name = "balance")
+    private Double balance;
 
 }

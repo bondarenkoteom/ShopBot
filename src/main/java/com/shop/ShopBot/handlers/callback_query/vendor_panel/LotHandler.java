@@ -33,12 +33,17 @@ public class LotHandler extends AbstractBaseHandler {
             Map<String, String> firstRow = product.getStatus().equals(ProductStatus.NOT_ACTIVE) ?
                     Map.of("ACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.ACTIVATE_LOT.text()) :
                     Map.of("DEACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.DEACTIVATE_LOT.text());
+            Map<String, String> secondRow = Map.of("GET_LOT_ITEMS -i %s".formatted(product.getId()),
+                    ButtonText.GET_LOT_ITEMS.text().formatted(product.getItems() == null ? 0 : product.getItems().length));
 
-            Map<String, String> secondRow = Map.of(
+            Map<String, String> thirdRow = Map.of(
                     "DELETE_LOT -i %s".formatted(product.getId()), ButtonText.DELETE_LOT.text(),
                     "EDIT_LOT -i %s".formatted(product.getId()), ButtonText.EDIT_LOT.text()
             );
-            payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsHorizontal(firstRow).setButtonsHorizontal(secondRow).build());
+            payload.setKeyboardMarkup(Buttons.newBuilder()
+                    .setButtonsHorizontal(firstRow)
+                    .setButtonsHorizontal(secondRow)
+                    .setButtonsHorizontal(thirdRow).build());
 
             bot.process(payload);
         }

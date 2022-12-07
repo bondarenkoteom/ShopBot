@@ -32,7 +32,7 @@ public class ManageMyLotsHandler extends AbstractBaseHandler {
                 .collect(Collectors.toMap(p -> "LOT -i %s -m %s".formatted(p.getId(), SendMethod.SEND_PHOTO), p -> {
                     String status = p.getStatus().equals(ProductStatus.ACTIVE) ?
                             MessageText.LOT_IS_ACTIVE.text() : MessageText.LOT_IS_NOT_ACTIVE.text();
-                    return "(%s) %s".formatted(status, p.getProductName());
+                    return "(%s)\u00A0\u00A0\u00A0\u00A0 %s".formatted(status, p.getProductName());
                 }));
         payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons)
                 .setGoBackButton("VENDOR_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());

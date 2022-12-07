@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -50,6 +51,7 @@ public class Bot extends TelegramLongPollingBot {
             case EDIT_CAPTION -> executeEditCaption(payload);
             case EDIT_MEDIA -> executeEditMedia(payload);
             case DELETE -> executeDelete(payload);
+            case SEND_DOCUMENT -> sendDocument(payload);
         }
     }
 
@@ -114,5 +116,13 @@ public class Bot extends TelegramLongPollingBot {
         deleteMessage.setChatId(payload.getChatId());
         deleteMessage.setMessageId(payload.getMessageId());
         execute(deleteMessage);
+    }
+
+    @SneakyThrows
+    private void sendDocument(Payload payload) {
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setDocument(payload.getDocument());
+        sendDocument.setChatId(payload.getChatId());
+        execute(sendDocument);
     }
 }

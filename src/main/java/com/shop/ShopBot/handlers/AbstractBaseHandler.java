@@ -3,6 +3,7 @@ package com.shop.ShopBot.handlers;
 import com.shop.ShopBot.Bot;
 import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.constant.Trigger;
+import com.shop.ShopBot.database.service.MessageService;
 import com.shop.ShopBot.database.service.ProductService;
 import com.shop.ShopBot.database.service.UserService;
 import com.shop.ShopBot.entity.AppInlineKeyboardButton;
@@ -27,6 +28,9 @@ public abstract class AbstractBaseHandler {
 
     @Autowired
     protected UserService userService;
+
+    @Autowired
+    protected MessageService messageService;
 
     @Autowired
     @Lazy

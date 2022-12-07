@@ -25,4 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p")
     LinkedList<Product> findAllProducts(Pageable pageable);
+
+    @Query(value = "SELECT pull_element(:id)", nativeQuery = true)
+    String pollItem(@Param("id") Long id);
 }

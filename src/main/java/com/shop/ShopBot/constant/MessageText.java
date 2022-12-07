@@ -90,7 +90,7 @@ public enum MessageText {
             Info: %s
             Price: <b>%s</b>
             
-            Seller: /uGrinder
+            Seller: /u%s
             
             Rating:  👍 %s   👎 %s"""),
     LOT_IS_ACTIVE("✅ Active"),
@@ -107,7 +107,7 @@ public enum MessageText {
             Disputes lose: %s
             """),
     USER_INFO("""
-            <b>%</b> %s
+            <b>%s</b> %s
             User link: <code>/u%s</code>
             Rating: %s
             Sells: %s

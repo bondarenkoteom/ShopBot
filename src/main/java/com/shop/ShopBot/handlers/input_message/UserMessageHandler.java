@@ -50,7 +50,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
             case NEW_PRODUCT_IMAGE -> {
                 productService.deleteAllEditing();
 
-                String fileId = message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId();
+                String fileId = message.getDocument() == null ? message.getPhoto().get(1).getFileId() : message.getDocument().getFileId();
 
                 Product product = new Product();
                 product.setImageId(fileId);
@@ -145,7 +145,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
             }
             case NEW_PRODUCT_PRICE -> {
                 Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
-                product.setPrice(message.getText());
+                product.setPrice(Double.parseDouble(message.getText()));
                 productService.save(product);
 
                 setTriggerValue(update, Trigger.NEW_PRODUCT_ITEMS);
@@ -160,7 +160,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
             }
             case EDIT_PRODUCT_PRICE -> {
                 Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
-                product.setPrice(message.getText());
+                product.setPrice(Double.parseDouble(message.getText()));
                 product.setEditing(false);
                 productService.save(product);
 
@@ -174,7 +174,15 @@ public class UserMessageHandler extends AbstractBaseHandler {
             }
             case NEW_PRODUCT_ITEMS -> {
                 Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
-//                product.setItems(Arrays.asList(message.getText().split(" ")));
+
+                if (message.getDocument() != null) {
+                    String filePath = telegramApiClient.getFilePath(message.getDocument().getFileId());
+                    byte[] bytea = telegramApiClient.getDownloadFile(filePath);
+                    product.setItems(new String(bytea).split("\n"));
+                } else {
+                    product.setItems(message.getText().split("\n"));
+                }
+
                 product.setEditing(false);
                 productService.save(product);
 
@@ -194,7 +202,15 @@ public class UserMessageHandler extends AbstractBaseHandler {
             }
             case EDIT_PRODUCT_ITEMS -> {
                 Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
-//                product.setItems(Arrays.asList(message.getText().split(" ")));
+
+                if (message.getDocument() != null) {
+                    String filePath = telegramApiClient.getFilePath(message.getDocument().getFileId());
+                    byte[] bytea = telegramApiClient.getDownloadFile(filePath);
+                    product.setItems(Arrays.toString(bytea).split("\n"));
+                } else {
+                    product.setItems(message.getText().split("\n"));
+                }
+
                 product.setEditing(false);
                 productService.save(product);
 

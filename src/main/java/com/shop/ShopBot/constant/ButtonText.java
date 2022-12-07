@@ -10,8 +10,9 @@ public enum ButtonText {
     EDIT_LOT("📝 Edit"),
     ACTIVATE_LOT("✅ Activate"),
     DEACTIVATE_LOT("❌ Deactivate"),
-    SET_NAME("Set name"),
-    USER_INFO("User info"),
+    GET_LOT_ITEMS("📦 Get items (%s pcs.)"),
+    SET_NAME("🏷️ Set name"),
+    USER_INFO("🪪 User info"),
     WALLET_ADD("Add"),
     WALLET_HISTORY("History"),
     WALLET_WITHDRAW("Withdraw"),
@@ -21,7 +22,8 @@ public enum ButtonText {
     PURCHASES("Purchases"),
     STATISTICS("📈 Statistics"),
     DISPUTES("⚠️ Disputes"),
-    MESSAGES("💬 Messages");
+    MESSAGES("💬 Messages"),
+    BUY("💳 Buy");
 
     private String message;
 

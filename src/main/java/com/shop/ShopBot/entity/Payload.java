@@ -3,6 +3,7 @@ package com.shop.ShopBot.entity;
 import com.shop.ShopBot.constant.SendMethod;
 import lombok.Data;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
@@ -15,6 +16,7 @@ public class Payload {
     private InlineKeyboardMarkup keyboardMarkup;
     private SendMethod sendMethod;
     private String parseMode;
+    private InputFile document;
 
     private String fileId;
 

@@ -4,10 +4,7 @@ import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.database.repository.ProductRepository;
 import com.shop.ShopBot.database.repository.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -53,5 +50,9 @@ public class ProductService {
 
     public LinkedList<Product> fullTextSearch(Pageable pageable, String text) {
         return searchRepository.fullTextSearch(pageable, String.join("|", text.split(" ")));
+    }
+
+    public String pollItem(Long id) {
+        return productRepository.pollItem(id);
     }
 }

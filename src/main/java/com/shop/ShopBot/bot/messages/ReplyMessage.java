@@ -84,8 +84,8 @@ public class ReplyMessage {
             }
             case NEW_PRODUCT_IMAGE -> {
 
-                String imageFilePath = telegramApiClient.getImageFilePath(message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId());
-                byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
+//                String imageFilePath = telegramApiClient.getImageFilePath(message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId());
+                //byte[] bytea = telegramApiClient.getDownloadImage(imageFilePath);
 
                 String productName = getValueColumn(message.getCaption(), "name");
                 String description = getValueColumn(message.getCaption(), "description");
@@ -95,7 +95,7 @@ public class ReplyMessage {
 //                product.setImage(bytea);
                 product.setOwnerId(message.getFrom().getId());
                 product.setDescription(description);
-                product.setPrice(price);
+//                product.setPrice(price);
                 product.setProductName(productName);
                 productService.save(product);
                 return new SendMessage(message.getChatId().toString(), "Information successfully add");

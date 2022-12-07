@@ -1,6 +1,7 @@
 package com.shop.ShopBot.handlers.callback_query.search;
 
 import com.shop.ShopBot.annotations.BotCommand;
+import com.shop.ShopBot.constant.ButtonText;
 import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
@@ -81,7 +82,7 @@ public class ProductHandler extends AbstractBaseHandler {
                 payload.setText(getFormattedTextMessage(currentProduct));
                 payload.setFileId(currentProduct.getImageId());
 
-                Map<String, String> button = Map.of("ACTIVATE_LOT -i %s".formatted(currentProduct.getId()), "Buy");
+                Map<String, String> button = Map.of("BUY -i %s".formatted(currentProduct.getId()), ButtonText.BUY.text());
 
                 Map<String, String> pagination = new LinkedHashMap<>();
                 if (previousProduct != null) {
@@ -91,13 +92,12 @@ public class ProductHandler extends AbstractBaseHandler {
                     pagination.put("PRODUCT -p %s -i %s -m %s -q '%s'".formatted(nextPage, nextProduct.getId(), SendMethod.EDIT_MEDIA, searchQuery), "Next »");
                 }
 
-                payload.setKeyboardMarkup(Buttons.newBuilder()
-                        .setButtonsHorizontal(button)
-                        .setButtonsHorizontal(pagination)
-                        .setGoBackButton("SEARCH -p %s -m %s -q '%s'".formatted(pageNumber, SendMethod.DELETE, searchQuery))
-                        .build()
-                );
-
+                Buttons.Builder builder = Buttons.newBuilder().setButtonsHorizontal(pagination);
+                if (!Long.valueOf(payload.getChatId()).equals(currentProduct.getOwnerId())) {
+                    builder.setButtonsHorizontal(button);
+                }
+                builder.setGoBackButton("SEARCH -p %s -m %s -q '%s'".formatted(pageNumber, SendMethod.DELETE, searchQuery));
+                payload.setKeyboardMarkup(builder.build());
                 bot.process(payload);
             }
         }
@@ -108,6 +108,7 @@ public class ProductHandler extends AbstractBaseHandler {
                 product.getProductName(),
                 product.getDescription(),
                 product.getPrice(),
+                "/uGrinder",
                 "0", "1"
         );
     }

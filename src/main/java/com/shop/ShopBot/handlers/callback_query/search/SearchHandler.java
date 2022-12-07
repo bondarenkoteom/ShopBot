@@ -15,12 +15,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 @BotCommand(command = "SEARCH .*", type = MessageType.CALLBACK_QUERY) //SEARCH -p -1 -m SEND_MESSAGE -
 public class SearchHandler extends AbstractBaseHandler {
+
     @Override
     public void handle(Update update) {
         Keys keys = getKeys(update);
