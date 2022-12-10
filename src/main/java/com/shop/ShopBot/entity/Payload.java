@@ -12,7 +12,6 @@ public class Payload {
     private Integer messageId;
     private String chatId;
     private String text;
-    private String callbackQuery;
     private InlineKeyboardMarkup keyboardMarkup;
     private SendMethod sendMethod;
     private String parseMode;
@@ -24,7 +23,6 @@ public class Payload {
         if (update.hasCallbackQuery()) {
             messageId = update.getCallbackQuery().getMessage().getMessageId();
             chatId = update.getCallbackQuery().getMessage().getChatId().toString();
-            callbackQuery = update.getCallbackQuery().getData();
         } else {
             messageId = update.getMessage().getMessageId();
             chatId = update.getMessage().getChatId().toString();

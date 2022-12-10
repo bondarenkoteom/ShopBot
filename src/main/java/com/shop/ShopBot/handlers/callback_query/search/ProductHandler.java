@@ -82,7 +82,7 @@ public class ProductHandler extends AbstractBaseHandler {
                 payload.setText(getFormattedTextMessage(currentProduct));
                 payload.setFileId(currentProduct.getImageId());
 
-                Map<String, String> button = Map.of("BUY -i %s".formatted(currentProduct.getId()), ButtonText.BUY.text());
+                Map<String, String> button = Map.of("BUY -i %s".formatted(currentProduct.getId()), ButtonText.BUY.text().formatted(currentProduct.getPrice()));
 
                 Map<String, String> pagination = new LinkedHashMap<>();
                 if (previousProduct != null) {

@@ -5,6 +5,7 @@ import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.MessageService;
 import com.shop.ShopBot.database.service.ProductService;
+import com.shop.ShopBot.database.service.PurchaseService;
 import com.shop.ShopBot.database.service.UserService;
 import com.shop.ShopBot.entity.AppInlineKeyboardButton;
 import com.shop.ShopBot.entity.Keys;
@@ -33,11 +34,15 @@ public abstract class AbstractBaseHandler {
     protected MessageService messageService;
 
     @Autowired
+    protected PurchaseService purchaseService;
+
+    @Autowired
     @Lazy
     protected Bot bot;
 
     protected abstract void handle(Update update);
 
+    @Deprecated
     protected List<InlineKeyboardButton> getButtonList(String buttonName, String buttonCallBackData) {
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(buttonName);
@@ -46,31 +51,6 @@ public abstract class AbstractBaseHandler {
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
         keyboardButtonsRow.add(button);
         return keyboardButtonsRow;
-    }
-
-    protected InlineKeyboardButton getButton(String buttonName, String buttonCallBackData) {
-        InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText(buttonName);
-        button.setCallbackData(buttonCallBackData);
-        return button;
-    }
-
-    protected List<InlineKeyboardButton> getWebAppButton(String buttonName) {
-        AppInlineKeyboardButton button = new AppInlineKeyboardButton("https://webappcontent.telegram.org/cafe/");
-        button.setText(buttonName);
-        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-        keyboardButtonsRow.add(button);
-        return keyboardButtonsRow;
-    }
-
-    protected String getValueColumn(String message, String field) {
-        Pattern pattern = Pattern.compile(field + ":(.*)");
-        Matcher matcher = pattern.matcher(message);
-        String result = "";
-        if(matcher.find()) {
-            result = matcher.group(1);
-        }
-        return result.trim();
     }
 
     protected void returnTriggerValue(Update update) {

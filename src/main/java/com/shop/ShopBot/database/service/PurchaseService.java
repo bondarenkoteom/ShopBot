@@ -6,7 +6,9 @@ import com.shop.ShopBot.database.repository.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 
 @Service
 public class PurchaseService {
@@ -24,4 +26,8 @@ public class PurchaseService {
         purchaseRepository.save(purchase);
     }
 
+    public void updateOverdueOrders() {
+        LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
+        purchaseRepository.updateOverdueOrders(Date.from(localDateTime.toInstant(ZoneOffset.UTC)));
+    }
 }

@@ -1,7 +1,6 @@
 package com.shop.ShopBot.database.model;
 
 import com.shop.ShopBot.constant.OrderStatus;
-import com.shop.ShopBot.constant.ProductStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,12 +23,15 @@ public class Purchase {
     @Column(name = "item")
     private String item;
 
+    @ManyToOne
+    private Product product;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @ManyToOne
-    private User owner;
+    private User buyer;
 
     @ManyToOne
     private User seller;

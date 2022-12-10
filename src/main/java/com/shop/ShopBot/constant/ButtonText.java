@@ -23,7 +23,11 @@ public enum ButtonText {
     STATISTICS("📈 Statistics"),
     DISPUTES("⚠️ Disputes"),
     MESSAGES("💬 Messages"),
-    BUY("💳 Buy");
+    BUY("💳 Buy this item for %s"),
+    CONFIRM_DELIVERY(" ✅ Confirm delivery"),
+    CHAT_WITH_SELLER("💬 Chat with seller"),
+    OPEN_DISPUTE("😡 Open dispute"),
+    CLOSE_DISPUTE("🤝 Close dispute");
 
     private String message;
 
