@@ -33,8 +33,8 @@ public class ProductService {
         return productRepository.getProductByOwnerIdAndIsEditing(ownerId, true);
     }
 
-    public List<Product> getAllProducts(Long ownerId) {
-        return productRepository.getProductsByOwnerIdAndIsEditing(ownerId, false);
+    public Page<Product> getAllProducts(Long ownerId, Pageable pageable) {
+        return productRepository.getProductsByOwnerIdAndIsEditing(ownerId, false, pageable);
     }
 
     public Optional<Product> getById(Long id) {
@@ -45,8 +45,8 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public LinkedList<Product> findAllProducts(Pageable pageable) {
-        return productRepository.findAllProducts(pageable);
+    public Page<Product> findAllProducts(Pageable pageable) {
+        return searchRepository.findAllProducts(pageable);
     }
 
     public Page<Product> fullTextSearch(String text, Pageable pageable) {

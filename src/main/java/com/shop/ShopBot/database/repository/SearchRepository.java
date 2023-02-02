@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SearchRepository extends CrudRepository<Product, Long> {
 
+    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE'")
+    Page<Product> findAllProducts(Pageable pageable);
+
     @Query(value = "SELECT * FROM t_product, to_tsquery(:text) query, ts_rank_cd(product_vector, query) rank WHERE query @@ product_vector AND status = 'ACTIVE' ORDER BY id",
             countQuery = "SELECT COUNT(*) FROM t_product, to_tsquery(:text) query, ts_rank_cd(product_vector, query) rank WHERE query @@ product_vector AND status = 'ACTIVE'",
             nativeQuery = true)

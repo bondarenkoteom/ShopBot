@@ -5,6 +5,7 @@ import com.shop.ShopBot.constant.ButtonText;
 import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
+import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
@@ -21,12 +22,14 @@ public class BuyerPanelCommandHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         returnTriggerValue(update);
 
+        Keys keys = getKeys(update);
+
         Payload payload = new Payload(update);
-        payload.setSendMethod(SendMethod.SEND_MESSAGE);
+        payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
         payload.setText(MessageText.CHOOSE_OPTION.text());
 
         Map<String, String> buttons = Map.of(
-                "PURCHASES", ButtonText.PURCHASES.text()
+                "PURCHASES -p 0", ButtonText.PURCHASES.text()
         );
         payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
         bot.process(payload);

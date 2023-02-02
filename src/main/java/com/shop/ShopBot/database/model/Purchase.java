@@ -23,8 +23,11 @@ public class Purchase {
     @Column(name = "item")
     private String item;
 
-    @ManyToOne
-    private Product product;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "product_id")
+    private Long productId;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

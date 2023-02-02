@@ -1,6 +1,7 @@
 package com.shop.ShopBot.database.repository;
 
 import com.shop.ShopBot.database.model.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Product getProductByOwnerIdAndIsEditing(Long ownerId, boolean isEditing);
 
-    List<Product> getProductsByOwnerIdAndIsEditing(Long ownerId, boolean isEditing);
+    Page<Product> getProductsByOwnerIdAndIsEditing(Long ownerId, boolean isEditing, Pageable pageable);
 
     @Query("SELECT p FROM Product p")
     LinkedList<Product> findAllProducts(Pageable pageable);

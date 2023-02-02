@@ -1,7 +1,6 @@
 package com.shop.ShopBot.handlers.callback_query.search;
 
 import com.shop.ShopBot.annotations.BotCommand;
-import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.database.model.Product;
@@ -17,9 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,13 +31,18 @@ public class SearchHandler extends AbstractBaseHandler {
 
         String searchQuery = keys.get("q");
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "rank");
-
         int pageNumber = Integer.parseInt(keys.get("p"));
         int elementsPerPage = 2;
 
-        Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
-        Page<Product> products = productService.fullTextSearch(searchQuery, pageable);
+        Page<Product> products;
+        if (searchQuery.equals("all")) {
+            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
+            products = productService.findAllProducts(pageable);
+        } else {
+            Sort sort = Sort.by(Sort.Direction.DESC, "rank");
+            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
+            products = productService.fullTextSearch(searchQuery, pageable);
+        }
 
         if (products.isEmpty()) return;
 
@@ -63,7 +64,7 @@ public class SearchHandler extends AbstractBaseHandler {
                 v -> "%s | %s".formatted(originProducts.get(v).getPrice(), originProducts.get(v).getProductName()), (a, b) -> a, LinkedHashMap::new
         ));
 
-        Map<String, String> pagination = SimplePagination.twoButtonsPagination(products, searchQuery, SendMethod.EDIT_TEXT, "SEARCH");
+        Map<String, String> pagination = SimplePagination.twoButtonsSearchPagination(products, searchQuery, SendMethod.EDIT_TEXT, "SEARCH");
 
         payload.setKeyboardMarkup(Buttons.newBuilder()
                 .setButtonsVertical(buttons)

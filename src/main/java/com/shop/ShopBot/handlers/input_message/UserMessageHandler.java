@@ -206,7 +206,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 if (message.getDocument() != null) {
                     String filePath = telegramApiClient.getFilePath(message.getDocument().getFileId());
                     byte[] bytea = telegramApiClient.getDownloadFile(filePath);
-                    product.setItems(Arrays.toString(bytea).split("\n"));
+                    product.setItems(new String(bytea).split("\n"));
                 } else {
                     product.setItems(message.getText().split("\n"));
                 }

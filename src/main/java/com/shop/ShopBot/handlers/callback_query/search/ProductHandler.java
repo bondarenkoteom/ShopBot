@@ -30,16 +30,20 @@ public class ProductHandler extends AbstractBaseHandler {
 
         String searchQuery = keys.get("q");
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "rank");
-
         int itemPosition = Integer.parseInt(keys.get("i"));
 
         int pageNumber = Integer.parseInt(keys.get("p"));
         int elementsPerPage = 2;
 
-        Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
-        Page<Product> products = productService.fullTextSearch(searchQuery, pageable);
-
+        Page<Product> products;
+        if (searchQuery.equals("all")) {
+            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
+            products = productService.findAllProducts(pageable);
+        } else {
+            Sort sort = Sort.by(Sort.Direction.DESC, "rank");
+            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
+            products = productService.fullTextSearch(searchQuery, pageable);
+        }
 
         if (products.isEmpty()) return;
 

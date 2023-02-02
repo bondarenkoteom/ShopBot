@@ -48,6 +48,8 @@ public class BuyHandler extends AbstractBaseHandler {
                 userService.save(user);
                 Purchase purchase = new Purchase();
                 purchase.setDate(new Date());
+                purchase.setName(product.getProductName());
+                purchase.setProductId(product.getId());
                 purchase.setItem(item);
                 purchase.setStatus(OrderStatus.IN_PROGRESS);
                 purchase.setBuyer(user);

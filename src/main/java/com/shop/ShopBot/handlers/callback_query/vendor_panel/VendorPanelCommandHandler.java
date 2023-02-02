@@ -32,7 +32,7 @@ public class VendorPanelCommandHandler extends AbstractBaseHandler {
         );
 
         Map<String, String> secondRow = Map.of(
-                "MANAGE_LOTS", ButtonText.MANAGE_LOTS.text(),
+                "MANAGE_LOTS -p 0", ButtonText.MANAGE_LOTS.text(),
                 "CREATE_LOT", ButtonText.CREATE_LOT.text()
         );
 

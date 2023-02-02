@@ -2,42 +2,56 @@ package com.shop.ShopBot.handlers.callback_query.byuer_panel;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageType;
+import com.shop.ShopBot.constant.OrderStatus;
+import com.shop.ShopBot.constant.SendMethod;
+import com.shop.ShopBot.database.model.Purchase;
+import com.shop.ShopBot.entity.Keys;
+import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
+import com.shop.ShopBot.utils.Buttons;
+import com.shop.ShopBot.utils.SimplePagination;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
-@BotCommand(command = "PURCHASES", type = MessageType.CALLBACK_QUERY)
+@BotCommand(command = "PURCHASES .*", type = MessageType.CALLBACK_QUERY)
 public class PurchasesHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
-        CallbackQuery callbackQuery = update.getCallbackQuery();
-        String chatId = callbackQuery.getMessage().getChatId().toString();
-        Integer messageId = callbackQuery.getMessage().getMessageId();
+        Keys keys = getKeys(update);
 
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(getButtonList("✅ 7878dsv (1 day ago)", "PURCHASE_1"));
-        rowList.add(getButtonList("✅ lk78dsv (1 day ago)", "PURCHASE_2"));
-        rowList.add(getButtonList("❌ 68c8dsv (4 day ago)", "PURCHASE_3"));
-        rowList.add(getButtonList("❌ o878dsv (3 day ago)", "PURCHASE_4"));
-        rowList.add(getButtonList("✅ d87fdsv (2 day ago)", "PURCHASE_5"));
-        rowList.add(getButtonList("✅ hy78dsv (1 day ago)", "PURCHASE_6"));
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        inlineKeyboardMarkup.setKeyboard(rowList);
+        int pageNumber = Integer.parseInt(keys.get("p"));
+        int elementsPerPage = 10;
 
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Your last deals list");
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
 
+        Payload payload = new Payload(update);
+        payload.setSendMethod(SendMethod.EDIT_TEXT);
+        payload.setText("Your last deals list");
+
+        Page<Purchase> purchases = purchaseService.getAllPurchases(update.getCallbackQuery().getFrom().getId(), pageable);
+
+        Map<String, String> buttons = purchases.stream()
+                .collect(Collectors.toMap(p -> "PURCHASE -i %s -m %s".formatted(p.getId(), SendMethod.SEND_MESSAGE), p -> {
+                    OrderStatus status = p.getStatus();
+                    return switch (status) {
+                        case IN_PROGRESS -> "🕑 %s (%s)".formatted(p.getName(), p.getDate());
+                        case DECLINED -> "❌ %s (%s)".formatted(p.getName(), p.getDate());
+                        case default -> "✅ %s (%s)".formatted(p.getName(), p.getDate());
+                    };
+                }));
+        payload.setKeyboardMarkup(Buttons.newBuilder()
+                .setButtonsVertical(buttons)
+                .setButtonsHorizontal(SimplePagination.twoButtonsPagination(purchases, SendMethod.EDIT_TEXT, "PURCHASES"))
+                .setGoBackButton("BUYER_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());
+        bot.process(payload);
         
     }
 }
