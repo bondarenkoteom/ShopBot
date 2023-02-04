@@ -1,4 +1,4 @@
-package com.shop.ShopBot.handlers.input_message;
+package com.shop.ShopBot.handlers.input_message.slash_commands;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageText;
@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-@BotCommand(command = "/U.*", type = MessageType.INPUT_MESSAGE)
+@BotCommand(command = "/USER .*", type = MessageType.INPUT_MESSAGE)
 public class SendMessageHandler extends AbstractBaseHandler {
 
 
@@ -68,13 +68,13 @@ public class SendMessageHandler extends AbstractBaseHandler {
     }
 
     @Data
-    class CommandParts {
+    static class CommandParts {
         private String username;
         private String message;
 
         CommandParts(Update update) {
             String query = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
-            Pattern pattern = Pattern.compile("/[uU](\\S+)\\s?(.*)?");
+            Pattern pattern = Pattern.compile("/(USER|user) (\\S+)\\s?(.*)?");
             Matcher matcher = pattern.matcher(query);
 
             if (matcher.find()) {

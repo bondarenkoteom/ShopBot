@@ -1,4 +1,4 @@
-package com.shop.ShopBot.handlers.input_message;
+package com.shop.ShopBot.handlers.input_message.slash_commands;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageText;

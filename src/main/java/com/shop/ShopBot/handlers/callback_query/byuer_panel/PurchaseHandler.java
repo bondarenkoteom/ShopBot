@@ -35,7 +35,7 @@ public class PurchaseHandler extends AbstractBaseHandler {
             Payload payload = new Payload(update);
 
             Map<String, String> firstRow = Map.of(
-                    "CONFIRM -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
+                    "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
                     "CHAT -i " + purchase.getId(), ButtonText.CHAT_WITH_SELLER.text()
             );
             Map<String, String> secondRow = Map.of(
@@ -55,13 +55,11 @@ public class PurchaseHandler extends AbstractBaseHandler {
                         🧾 Price: $%s
                         ---------------------------------------------------------------------------
                         Here some instructions to use:
-                        1. Open http://google.com
-                        2. Enter this code to input box
-                        3. Enjoy
+                        %s
                         
                         Your purchase:
                         <code>%s</code>
-                        """.formatted(purchase.getName(), purchase.getPrice(), purchase.getItem()));
+                        """.formatted(purchase.getName(), purchase.getPrice(), purchase.getInstruction(), purchase.getItem()));
             bot.process(payload);
         }
         

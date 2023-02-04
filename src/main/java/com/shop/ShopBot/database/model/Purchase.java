@@ -26,6 +26,9 @@ public class Purchase {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "instruction")
+    private String instruction;
+
     @Column(name = "product_id")
     private Long productId;
 

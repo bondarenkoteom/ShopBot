@@ -1,19 +1,17 @@
 package com.shop.ShopBot.handlers;
 
-import com.shop.ShopBot.Bot;
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.bot.messages.InlineMessage;
 import com.shop.ShopBot.bot.messages.ReplyMessage;
+import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.UserService;
-import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.input_message.UserMessageHandler;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;

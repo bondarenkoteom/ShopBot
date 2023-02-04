@@ -50,6 +50,7 @@ public class BuyHandler extends AbstractBaseHandler {
                 purchase.setDate(new Date());
                 purchase.setName(product.getProductName());
                 purchase.setProductId(product.getId());
+                purchase.setInstruction(product.getInstruction());
                 purchase.setItem(item);
                 purchase.setStatus(OrderStatus.IN_PROGRESS);
                 purchase.setBuyer(user);
@@ -63,7 +64,7 @@ public class BuyHandler extends AbstractBaseHandler {
 
 
                 Map<String, String> firstRow = Map.of(
-                        "CONFIRM -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
+                        "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
                         "CHAT -i " + purchase.getId(), ButtonText.CHAT_WITH_SELLER.text()
                 );
                 Map<String, String> secondRow = Map.of(
@@ -83,13 +84,11 @@ public class BuyHandler extends AbstractBaseHandler {
                         🧾 Now your balance is: $%s
                         ---------------------------------------------------------------------------
                         Here some instructions to use:
-                        1. Open http://google.com
-                        2. Enter this code to input box
-                        3. Enjoy
+                        %s
                         
                         Your purchase:
                         <code>%s</code>
-                        """.formatted(product.getProductName(), user.getBalance(), item));
+                        """.formatted(product.getProductName(), user.getBalance(), product.getInstruction(), item));
                 bot.process(payload);
             }
 
