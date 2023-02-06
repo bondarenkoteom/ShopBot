@@ -1,4 +1,4 @@
-package com.shop.ShopBot.handlers.callback_query.vendor_panel;
+package com.shop.ShopBot.handlers.callback_query.vendor_panel.manage_my_lots;
 
 import com.shop.ShopBot.constant.MessageText;
 import com.shop.ShopBot.constant.ProductStatus;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,7 @@ public class ManageMyLotsHandler extends AbstractBaseHandler {
                 }));
         payload.setKeyboardMarkup(Buttons.newBuilder()
                 .setButtonsVertical(buttons)
-                .setButtonsHorizontal(SimplePagination.twoButtonsPagination(products, SendMethod.EDIT_TEXT, "MANAGE_LOTS"))
+                .setButtonsHorizontal(SimplePagination.twoButtonsPagination(products, "MANAGE_LOTS", "-m EDIT_TEXT"))
                 .setGoBackButton("VENDOR_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());
         bot.process(payload);
     }

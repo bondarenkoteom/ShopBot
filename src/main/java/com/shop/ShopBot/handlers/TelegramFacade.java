@@ -1,8 +1,6 @@
 package com.shop.ShopBot.handlers;
 
 import com.shop.ShopBot.annotations.BotCommand;
-import com.shop.ShopBot.bot.messages.InlineMessage;
-import com.shop.ShopBot.bot.messages.ReplyMessage;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.constant.Trigger;
@@ -24,12 +22,6 @@ import java.util.stream.Stream;
 @Getter
 @Setter
 public class TelegramFacade {
-
-    @Autowired
-    InlineMessage inlineMessage;
-
-    @Autowired
-    ReplyMessage replyMessage;
 
     @Autowired
     UserService userService;

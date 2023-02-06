@@ -12,6 +12,7 @@ import com.shop.ShopBot.utils.Buttons;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
@@ -28,10 +29,18 @@ public class BuyerPanelCommandHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
         payload.setText(MessageText.CHOOSE_OPTION.text());
 
-        Map<String, String> buttons = Map.of(
+        Map<String, String> firstRow = Map.of(
                 "PURCHASES -p 0", ButtonText.PURCHASES.text()
         );
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
+
+        Map<String, String> secondRow = new LinkedHashMap<>();
+        secondRow.put("BUYER_MESSAGES -m %s".formatted(SendMethod.SEND_MESSAGE), ButtonText.MESSAGES.text());
+        secondRow.put("BUYER_DISPUTES", ButtonText.DISPUTES.text());
+
+        payload.setKeyboardMarkup(Buttons.newBuilder()
+                .setButtonsVertical(firstRow)
+                .setButtonsHorizontal(secondRow)
+                .build());
         bot.process(payload);
     }
 }

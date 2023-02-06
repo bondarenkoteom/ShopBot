@@ -64,7 +64,7 @@ public class SearchHandler extends AbstractBaseHandler {
                 v -> "%s | %s".formatted(originProducts.get(v).getPrice(), originProducts.get(v).getProductName()), (a, b) -> a, LinkedHashMap::new
         ));
 
-        Map<String, String> pagination = SimplePagination.twoButtonsSearchPagination(products, searchQuery, SendMethod.EDIT_TEXT, "SEARCH");
+        Map<String, String> pagination = SimplePagination.twoButtonsPagination(products, "SEARCH", "-m EDIT_TEXT -q '" + searchQuery + "'");
 
         payload.setKeyboardMarkup(Buttons.newBuilder()
                 .setButtonsVertical(buttons)

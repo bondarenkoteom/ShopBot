@@ -9,24 +9,13 @@ import java.util.Map;
 
 public class SimplePagination {
 
-    public static Map<String, String> twoButtonsPagination(Page<?> page, SendMethod sendMethod, String handler) {
+    public static Map<String, String> twoButtonsPagination(Page<?> page, String handler, String params) {
         Map<String, String> pagination = new LinkedHashMap<>();
         if (page.hasPrevious()) {
-            pagination.put("%s -p %s -m %s".formatted(handler, page.getNumber() - 1, sendMethod), "« Previous");
+            pagination.put(("%s -p %s " + params).formatted(handler, page.getNumber() - 1), "« Previous");
         }
         if (page.hasNext()) {
-            pagination.put("%s -p %s -m %s".formatted(handler, page.getNumber() + 1, sendMethod), "Next »");
-        }
-        return pagination;
-    }
-
-    public static Map<String, String> twoButtonsSearchPagination(Page<?> page, String searchQuery, SendMethod sendMethod, String handler) {
-        Map<String, String> pagination = new LinkedHashMap<>();
-        if (page.hasPrevious()) {
-            pagination.put("%s -p %s -m %s -q '%s'".formatted(handler, page.getNumber() - 1, sendMethod, searchQuery), "« Previous");
-        }
-        if (page.hasNext()) {
-            pagination.put("%s -p %s -m %s -q '%s'".formatted(handler, page.getNumber() + 1, sendMethod, searchQuery), "Next »");
+            pagination.put(("%s -p %s " + params).formatted(handler, page.getNumber() + 1), "Next »");
         }
         return pagination;
     }

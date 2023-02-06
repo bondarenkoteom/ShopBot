@@ -1,47 +1,42 @@
-package com.shop.ShopBot.handlers.callback_query.messages;
+package com.shop.ShopBot.handlers.callback_query.vendor_panel.disputes;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
-import com.shop.ShopBot.database.model.Message;
-import com.shop.ShopBot.database.model.User;
+import com.shop.ShopBot.database.model.Dispute;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
-import com.shop.ShopBot.utils.Buttons;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.awt.*;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-@BotCommand(command = "MESSAGE .*", type = MessageType.CALLBACK_QUERY)
-public class MessageHandler extends AbstractBaseHandler {
+@BotCommand(command = "SELLER_DISPUTE .*", type = MessageType.CALLBACK_QUERY)
+public class SellerDisputeHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
         Keys keys = getKeys(update);
 
-        Long userId = Long.parseLong(keys.get("i"));
+        Long purchaseId = Long.parseLong(keys.get("i"));
         Long superUserId = update.getCallbackQuery().getFrom().getId();
 
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
 
-        List<Message> messages = messageService.getChatMessages(superUserId, userId);
+        List<Dispute> messages = disputeService.getDisputeMessages(purchaseId);
 
         String chatText = getFormattedChatText(messages, superUserId);
+        if (chatText.isEmpty()) chatText = "No messages yet";
         payload.setText(chatText);
 
         bot.process(payload);
     }
 
-    private String getFormattedChatText(List<Message> messages, Long superUserId) {
+    private String getFormattedChatText(List<Dispute> messages, Long superUserId) {
         return messages.stream().map(message -> {
             if (message.getSender().getId().equals(superUserId)) {
                 return "you -> \n" + message.getText();

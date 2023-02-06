@@ -1,4 +1,4 @@
-package com.shop.ShopBot.handlers.callback_query.vendor_panel;
+package com.shop.ShopBot.handlers.callback_query.vendor_panel.manage_my_lots;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.*;
@@ -6,7 +6,6 @@ import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
-import com.shop.ShopBot.utils.Buttons;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -14,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Map;
 import java.util.Optional;
 
 @Component

@@ -1,4 +1,4 @@
-package com.shop.ShopBot.handlers.callback_query.vendor_panel;
+package com.shop.ShopBot.handlers.callback_query.vendor_panel.create_new_lot;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageText;

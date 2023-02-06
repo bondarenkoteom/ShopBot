@@ -183,6 +183,11 @@ public class UserMessageHandler extends AbstractBaseHandler {
                     product.setItems(message.getText().split("\n"));
                 }
 
+                //todo Добавить шаг с установкой инструкции и добавить ее в продукт для продавца
+                product.setInstruction("1. Open http://google.com\n2. Enter this code to input box\n3. Enjoy");
+                product.setRatingGood(0);
+                product.setRatingBad(0);
+
                 product.setEditing(false);
                 productService.save(product);
 

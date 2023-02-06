@@ -37,8 +37,8 @@ public class VendorPanelCommandHandler extends AbstractBaseHandler {
         );
 
         Map<String, String> thirdRow = new LinkedHashMap<>();
-        thirdRow.put("MESSAGES", ButtonText.MESSAGES.text());
-        thirdRow.put("DISPUTES", ButtonText.DISPUTES.text());
+        thirdRow.put("SELLER_MESSAGES -m %s".formatted(SendMethod.SEND_MESSAGE), ButtonText.MESSAGES.text());
+        thirdRow.put("SELLER_DISPUTES", ButtonText.DISPUTES.text());
 
         payload.setKeyboardMarkup(Buttons.newBuilder()
                 .setButtonsHorizontal(firstRow)

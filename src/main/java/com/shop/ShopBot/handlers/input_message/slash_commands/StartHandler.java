@@ -20,7 +20,6 @@ import java.util.List;
 @BotCommand(command = "/START", type = MessageType.INPUT_MESSAGE)
 public class StartHandler extends AbstractBaseHandler {
 
-
     @Override
     @SneakyThrows
     public void handle(Update update) {

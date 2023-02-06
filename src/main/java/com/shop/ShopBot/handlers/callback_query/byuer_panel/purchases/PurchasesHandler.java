@@ -1,4 +1,4 @@
-package com.shop.ShopBot.handlers.callback_query.byuer_panel;
+package com.shop.ShopBot.handlers.callback_query.byuer_panel.purchases;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageType;
@@ -44,12 +44,13 @@ public class PurchasesHandler extends AbstractBaseHandler {
                     return switch (status) {
                         case IN_PROGRESS -> "🕑 %s (%s)".formatted(p.getName(), p.getDate());
                         case DECLINED -> "❌ %s (%s)".formatted(p.getName(), p.getDate());
+                        case DISPUTE -> "😡 %s (%s)".formatted(p.getName(), p.getDate());
                         case default -> "✅ %s (%s)".formatted(p.getName(), p.getDate());
                     };
                 }));
         payload.setKeyboardMarkup(Buttons.newBuilder()
                 .setButtonsVertical(buttons)
-                .setButtonsHorizontal(SimplePagination.twoButtonsPagination(purchases, SendMethod.EDIT_TEXT, "PURCHASES"))
+                .setButtonsHorizontal(SimplePagination.twoButtonsPagination(purchases, "PURCHASES", "-m EDIT_TEXT"))
                 .setGoBackButton("BUYER_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());
         bot.process(payload);
         

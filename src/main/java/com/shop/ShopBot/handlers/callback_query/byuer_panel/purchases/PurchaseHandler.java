@@ -1,24 +1,18 @@
-package com.shop.ShopBot.handlers.callback_query.byuer_panel;
+package com.shop.ShopBot.handlers.callback_query.byuer_panel.purchases;
 
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.*;
-import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.database.model.Purchase;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
-import com.shop.ShopBot.utils.SimplePagination;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 @BotCommand(command = "PURCHASE .*", type = MessageType.CALLBACK_QUERY)
@@ -36,7 +30,7 @@ public class PurchaseHandler extends AbstractBaseHandler {
 
             Map<String, String> firstRow = Map.of(
                     "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
-                    "CHAT -i " + purchase.getId(), ButtonText.CHAT_WITH_SELLER.text()
+                    "CHAT -i " + purchase.getSeller().getId(), ButtonText.CHAT_WITH_SELLER.text()
             );
             Map<String, String> secondRow = Map.of(
                     "OPEN_DISPUTE -i " + purchase.getId(), ButtonText.OPEN_DISPUTE.text(),

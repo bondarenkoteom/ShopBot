@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Map;
-
 @Component
 @BotCommand(command = "USER_SETTINGS .*", type = MessageType.CALLBACK_QUERY)
 public class UserSettingsCommandHandler extends AbstractBaseHandler {

@@ -3,10 +3,7 @@ package com.shop.ShopBot.handlers;
 import com.shop.ShopBot.Bot;
 import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.constant.Trigger;
-import com.shop.ShopBot.database.service.MessageService;
-import com.shop.ShopBot.database.service.ProductService;
-import com.shop.ShopBot.database.service.PurchaseService;
-import com.shop.ShopBot.database.service.UserService;
+import com.shop.ShopBot.database.service.*;
 import com.shop.ShopBot.entity.AppInlineKeyboardButton;
 import com.shop.ShopBot.entity.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +29,9 @@ public abstract class AbstractBaseHandler {
 
     @Autowired
     protected MessageService messageService;
+
+    @Autowired
+    protected DisputeService disputeService;
 
     @Autowired
     protected PurchaseService purchaseService;

@@ -56,6 +56,7 @@ public class BuyHandler extends AbstractBaseHandler {
                 purchase.setBuyer(user);
                 purchase.setSeller(userService.getUser(product.getOwnerId()));
                 purchase.setPrice(product.getPrice());
+                purchase.setInstruction(product.getInstruction());
                 purchaseService.createOrder(purchase);
 
                 Payload payload = new Payload(update);
@@ -65,7 +66,7 @@ public class BuyHandler extends AbstractBaseHandler {
 
                 Map<String, String> firstRow = Map.of(
                         "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
-                        "CHAT -i " + purchase.getId(), ButtonText.CHAT_WITH_SELLER.text()
+                        "CHAT -i " + purchase.getSeller().getId(), ButtonText.CHAT_WITH_SELLER.text()
                 );
                 Map<String, String> secondRow = Map.of(
                         "OPEN_DISPUTE -i " + purchase.getId(), ButtonText.OPEN_DISPUTE.text(),

@@ -84,8 +84,8 @@ public class ProductHandler extends AbstractBaseHandler {
                 product.getProductName(),
                 product.getDescription(),
                 product.getPrice(),
-                "/uGrinder",
-                "0", "1"
+                userService.getUser(product.getOwnerId()).getUsername(),
+                product.getRatingGood(), product.getRatingBad()
         );
     }
 }

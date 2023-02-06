@@ -34,10 +34,10 @@ public class Product {
     private ProductStatus status;
 
     @Column(name = "rating_good")
-    private String ratingGood;
+    private Integer ratingGood;
 
     @Column(name = "rating_bad")
-    private String ratingBad;
+    private Integer ratingBad;
 
     @Column(name = "product_name")
     private String productName;
