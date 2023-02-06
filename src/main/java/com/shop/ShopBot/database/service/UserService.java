@@ -53,4 +53,10 @@ public class UserService {
     public List<User> getChatsUsers(Long id) {
         return userRepository.unionChatsUsers(id);
     }
+
+    public void incrementSells(Long userId) {
+        User user = getUser(userId);
+        user.setSells(user.getSells() + 1);
+        userRepository.save(user);
+    }
 }

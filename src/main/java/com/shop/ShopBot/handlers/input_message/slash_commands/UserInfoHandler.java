@@ -22,8 +22,8 @@ public class UserInfoHandler extends AbstractBaseHandler {
 
     @Override
     protected void handle(Update update) {
-        SendMessageHandler.CommandParts commandParts = new SendMessageHandler.CommandParts(update);
-        if (!commandParts.getMessage().isEmpty() && !commandParts.getUsername().isEmpty()) {
+        CommandParts commandParts = new CommandParts(update);
+        if (!commandParts.getUsername().isEmpty()) {
 
             Optional<User> userOptional = userService.getUserByUsername(commandParts.getUsername());
             User sender = userService.getUser(update.getMessage().getFrom().getId());
@@ -36,7 +36,7 @@ public class UserInfoHandler extends AbstractBaseHandler {
                         user.getUsername(), user.equals(sender) ? "(you)" : "",
                         user.getUsername(),
                         user.getRating(),
-                        0,
+                        user.getSells(),
                         0,
                         0
                 ));
@@ -47,18 +47,16 @@ public class UserInfoHandler extends AbstractBaseHandler {
     }
 
     @Data
-    static class CommandParts {
+    private static class CommandParts {
         private String username;
-        private String message;
 
         CommandParts(Update update) {
             String query = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
-            Pattern pattern = Pattern.compile("/USER (\\S+)\\s?(.*)?", Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile("/USER (\\S+)", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(query);
 
             if (matcher.find()) {
                 username = matcher.group(1);
-                message = matcher.group(2);
             }
         }
     }

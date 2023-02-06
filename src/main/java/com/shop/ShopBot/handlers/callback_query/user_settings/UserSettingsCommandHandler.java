@@ -27,16 +27,13 @@ public class UserSettingsCommandHandler extends AbstractBaseHandler {
             Payload payload = new Payload(update);
             payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
 
-            Integer rating = user.getRating() == null ? 0 : user.getRating();
-
             payload.setParseMode(ParseMode.HTML);
             payload.setText(MessageText.PERSONAL_INFO.text().formatted(
                     user.getUsername(),
-                    user.getId(),       //User ID
-                    user.getUsername(), //User link
-                    rating,             //Rating
-                    0,                  //Sells
-                    1,                  //Purchases
+                    user.getId(),
+                    user.getRating(),
+                    user.getSells(),
+                    user.getPurchases(),
                     10,                 //Disputes win
                     0                   //Disputes lose
             ));

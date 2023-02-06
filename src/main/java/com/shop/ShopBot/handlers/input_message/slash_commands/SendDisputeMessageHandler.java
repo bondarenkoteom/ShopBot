@@ -46,7 +46,7 @@ public class SendDisputeMessageHandler extends AbstractBaseHandler {
     }
 
     @Data
-    static class CommandParts {
+    private static class CommandParts {
         private Long order;
         private String message;
 

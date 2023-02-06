@@ -36,17 +36,23 @@ $$;
 
 CREATE OR REPLACE PROCEDURE confirm_order(order_id bigint)
 LANGUAGE plpgsql AS $$
+DECLARE product t_product;
 BEGIN
+  SELECT pr.* INTO product FROM t_product pr JOIN t_purchase p ON pr.id = p.product_id WHERE p.id = order_id;
   UPDATE t_purchase p SET status = 'CONFIRMED' WHERE p.id = order_id AND p.status IN('IN_PROGRESS', 'DISPUTE');
-  UPDATE t_product pr SET rating_good = rating_good + 1 WHERE pr = (SELECT pr FROM t_product pr JOIN t_purchase p ON pr.id = p.product_id WHERE p.id = order_id);
+  UPDATE t_product pr SET rating_good = rating_good + 1 WHERE pr.id = product.id;
+  UPDATE t_user u SET rating = rating + 1 WHERE u.id = product.owner_id;
 END;
 $$;
 
 CREATE OR REPLACE PROCEDURE decline_order(order_id bigint)
 LANGUAGE plpgsql AS $$
+DECLARE product t_product;
 BEGIN
+  SELECT pr.* INTO product FROM t_product pr JOIN t_purchase p ON pr.id = p.product_id WHERE p.id = order_id;
   UPDATE t_purchase p SET status = 'DECLINED' WHERE p.id = order_id AND p.status = 'DISPUTE';
-  UPDATE t_product pr SET rating_bad = rating_bad + 1 WHERE pr = (SELECT pr FROM t_product pr JOIN t_purchase p ON pr.id = p.product_id WHERE p.id = order_id);
+  UPDATE t_product pr SET rating_bad = rating_bad + 1 WHERE pr.id = product.id;
+  UPDATE t_user u SET rating = rating - 1 WHERE u.id = product.owner_id;
 END;
 $$;
 ```

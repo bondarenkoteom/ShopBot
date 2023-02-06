@@ -45,7 +45,7 @@ public class SendMessageHandler extends AbstractBaseHandler {
     }
 
     @Data
-    static class CommandParts {
+    private static class CommandParts {
         private String username;
         private String message;
 

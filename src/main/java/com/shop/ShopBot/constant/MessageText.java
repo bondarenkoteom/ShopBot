@@ -97,9 +97,7 @@ public enum MessageText {
     LOT_IS_NOT_ACTIVE("❌ Not active"),
     PERSONAL_INFO("""
             <b>%s</b>
-            
             User ID: %s
-            User link: <code>/u%s</code>
             Rating: %s
             Sells: %s
             Purchases: %s
@@ -108,7 +106,7 @@ public enum MessageText {
             """),
     USER_INFO("""
             <b>%s</b> %s
-            User link: <code>/u%s</code>
+            Message: <code>/message %s text</code>
             Rating: %s
             Sells: %s
             Disputes win: %s

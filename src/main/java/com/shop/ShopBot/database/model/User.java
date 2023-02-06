@@ -17,6 +17,7 @@ public class User {
         this.id = id;
         this.username = username;
         this.rating = 0;
+        this.sells = 0;
         this.waitFor = Trigger.UNDEFINED;
         this.balance = 0.0;
     }
@@ -36,5 +37,11 @@ public class User {
 
     @Column(name = "balance")
     private Double balance;
+
+    @Column(name = "sells")
+    private Integer sells;
+
+    @Column(name = "purchases")
+    private Integer purchases;
 
 }

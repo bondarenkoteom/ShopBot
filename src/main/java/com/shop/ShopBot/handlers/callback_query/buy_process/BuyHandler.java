@@ -42,10 +42,14 @@ public class BuyHandler extends AbstractBaseHandler {
 
             String item = productService.pollItem(product.getId());
             if (!item.isEmpty()) {
+                userService.incrementSells(product.getOwnerId());
+
                 user.setBalance(BigDecimal.valueOf(user.getBalance() - product.getPrice())
                         .setScale(2, RoundingMode.DOWN).doubleValue());
+                user.setPurchases(user.getPurchases() + 1);
 
                 userService.save(user);
+
                 Purchase purchase = new Purchase();
                 purchase.setDate(new Date());
                 purchase.setName(product.getProductName());
