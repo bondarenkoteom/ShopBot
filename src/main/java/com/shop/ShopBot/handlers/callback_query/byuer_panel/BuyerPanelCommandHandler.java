@@ -8,12 +8,9 @@ import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
-import com.shop.ShopBot.utils.Buttons;
+import com.shop.ShopBot.utils.Keyboard;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Component
 @BotCommand(command = "BUYER_PANEL .*", type = MessageType.CALLBACK_QUERY)
@@ -29,18 +26,18 @@ public class BuyerPanelCommandHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
         payload.setText(MessageText.CHOOSE_OPTION.text());
 
-        Map<String, String> firstRow = Map.of(
-                "PURCHASES -p 0", ButtonText.PURCHASES.text()
+        payload.setKeyboard(Keyboard.newBuilder()
+                .row()
+                .button("PURCHASES -p 0", ButtonText.PURCHASES)
+                .row()
+                .button("BUYER_MESSAGES -m %s".formatted(SendMethod.SEND_MESSAGE), ButtonText.MESSAGES)
+                .button("BUYER_DISPUTES", ButtonText.DISPUTES)
+                .row()
+                .button("TOP_USERS", ButtonText.TOP_USERS)
+                .row()
+                .button("SEARCH_CATEGORIES", ButtonText.CATEGORIES)
+                .build()
         );
-
-        Map<String, String> secondRow = new LinkedHashMap<>();
-        secondRow.put("BUYER_MESSAGES -m %s".formatted(SendMethod.SEND_MESSAGE), ButtonText.MESSAGES.text());
-        secondRow.put("BUYER_DISPUTES", ButtonText.DISPUTES.text());
-
-        payload.setKeyboardMarkup(Buttons.newBuilder()
-                .setButtonsVertical(firstRow)
-                .setButtonsHorizontal(secondRow)
-                .build());
         bot.process(payload);
     }
 }

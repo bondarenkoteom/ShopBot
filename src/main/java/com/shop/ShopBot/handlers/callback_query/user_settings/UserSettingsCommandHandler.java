@@ -38,8 +38,8 @@ public class UserSettingsCommandHandler extends AbstractBaseHandler {
                     0                   //Disputes lose
             ));
 
-            payload.setKeyboardMarkup(Buttons.newBuilder()
-                    .setButton("SET_USERNAME", ButtonText.SET_NAME.text())
+            payload.setKeyboard(Buttons.newBuilder()
+                    .setButton("SET_USERNAME", ButtonText.SET_NAME)
                     .build());
             bot.process(payload);
         }

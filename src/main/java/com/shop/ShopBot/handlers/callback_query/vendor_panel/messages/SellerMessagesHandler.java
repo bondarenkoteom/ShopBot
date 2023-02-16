@@ -11,7 +11,6 @@ import com.shop.ShopBot.utils.Buttons;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.security.Key;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ public class SellerMessagesHandler extends AbstractBaseHandler {
                 k -> "SELLER_MESSAGE -i %s -p -1 -m %s".formatted(k.getId(), SendMethod.EDIT_TEXT),
                 User::getUsername, (a, b) -> a, LinkedHashMap::new
         ));
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
+        payload.setKeyboard(Buttons.newBuilder().setButtonsVertical(buttons).build());
         bot.process(payload);
     }
 }

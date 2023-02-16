@@ -1,10 +1,7 @@
 package com.shop.ShopBot.handlers.callback_query.search;
 
 import com.shop.ShopBot.annotations.BotCommand;
-import com.shop.ShopBot.constant.ButtonText;
-import com.shop.ShopBot.constant.MessageText;
-import com.shop.ShopBot.constant.MessageType;
-import com.shop.ShopBot.constant.SendMethod;
+import com.shop.ShopBot.constant.*;
 import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
@@ -24,25 +21,35 @@ import java.util.Map;
 @Component
 @BotCommand(command = "PRODUCT .*", type = MessageType.CALLBACK_QUERY)
 public class ProductHandler extends AbstractBaseHandler {
+
     @Override
     public void handle(Update update) {
         Keys keys = getKeys(update);
 
         String searchQuery = keys.get("q");
+        Category category = keys.get("c") != null ? Category.valueOf(keys.get("c")) : Category.ALL;
 
         int itemPosition = Integer.parseInt(keys.get("i"));
 
         int pageNumber = Integer.parseInt(keys.get("p"));
-        int elementsPerPage = 2;
+        int elementsPerPage = 5;
 
         Page<Product> products;
-        if (searchQuery.equals("all")) {
+        if (searchQuery.isEmpty()) {
             Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-            products = productService.findAllProducts(pageable);
+            if (category == Category.ALL) {
+                products = productService.findAllProducts(pageable);
+            } else {
+                products = productService.findAllProducts(category, pageable);
+            }
         } else {
             Sort sort = Sort.by(Sort.Direction.DESC, "rank");
             Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
-            products = productService.fullTextSearch(searchQuery, pageable);
+            if (category == Category.ALL) {
+                products = productService.fullTextSearch(searchQuery, pageable);
+            } else {
+                products = productService.fullTextSearch(searchQuery, category, pageable);
+            }
         }
 
         if (products.isEmpty()) return;
@@ -64,16 +71,17 @@ public class ProductHandler extends AbstractBaseHandler {
             payload.setText(getFormattedTextMessage(currentProduct));
             payload.setFileId(currentProduct.getImageId());
 
-            Map<String, String> button = Map.of("BUY -i %s".formatted(currentProduct.getId()), ButtonText.BUY.text().formatted(currentProduct.getPrice()));
+            Map<String, String> button = Map.of("BUY_CONFIRM -i %s -m %s".formatted(currentProduct.getId(), SendMethod.SEND_MESSAGE),
+                    ButtonText.BUY.formatted(currentProduct.getPrice()));
 
-            Map<String, String> pagination = SimplePagination.floatingItemPagination(products, searchQuery, itemPosition, SendMethod.EDIT_MEDIA, "PRODUCT");
+            Map<String, String> pagination = SimplePagination.floatingItemPagination2(products, searchQuery, itemPosition, SendMethod.EDIT_MEDIA, "PRODUCT");
 
             Buttons.Builder builder = Buttons.newBuilder().setButtonsHorizontal(pagination);
             if (!Long.valueOf(payload.getChatId()).equals(currentProduct.getOwnerId())) {
                 builder.setButtonsHorizontal(button);
             }
-            builder.setGoBackButton("SEARCH -p %s -m %s -q '%s'".formatted(pageNumber, SendMethod.DELETE, searchQuery));
-            payload.setKeyboardMarkup(builder.build());
+            builder.setGoBackButton("SEARCH -p %s -m %s -q '%s' -c %s".formatted(pageNumber, SendMethod.DELETE, searchQuery, category.name()));
+            payload.setKeyboard(builder.build());
             bot.process(payload);
         }
 

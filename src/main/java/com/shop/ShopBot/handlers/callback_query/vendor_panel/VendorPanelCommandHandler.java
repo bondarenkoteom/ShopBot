@@ -28,19 +28,19 @@ public class VendorPanelCommandHandler extends AbstractBaseHandler {
         payload.setText(MessageText.CHOOSE_OPTION.text());
 
         Map<String, String> firstRow = Map.of(
-                "STATISTICS", ButtonText.STATISTICS.text()
+                "STATISTICS", ButtonText.STATISTICS
         );
 
         Map<String, String> secondRow = Map.of(
-                "MANAGE_LOTS -p 0", ButtonText.MANAGE_LOTS.text(),
-                "CREATE_LOT", ButtonText.CREATE_LOT.text()
+                "MANAGE_LOTS -p 0", ButtonText.MANAGE_LOTS,
+                "CREATE_LOT", ButtonText.CREATE_LOT
         );
 
         Map<String, String> thirdRow = new LinkedHashMap<>();
-        thirdRow.put("SELLER_MESSAGES -m %s".formatted(SendMethod.SEND_MESSAGE), ButtonText.MESSAGES.text());
-        thirdRow.put("SELLER_DISPUTES", ButtonText.DISPUTES.text());
+        thirdRow.put("SELLER_MESSAGES -m %s".formatted(SendMethod.SEND_MESSAGE), ButtonText.MESSAGES);
+        thirdRow.put("SELLER_DISPUTES", ButtonText.DISPUTES);
 
-        payload.setKeyboardMarkup(Buttons.newBuilder()
+        payload.setKeyboard(Buttons.newBuilder()
                 .setButtonsHorizontal(firstRow)
                 .setButtonsHorizontal(secondRow)
                 .setButtonsHorizontal(thirdRow).build());

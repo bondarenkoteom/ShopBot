@@ -22,7 +22,7 @@ public class HelpSellHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
 
         payload.setText(MessageText.WHAT_CAN_I_SELL.text());
-        payload.setKeyboardMarkup(Buttons.newBuilder().setNextPageButton("HELP_BUYER -m EDIT_TEXT").build());
+        payload.setKeyboard(Buttons.newBuilder().setNextPageButton("HELP_BUYER -m EDIT_TEXT").build());
         bot.process(payload);
     }
 }

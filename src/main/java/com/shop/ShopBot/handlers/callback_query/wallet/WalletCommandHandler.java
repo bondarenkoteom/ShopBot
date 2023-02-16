@@ -27,11 +27,11 @@ public class WalletCommandHandler extends AbstractBaseHandler {
         payload.setText(MessageText.WALLET_DEFAULT_MESSAGE.text());
 
         Map<String, String> buttons = Map.of(
-                "WALLET_ADD", ButtonText.WALLET_ADD.text(),
-                "WALLET_HISTORY", ButtonText.WALLET_HISTORY.text(),
-                "WALLET_WITHDRAW", ButtonText.WALLET_WITHDRAW.text()
+                "WALLET_ADD", ButtonText.WALLET_ADD,
+                "WALLET_HISTORY", ButtonText.WALLET_HISTORY,
+                "WALLET_WITHDRAW", ButtonText.WALLET_WITHDRAW
         );
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
+        payload.setKeyboard(Buttons.newBuilder().setButtonsVertical(buttons).build());
         bot.process(payload);
     }
 }

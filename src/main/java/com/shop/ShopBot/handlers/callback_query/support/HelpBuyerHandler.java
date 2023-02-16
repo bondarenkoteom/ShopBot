@@ -22,7 +22,7 @@ public class HelpBuyerHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
 
         payload.setText(MessageText.BUYERS_FEATURES.text());
-        payload.setKeyboardMarkup(Buttons.newBuilder().setGoBackButton("SUPPORT -m EDIT_TEXT").build());
+        payload.setKeyboard(Buttons.newBuilder().setGoBackButton("SUPPORT -m EDIT_TEXT").build());
         bot.process(payload);
     }
 }

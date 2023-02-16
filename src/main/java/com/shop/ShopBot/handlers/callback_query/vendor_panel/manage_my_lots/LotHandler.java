@@ -31,16 +31,16 @@ public class LotHandler extends AbstractBaseHandler {
             payload.setFileId(product.getImageId());
 
             Map<String, String> firstRow = product.getStatus().equals(ProductStatus.NOT_ACTIVE) ?
-                    Map.of("ACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.ACTIVATE_LOT.text()) :
-                    Map.of("DEACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.DEACTIVATE_LOT.text());
+                    Map.of("ACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.ACTIVATE_LOT) :
+                    Map.of("DEACTIVATE_LOT -i %s".formatted(product.getId()), ButtonText.DEACTIVATE_LOT);
             Map<String, String> secondRow = Map.of("GET_LOT_ITEMS -i %s".formatted(product.getId()),
-                    ButtonText.GET_LOT_ITEMS.text().formatted(product.getItems() == null ? 0 : product.getItems().length));
+                    ButtonText.GET_LOT_ITEMS.formatted(product.getItems() == null ? 0 : product.getItems().length));
 
             Map<String, String> thirdRow = Map.of(
-                    "DELETE_LOT -i %s".formatted(product.getId()), ButtonText.DELETE_LOT.text(),
-                    "EDIT_LOT -i %s".formatted(product.getId()), ButtonText.EDIT_LOT.text()
+                    "DELETE_LOT -i %s".formatted(product.getId()), ButtonText.DELETE_LOT,
+                    "EDIT_LOT -i %s".formatted(product.getId()), ButtonText.EDIT_LOT
             );
-            payload.setKeyboardMarkup(Buttons.newBuilder()
+            payload.setKeyboard(Buttons.newBuilder()
                     .setButtonsHorizontal(firstRow)
                     .setButtonsHorizontal(secondRow)
                     .setButtonsHorizontal(thirdRow).build());

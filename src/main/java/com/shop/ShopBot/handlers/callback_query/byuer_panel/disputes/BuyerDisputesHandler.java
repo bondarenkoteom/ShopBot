@@ -31,7 +31,7 @@ public class BuyerDisputesHandler extends AbstractBaseHandler {
                 k -> "BUYER_DISPUTE -i %s".formatted(k.getId()),
                 v -> v.getId() + " | " + v.getName(), (a, b) -> a, LinkedHashMap::new
         ));
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
+        payload.setKeyboard(Buttons.newBuilder().setButtonsVertical(buttons).build());
         bot.process(payload);
     }
 }

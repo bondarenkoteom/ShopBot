@@ -45,7 +45,7 @@ public class ManageMyLotsHandler extends AbstractBaseHandler {
                             MessageText.LOT_IS_ACTIVE.text() : MessageText.LOT_IS_NOT_ACTIVE.text();
                     return "(%s) %s".formatted(status, p.getProductName());
                 }));
-        payload.setKeyboardMarkup(Buttons.newBuilder()
+        payload.setKeyboard(Buttons.newBuilder()
                 .setButtonsVertical(buttons)
                 .setButtonsHorizontal(SimplePagination.twoButtonsPagination(products, "MANAGE_LOTS", "-m EDIT_TEXT"))
                 .setGoBackButton("VENDOR_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());

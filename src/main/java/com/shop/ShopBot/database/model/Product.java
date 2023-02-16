@@ -1,6 +1,8 @@
 package com.shop.ShopBot.database.model;
 
+import com.shop.ShopBot.constant.Category;
 import com.shop.ShopBot.constant.ProductStatus;
+import com.shop.ShopBot.constant.Trigger;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +52,10 @@ public class Product {
 
     @Column(name = "price")
     private Double price;
+
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column(name = "image_id")
     private String imageId;

@@ -3,17 +3,18 @@ package com.shop.ShopBot.handlers.callback_query.vendor_panel.messages;
 import com.shop.ShopBot.annotations.BotCommand;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
+import com.shop.ShopBot.database.model.Dispute;
 import com.shop.ShopBot.database.model.Message;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
 import com.shop.ShopBot.utils.Buttons;
+import com.shop.ShopBot.utils.DateFormat;
 import com.shop.ShopBot.utils.SimplePagination;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -49,8 +50,9 @@ public class SellerMessageHandler extends AbstractBaseHandler {
         String chatText = getFormattedChatText(messages, superUserId);
         if (chatText.isEmpty()) chatText = "No messages yet";
         payload.setText(chatText);
+        payload.setParseMode(ParseMode.HTML);
 
-        payload.setKeyboardMarkup(Buttons.newBuilder()
+        payload.setKeyboard(Buttons.newBuilder()
                 .setButtonsHorizontal(SimplePagination.twoButtonsPagination(messages, "SELLER_MESSAGE", "-m EDIT_TEXT -i " + userId))
                 .setGoBackButton("SELLER_MESSAGES -m %s".formatted(SendMethod.EDIT_TEXT)).build());
         bot.process(payload);
@@ -59,9 +61,9 @@ public class SellerMessageHandler extends AbstractBaseHandler {
     private String getFormattedChatText(Page<Message> messages, Long superUserId) {
         return messages.stream().map(message -> {
             if (message.getSender().getId().equals(superUserId)) {
-                return "you -> \n" + message.getText();
+                return String.format("<b># You</b> [%s]%n", DateFormat.format(message.getDate())) + message.getText();
             } else {
-                return "<- " + message.getSender().getUsername() + "\n" + message.getText();
+                return String.format("<b># %s</b> [%s]%n", message.getSender().getUsername(), DateFormat.format(message.getDate())) + message.getText();
             }
         }).collect(Collectors.joining("\n\n"));
     }

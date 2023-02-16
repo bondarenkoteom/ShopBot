@@ -1,5 +1,6 @@
 package com.shop.ShopBot.database.service;
 
+import com.shop.ShopBot.constant.Category;
 import com.shop.ShopBot.database.model.Product;
 import com.shop.ShopBot.database.repository.ProductRepository;
 import com.shop.ShopBot.database.repository.SearchRepository;
@@ -49,8 +50,16 @@ public class ProductService {
         return searchRepository.findAllProducts(pageable);
     }
 
+    public Page<Product> findAllProducts(Category category, Pageable pageable) {
+        return searchRepository.findAllProducts(category, pageable);
+    }
+
     public Page<Product> fullTextSearch(String text, Pageable pageable) {
         return searchRepository.fullTextSearch(text, pageable);
+    }
+
+    public Page<Product> fullTextSearch(String text, Category category, Pageable pageable) {
+        return searchRepository.fullTextSearch(text, category, pageable);
     }
 
     public String pollItem(Long id) {

@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             UNION
             SELECT m.sender_id FROM t_message m WHERE m.receiver_id = :id)""", nativeQuery = true)
     List<User> unionChatsUsers(@Param("id") Long id);
+
+    @Query(value = "SELECT * FROM t_user ORDER BY sells ASC, rating ASC", nativeQuery = true)
+    List<User> findTop25Vendors();
 }

@@ -54,6 +54,10 @@ public class UserService {
         return userRepository.unionChatsUsers(id);
     }
 
+    public List<User> findTop25Vendors() {
+        return userRepository.findTop25Vendors();
+    }
+
     public void incrementSells(Long userId) {
         User user = getUser(userId);
         user.setSells(user.getSells() + 1);

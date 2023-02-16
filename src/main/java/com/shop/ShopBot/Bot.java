@@ -59,7 +59,7 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(payload.getChatId());
         sendMessage.setText(payload.getText());
-        sendMessage.setReplyMarkup(payload.getKeyboardMarkup());
+        sendMessage.setReplyMarkup(payload.getKeyboard());
         sendMessage.setParseMode(payload.getParseMode());
         execute(sendMessage);
     }
@@ -70,7 +70,8 @@ public class Bot extends TelegramLongPollingBot {
         editMessageText.setChatId(payload.getChatId());
         editMessageText.setText(payload.getText());
         editMessageText.setMessageId(payload.getMessageId());
-        editMessageText.setReplyMarkup(payload.getKeyboardMarkup());
+        editMessageText.setReplyMarkup(payload.getKeyboard());
+        editMessageText.setParseMode(payload.getParseMode());
         execute(editMessageText);
     }
 
@@ -80,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
         sendPhoto.setPhoto(new InputFile(payload.getFileId()));
         sendPhoto.setChatId(payload.getChatId());
         sendPhoto.setCaption(payload.getText());
-        sendPhoto.setReplyMarkup(payload.getKeyboardMarkup());
+        sendPhoto.setReplyMarkup(payload.getKeyboard());
         sendPhoto.setParseMode(ParseMode.HTML);
         execute(sendPhoto);
     }
@@ -91,7 +92,7 @@ public class Bot extends TelegramLongPollingBot {
         editMessageCaption.setChatId(payload.getChatId());
         editMessageCaption.setCaption(payload.getText());
         editMessageCaption.setMessageId(payload.getMessageId());
-        editMessageCaption.setReplyMarkup(payload.getKeyboardMarkup());
+        editMessageCaption.setReplyMarkup(payload.getKeyboard());
         editMessageCaption.setParseMode(ParseMode.HTML);
         execute(editMessageCaption);
     }
@@ -105,7 +106,7 @@ public class Bot extends TelegramLongPollingBot {
         editMessageMedia.setMedia(inputMediaPhoto);
         editMessageMedia.setChatId(payload.getChatId());
         editMessageMedia.setMessageId(payload.getMessageId());
-        editMessageMedia.setReplyMarkup(payload.getKeyboardMarkup());
+        editMessageMedia.setReplyMarkup(payload.getKeyboard());
         execute(editMessageMedia);
     }
 

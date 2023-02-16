@@ -4,7 +4,6 @@ import com.shop.ShopBot.Bot;
 import com.shop.ShopBot.api.TelegramApiClient;
 import com.shop.ShopBot.constant.Trigger;
 import com.shop.ShopBot.database.service.*;
-import com.shop.ShopBot.entity.AppInlineKeyboardButton;
 import com.shop.ShopBot.entity.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

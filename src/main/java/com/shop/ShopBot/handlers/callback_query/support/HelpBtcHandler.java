@@ -22,7 +22,7 @@ public class HelpBtcHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
 
         payload.setText(MessageText.WHAT_IS_BTC.text());
-        payload.setKeyboardMarkup(Buttons.newBuilder().setNextPageButton("HELP_SELL -m EDIT_TEXT").build());
+        payload.setKeyboard(Buttons.newBuilder().setNextPageButton("HELP_SELL -m EDIT_TEXT").build());
         bot.process(payload);
     }
 }

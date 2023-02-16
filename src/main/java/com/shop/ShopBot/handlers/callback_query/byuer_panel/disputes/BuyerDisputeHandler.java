@@ -7,7 +7,9 @@ import com.shop.ShopBot.database.model.Dispute;
 import com.shop.ShopBot.entity.Keys;
 import com.shop.ShopBot.entity.Payload;
 import com.shop.ShopBot.handlers.AbstractBaseHandler;
+import com.shop.ShopBot.utils.DateFormat;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class BuyerDisputeHandler extends AbstractBaseHandler {
         String chatText = getFormattedChatText(messages, superUserId);
         if (chatText.isEmpty()) chatText = "No messages yet";
         payload.setText(chatText);
+        payload.setParseMode(ParseMode.HTML);
 
         bot.process(payload);
     }
@@ -39,9 +42,9 @@ public class BuyerDisputeHandler extends AbstractBaseHandler {
     private String getFormattedChatText(List<Dispute> messages, Long superUserId) {
         return messages.stream().map(message -> {
             if (message.getSender().getId().equals(superUserId)) {
-                return "you -> \n" + message.getText();
+                return String.format("<b># You</b> [%s]%n", DateFormat.format(message.getDate())) + message.getText();
             } else {
-                return "<- " + message.getSender().getUsername() + "\n" + message.getText();
+                return String.format("<b># %s</b> [%s]%n", message.getSender().getUsername(), DateFormat.format(message.getDate())) + message.getText();
             }
         }).collect(Collectors.joining("\n\n"));
     }

@@ -31,7 +31,7 @@ public class BuyerMessagesHandler extends AbstractBaseHandler {
                 k -> "BUYER_MESSAGE -i %s -p -1 -m %s".formatted(k.getId(), SendMethod.EDIT_TEXT),
                 User::getUsername, (a, b) -> a, LinkedHashMap::new
         ));
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
+        payload.setKeyboard(Buttons.newBuilder().setButtonsVertical(buttons).build());
         bot.process(payload);
     }
 }

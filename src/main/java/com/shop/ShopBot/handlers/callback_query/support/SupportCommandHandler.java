@@ -29,10 +29,10 @@ public class SupportCommandHandler extends AbstractBaseHandler {
         payload.setText(MessageText.HELP_MESSAGE.text());
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("HELP_BTC -m EDIT_TEXT", ButtonText.HELP_BTC.text());
-        buttons.put("HELP_SELL -m EDIT_TEXT", ButtonText.HELP_SELL.text());
-        buttons.put("HELP_BUYER -m EDIT_TEXT", ButtonText.HELP_BUYER.text());
-        payload.setKeyboardMarkup(Buttons.newBuilder().setButtonsVertical(buttons).build());
+        buttons.put("HELP_BTC -m EDIT_TEXT", ButtonText.HELP_BTC);
+        buttons.put("HELP_SELL -m EDIT_TEXT", ButtonText.HELP_SELL);
+        buttons.put("HELP_BUYER -m EDIT_TEXT", ButtonText.HELP_BUYER);
+        payload.setKeyboard(Buttons.newBuilder().setButtonsVertical(buttons).build());
         bot.process(payload);
     }
 }

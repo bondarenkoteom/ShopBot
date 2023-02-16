@@ -51,7 +51,7 @@ public class EditLotHandler extends AbstractBaseHandler {
                     "SET_LOT_INSTRUCTION -i %s".formatted(product.getId()), "Set lot items"
             );
 
-            payload.setKeyboardMarkup(Buttons.newBuilder()
+            payload.setKeyboard(Buttons.newBuilder()
                     .setButtonsHorizontal(firstRow)
                     .setButtonsHorizontal(secondRow)
                     .setButtonsHorizontal(thirdRow)

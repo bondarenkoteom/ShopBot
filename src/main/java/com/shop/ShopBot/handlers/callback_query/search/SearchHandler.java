@@ -1,6 +1,7 @@
 package com.shop.ShopBot.handlers.callback_query.search;
 
 import com.shop.ShopBot.annotations.BotCommand;
+import com.shop.ShopBot.constant.Category;
 import com.shop.ShopBot.constant.MessageType;
 import com.shop.ShopBot.constant.SendMethod;
 import com.shop.ShopBot.database.model.Product;
@@ -27,26 +28,40 @@ public class SearchHandler extends AbstractBaseHandler {
 
     @Override
     public void handle(Update update) {
+        Payload payload = new Payload(update);
         Keys keys = getKeys(update);
 
         String searchQuery = keys.get("q");
+        Category category = keys.get("c") != null ? Category.valueOf(keys.get("c")) : Category.ALL;
 
         int pageNumber = Integer.parseInt(keys.get("p"));
-        int elementsPerPage = 2;
+        int elementsPerPage = 5;
 
         Page<Product> products;
-        if (searchQuery.equals("all")) {
+        if (searchQuery.isEmpty()) {
             Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-            products = productService.findAllProducts(pageable);
+            if (category == Category.ALL) {
+                products = productService.findAllProducts(pageable);
+            } else {
+                products = productService.findAllProducts(category, pageable);
+            }
         } else {
             Sort sort = Sort.by(Sort.Direction.DESC, "rank");
             Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
-            products = productService.fullTextSearch(searchQuery, pageable);
+            if (category == Category.ALL) {
+                products = productService.fullTextSearch(searchQuery, pageable);
+            } else {
+                products = productService.fullTextSearch(searchQuery, category, pageable);
+            }
         }
 
-        if (products.isEmpty()) return;
-
-        Payload payload = new Payload(update);
+        if (products.isEmpty()) {
+            payload.setText("Nothing found, but here is all items that we got");
+            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
+            products = productService.findAllProducts(pageable);
+        } else {
+            payload.setText("Below is the list of active lots. If you want to search some lots by the name or description just enter a string to search.");
+        }
 
         if (SendMethod.valueOf(keys.get("m")).equals(SendMethod.DELETE)) {
             payload.setSendMethod(SendMethod.DELETE);
@@ -56,23 +71,19 @@ public class SearchHandler extends AbstractBaseHandler {
             payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
         }
 
-        payload.setText("Below is the list of active lots. If you want to search some lots by the name or description just enter a string to search.");
-
         List<Product> originProducts = products.getContent();
         Map<String, String> buttons = IntStream.range(0, originProducts.size()).boxed().collect(Collectors.toMap(
-                k -> "PRODUCT -p %s -i %s -m %s -q '%s'".formatted(pageNumber, k, SendMethod.DELETE, searchQuery),
+                k -> "PRODUCT -p %s -i %s -m %s -q '%s' -c %s".formatted(pageNumber, k, SendMethod.DELETE, searchQuery, category.name()),
                 v -> "%s | %s".formatted(originProducts.get(v).getPrice(), originProducts.get(v).getProductName()), (a, b) -> a, LinkedHashMap::new
         ));
 
-        Map<String, String> pagination = SimplePagination.twoButtonsPagination(products, "SEARCH", "-m EDIT_TEXT -q '" + searchQuery + "'");
+        Map<String, String> pagination = SimplePagination.twoButtonsPagination(products, "SEARCH", "-m EDIT_TEXT -q '" + searchQuery + "' -c " + category.name());
 
-        payload.setKeyboardMarkup(Buttons.newBuilder()
+        payload.setKeyboard(Buttons.newBuilder()
                 .setButtonsVertical(buttons)
                 .setButtonsHorizontal(pagination)
                 .build());
 
         bot.process(payload);
-
-
     }
 }

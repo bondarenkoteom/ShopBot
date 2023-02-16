@@ -29,15 +29,15 @@ public class PurchaseHandler extends AbstractBaseHandler {
             Payload payload = new Payload(update);
 
             Map<String, String> firstRow = Map.of(
-                    "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY.text(),
-                    "CHAT -i " + purchase.getSeller().getId(), ButtonText.CHAT_WITH_SELLER.text()
+                    "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY,
+                    "CHAT -i " + purchase.getSeller().getId(), ButtonText.CHAT_WITH_SELLER
             );
             Map<String, String> secondRow = Map.of(
-                    "OPEN_DISPUTE -i " + purchase.getId(), ButtonText.OPEN_DISPUTE.text(),
-                    "CLOSE_DISPUTE -i " + purchase.getId(), ButtonText.CLOSE_DISPUTE.text()
+                    "OPEN_DISPUTE -i " + purchase.getId(), ButtonText.OPEN_DISPUTE,
+                    "CLOSE_DISPUTE -i " + purchase.getId(), ButtonText.CLOSE_DISPUTE
             );
             payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
-            payload.setKeyboardMarkup(Buttons.newBuilder()
+            payload.setKeyboard(Buttons.newBuilder()
                     .setButtonsVertical(firstRow)
                     .setButtonsHorizontal(secondRow).build());
             payload.setParseMode(ParseMode.HTML);

@@ -48,7 +48,7 @@ public class PurchasesHandler extends AbstractBaseHandler {
                         case default -> "✅ %s (%s)".formatted(p.getName(), p.getDate());
                     };
                 }));
-        payload.setKeyboardMarkup(Buttons.newBuilder()
+        payload.setKeyboard(Buttons.newBuilder()
                 .setButtonsVertical(buttons)
                 .setButtonsHorizontal(SimplePagination.twoButtonsPagination(purchases, "PURCHASES", "-m EDIT_TEXT"))
                 .setGoBackButton("BUYER_PANEL -m %s".formatted(SendMethod.EDIT_TEXT)).build());

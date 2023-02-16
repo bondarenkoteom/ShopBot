@@ -104,39 +104,34 @@ public class SimplePagination {
         int lastItemPosition = page.getSize() - 1;
         int firstItemPosition = 0;
 
-        if (!page.isFirst() && !itemPosition.equals(0)) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, 0, itemPosition - 1, sendMethod, searchQuery), "<<" + 1);
-        } else if (!page.isFirst()) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, 0, firstItemPosition, sendMethod, searchQuery), "<<" + 1);
+        if (getItemPosition(page.getNumber(), page.getSize(), itemPosition) > 1) {
+            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, 0, 0, sendMethod, searchQuery), "<<" + 1);
         }
 
         if (page.hasPrevious() && itemPosition.equals(0)) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber() - 1, lastItemPosition, sendMethod, searchQuery), "<" + page.getNumber());
+            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber() - 1, lastItemPosition, sendMethod, searchQuery), "<" + getItemPosition(page.getNumber() - 1, page.getSize(), lastItemPosition));
         } else if (!itemPosition.equals(0)) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber(), itemPosition - 1, sendMethod, searchQuery), "prev");
+            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber(), itemPosition - 1, sendMethod, searchQuery), "<" + getItemPosition(page.getNumber(), page.getSize(), itemPosition - 1));
         }
 
-        pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber(), itemPosition, sendMethod, searchQuery), "•" + (page.getNumber() + 1) + "•");
+        pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber(), itemPosition, sendMethod, searchQuery), "•" + getItemPosition(page.getNumber(), page.getSize(), itemPosition)  + "•");
 
 
         if (page.hasNext() && itemPosition.equals(lastItemPosition)) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber() + 1, firstItemPosition, sendMethod, searchQuery), ">" + (page.getNumber() + 2));
+            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber() + 1, firstItemPosition, sendMethod, searchQuery), getItemPosition(page.getNumber() + 1, page.getSize(), firstItemPosition) + ">");
         } else if (!itemPosition.equals(page.getContent().size() - 1)) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber(), itemPosition + 1, sendMethod, searchQuery), "next");
+            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getNumber(), itemPosition + 1, sendMethod, searchQuery), getItemPosition(page.getNumber(), page.getSize(), itemPosition + 1) + ">");
         }
 
-        if (!page.isLast() && !itemPosition.equals(page.getTotalPages())) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getTotalPages() - 1, lastItemPosition, sendMethod, searchQuery), page.getTotalPages() + ">>");
-        } else if (itemPosition.equals(page.getTotalPages())) {
-            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getTotalPages() - 1, firstItemPosition, sendMethod, searchQuery), page.getTotalPages() + ">>");
+        if (getItemPosition(page.getNumber(), page.getSize(), itemPosition) < page.getTotalElements()) {
+            pagination.put("%s -p %s -i %s -m %s -q '%s'".formatted(handler, page.getTotalPages() - 1, lastItemPosition, sendMethod, searchQuery), page.getTotalElements() + ">>");
         }
-
 
         return pagination;
     }
 
-    private static int getItemPosition(int page, Integer itemPosition, Integer stringNumberPosition) {
-        return (page * itemPosition) - (itemPosition - stringNumberPosition);
+    private static int getItemPosition(int page, Integer countOfItemsOnPage, Integer itemPosition) {
+        return ((page + 1) * countOfItemsOnPage) - (countOfItemsOnPage - itemPosition - 1);
 
     }
 

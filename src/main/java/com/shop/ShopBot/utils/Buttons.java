@@ -66,12 +66,12 @@ public class Buttons {
         }
 
         public Builder setGoBackButton(String callBackQuery) {
-            setButton(callBackQuery, ButtonText.GO_BACK.text());
+            setButton(callBackQuery, ButtonText.GO_BACK);
             return this;
         }
 
         public Builder setNextPageButton(String callBackQuery) {
-            setButton(callBackQuery, ButtonText.NEXT_PAGE.text());
+            setButton(callBackQuery, ButtonText.NEXT_PAGE);
             return this;
         }
 
