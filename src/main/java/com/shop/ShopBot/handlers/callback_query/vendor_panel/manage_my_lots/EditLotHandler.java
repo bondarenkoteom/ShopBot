@@ -47,10 +47,15 @@ public class EditLotHandler extends AbstractBaseHandler {
                     "SET_LOT_ITEMS -i %s".formatted(product.getId()), "Set lot items"
             );
 
+            Map<String, String> fourthRow = Map.of(
+                    "SET_LOT_INSTRUCTION -i %s".formatted(product.getId()), "Set lot items"
+            );
+
             payload.setKeyboardMarkup(Buttons.newBuilder()
                     .setButtonsHorizontal(firstRow)
                     .setButtonsHorizontal(secondRow)
                     .setButtonsHorizontal(thirdRow)
+                    .setButtonsHorizontal(fourthRow)
                     .setGoBackButton("LOT -i %s -m %s".formatted(product.getId(), SendMethod.EDIT_CAPTION))
                     .build()
             );

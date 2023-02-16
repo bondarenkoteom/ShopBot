@@ -73,25 +73,26 @@ public enum MessageText {
             2. Enter your product name
             3. Enter your product description
             4. Enter your price
-            5. Send text file with keys (example is attached to this message)"""),
+            5. Send text file with keys (example is attached to this message)
+            6. Send text of instructions how to use your product"""),
 
     LOT("""
             Status: %s
-            
+                        
             Title: <code>%s</code>
             Description: <code>%s</code>
             Price: <code>%s</code>
-            
+                        
             Lot rating:  👍 %s   👎 %s"""),
 
     PRODUCT("""
             <b>%s</b>
-            
+                        
             Info: %s
             Price: <b>%s</b>
-            
+                        
             Seller: <code>%s</code>
-            
+                        
             Rating:  👍 %s   👎 %s"""),
     LOT_IS_ACTIVE("✅ Active"),
     LOT_IS_NOT_ACTIVE("❌ Not active"),

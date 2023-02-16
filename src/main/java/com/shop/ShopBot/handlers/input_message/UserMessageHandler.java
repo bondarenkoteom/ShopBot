@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Arrays;
-
 @Component
 public class UserMessageHandler extends AbstractBaseHandler {
 
@@ -94,7 +92,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
 
                 Payload payload = new Payload(update);
                 payload.setSendMethod(SendMethod.SEND_MESSAGE);
-                        payload.setText("""
+                payload.setText("""
                         👍 The value was set successfully.
 
                         Please enter the description of your lot. Try not to use more than 2500 symbols.""");
@@ -152,7 +150,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
 
                 Payload payload = new Payload(update);
                 payload.setSendMethod(SendMethod.SEND_MESSAGE);
-                        payload.setText("""
+                payload.setText("""
                         👍 The value was set successfully.
 
                         Send text file with items you want to sell""");
@@ -183,11 +181,22 @@ public class UserMessageHandler extends AbstractBaseHandler {
                     product.setItems(message.getText().split("\n"));
                 }
 
-                //todo Добавить шаг с установкой инструкции и добавить ее в продукт для продавца
-                product.setInstruction("1. Open http://google.com\n2. Enter this code to input box\n3. Enjoy");
-                product.setRatingGood(0);
-                product.setRatingBad(0);
+                product.setEditing(true);
+                productService.save(product);
 
+                setTriggerValue(update, Trigger.NEW_PRODUCT_INSTRUCTION);
+
+                Payload payload = new Payload(update);
+                payload.setSendMethod(SendMethod.SEND_MESSAGE);
+                payload.setText("""
+                        👍 The value was set successfully.
+                                                
+                        Send text of instructions how to use your product""");
+                bot.process(payload);
+            }
+            case NEW_PRODUCT_INSTRUCTION -> {
+                Product product = productService.getEditingProductByOwnerId(message.getFrom().getId());
+                product.setInstruction(message.getText());
                 product.setEditing(false);
                 productService.save(product);
 
