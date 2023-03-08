@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header-css}"></head>
+
+<style type="text/css">
+    body {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+        min-height: 1rem !important;
+    }
+    html { overflow-y: scroll; }
+
+
+</style>
+
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/header :: header}"/>
+
+<div class="container">
+    <div class="mt-5 text-center">
+        <noscript>
+            <div class="alert alert alert-danger" role="alert">This site requires Javascript to work, please enable
+                Javascript.
+            </div>
+        </noscript>
+    </div>
+</div>
+
+<section id="content">
+
+    <div class="d-flex justify-content-center">
+
+        <div class="col-md-10 mx-auto col-lg-3">
+
+            <h1 class="mb-5 text-center">Please Sign In</h1>
+
+            <form th:action="@{/login}" method="post" class="p-4 p-md-5 border rounded-3 bg-light">
+                <div th:if="${param.error}" class="form-floating mb-3">
+                    <div class="alert alert-danger">
+                        Invalid username and password.
+                    </div>
+                </div>
+                <div th:if="${param.error_captcha}" class="form-floating mb-3">
+                    <div class="alert alert-warning">
+                        Captcha not verified.
+                    </div>
+                </div>
+                <div th:if="${param.logout}" class="form-floating mb-3">
+                    <div class="alert alert-info">
+                        You have been logged out.
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input name="username" type="username" class="form-control" id="floatingInput" placeholder="Login">
+                    <label for="floatingInput">Login</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+
+                <div class="h-captcha" data-sitekey="aec1b47f-018e-478c-b230-fb671bda4cce"></div>
+                <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+                <hr class="my-4">
+                <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"/>
+
+</body>
+</html>
