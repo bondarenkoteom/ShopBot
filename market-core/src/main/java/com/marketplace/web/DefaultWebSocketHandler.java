@@ -11,6 +11,8 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
 public class DefaultWebSocketHandler implements WebSocketHandler {
 
@@ -27,18 +29,15 @@ public class DefaultWebSocketHandler implements WebSocketHandler {
     @Override
     public Mono<Void> handle(WebSocketSession session) {
         Flux<WebSocketMessage> messages = session.receive()
-                // .doOnNext(message -> { read message here or in the block below })
-                .flatMap(message -> {
-                    // or read message here
-                    return eventUnicastService.getMessages();
-                })
+                .flatMap(message -> eventUnicastService.getMessages())
                 .flatMap(o -> {
                     try {
                         return Mono.just(objectMapper.writeValueAsString(o));
                     } catch (JsonProcessingException e) {
-                        return Mono.error(e);
+                        throw new RuntimeException(e);
                     }
-                }).map(session::textMessage);
+                })
+                .map(session::textMessage);
         return session.send(messages);
     }
 }

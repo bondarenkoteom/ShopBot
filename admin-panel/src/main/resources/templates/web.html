@@ -16,19 +16,25 @@
 		}
 		clientWebSocket.onclose = function(error) {
 			console.log("clientWebSocket.onclose", clientWebSocket, error);
-			events("Closing connection");
 		}
 		clientWebSocket.onerror = function(error) {
 			console.log("clientWebSocket.onerror", clientWebSocket, error);
-			events("An error occured");
 		}
-		clientWebSocket.onmessage = function(error) {
-			console.log("clientWebSocket.onmessage", clientWebSocket, error);
-			events(error.data);
+		clientWebSocket.onmessage = function(message) {
+			console.log("clientWebSocket.onmessage", clientWebSocket, message);
+			events(error.message);
 		}
-		function events(responseEvent) {
+
+        function events(responseEvent) {
 			document.querySelector(".events").innerHTML += responseEvent + "<br>";
 		}
+
+		function addData(data) {
+            myChart.data.datasets.forEach((dataset) => {
+                dataset.data = Array(data);
+            });
+            myChart.update();
+        }
 	</script>
 </body>
 </html>

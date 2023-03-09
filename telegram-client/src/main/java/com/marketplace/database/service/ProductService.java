@@ -1,5 +1,6 @@
 package com.marketplace.database.service;
 
+import com.marketplace.client.HttpCoreInterface;
 import com.marketplace.constant.Category;
 import com.marketplace.database.model.Product;
 import com.marketplace.database.repository.ProductRepository;
@@ -20,13 +21,8 @@ public class ProductService {
     @Autowired
     private SearchRepository searchRepository;
 
-    public Product save(Product product) {
-        return productRepository.save(product);
-    }
-
-    public void deleteAllEditing() {
-        productRepository.deleteByIsEditingTrue();
-    }
+    @Autowired
+    private HttpCoreInterface httpCoreInterface;
 
     public Product getEditingProductByOwnerId(Long ownerId) {
         return productRepository.getProductByOwnerIdAndIsEditing(ownerId, true);
@@ -38,10 +34,6 @@ public class ProductService {
 
     public Optional<Product> getById(Long id) {
         return productRepository.findById(id);
-    }
-
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
     }
 
     public Page<Product> findAllProducts(Pageable pageable) {
@@ -62,5 +54,17 @@ public class ProductService {
 
     public String pollItem(Long id) {
         return productRepository.pollItem(id);
+    }
+
+    public Product save(Product product) {
+        return httpCoreInterface.saveProduct(product);
+    }
+
+    public void deleteAllEditing() {
+        httpCoreInterface.deleteProduct(true);
+    }
+
+    public void deleteById(Long id) {
+        httpCoreInterface.deleteProduct(id);
     }
 }

@@ -1,6 +1,8 @@
 package com.marketplace.config;
 
 import com.marketplace.Bot;
+import com.marketplace.client.HttpCoreClient;
+import com.marketplace.client.HttpCoreInterface;
 import com.marketplace.handlers.TelegramFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,13 @@ public class SpringConfig {
 
         return bot;
     }
+
+    @Bean
+    public HttpCoreInterface httpCoreInterface(HttpCoreClient httpCoreClient) {
+        return httpCoreClient.getHttpInterface();
+    }
+
+
 //    @Bean
 //    public SetWebhook setWebhookInstance() {
 //        return SetWebhook.builder().url(botConfig.getBotWebhookUrl()).build();
