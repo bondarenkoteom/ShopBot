@@ -3,7 +3,7 @@ package com.marketplace.handlers.callback_query.vendor_panel.disputes;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Dispute;
+import com.marketplace.entity.Dispute;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
 import com.marketplace.handlers.AbstractBaseHandler;
@@ -29,7 +29,7 @@ public class SellerDisputeHandler extends AbstractBaseHandler {
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
 
-        List<Dispute> messages = disputeService.getDisputeMessages(purchaseId);
+        List<Dispute> messages = httpCoreInterface.disputesGet(purchaseId);
 
         String chatText = getFormattedChatText(messages, superUserId);
         if (chatText.isEmpty()) chatText = "No messages yet";

@@ -17,7 +17,7 @@ public class OpenDisputeHandler extends AbstractBaseHandler {
     @Override
     public void handle(Update update) {
         long purchaseId = Long.parseLong(getKeys(update).get("i"));
-        purchaseService.updateOrderStatus(purchaseId, OrderStatus.DISPUTE);
+        httpCoreInterface.statusUpdate(purchaseId, OrderStatus.DISPUTE);
 
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.SEND_MESSAGE);

@@ -3,15 +3,14 @@ package com.marketplace.handlers.callback_query.byuer_panel.messages;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Message;
+import com.marketplace.entity.Keys;
+import com.marketplace.entity.Message;
 import com.marketplace.entity.Payload;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
 import com.marketplace.utils.DateFormat;
 import com.marketplace.utils.SimplePagination;
-import com.marketplace.entity.Keys;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,13 +35,13 @@ public class BuyerMessageHandler extends AbstractBaseHandler {
 
         Page<Message> messages;
         if (pageNumber == -1) {
-            messages = messageService.getChatMessages(superUserId, userId, PageRequest.of(0, elementsPerPage));
+            messages = httpCoreInterface.messagesGet(0, elementsPerPage, new String[]{}, superUserId, userId);
             if (messages.getTotalPages() > 1) {
                 pageNumber = messages.getTotalPages() - 1;
-                messages = messageService.getChatMessages(superUserId, userId, PageRequest.of(pageNumber, elementsPerPage));
+                messages = httpCoreInterface.messagesGet(pageNumber, elementsPerPage, new String[]{}, superUserId, userId);
             }
         } else {
-            messages = messageService.getChatMessages(superUserId, userId, PageRequest.of(pageNumber, elementsPerPage));
+            messages = httpCoreInterface.messagesGet(pageNumber, elementsPerPage, new String[]{}, superUserId, userId);
         }
 
         String chatText = getFormattedChatText(messages, superUserId);

@@ -32,8 +32,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
     Page<Purchase> getPurchasesByBuyerId(Long buyerId, Pageable pageable);
 
     @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND buyer_id = :id", nativeQuery = true)
-    List<Purchase> disputeBuyerPurchasesChats(@Param("id") Long id);
+    List<Purchase> disputePurchasesByBuyer(@Param("id") Long id);
 
     @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND seller_id = :id", nativeQuery = true)
-    List<Purchase> disputeSellerPurchasesChats(@Param("id") Long id);
+    List<Purchase> disputePurchasesBySeller(@Param("id") Long id);
 }

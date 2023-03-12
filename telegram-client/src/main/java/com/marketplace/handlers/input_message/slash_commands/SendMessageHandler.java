@@ -3,10 +3,11 @@ package com.marketplace.handlers.input_message.slash_commands;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Message;
+import com.marketplace.entity.Message;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
-import com.marketplace.database.model.User;
+import com.marketplace.requests.UserRequest;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -25,15 +26,17 @@ public class SendMessageHandler extends AbstractBaseHandler {
         CommandParts commandParts = new CommandParts(update);
         if (!commandParts.getMessage().isEmpty() && !commandParts.getUsername().isEmpty()) {
 
-            Optional<User> receiver = userService.getUserByUsername(commandParts.getUsername());
-            User sender = userService.getUser(update.getMessage().getFrom().getId());
-            if (receiver.isPresent() && !receiver.get().equals(sender)) {
+            Optional<User> receiverOptional = httpCoreInterface.userGet(null, commandParts.getUsername());
+            Optional<User> senderOptional = httpCoreInterface.userGet(update.getMessage().getFrom().getId(), null);
+
+            if (receiverOptional.isPresent() && senderOptional.isPresent() && !receiverOptional.get().equals(senderOptional.get())) {
                 Message message = new Message();
                 message.setText(commandParts.getMessage());
-                message.setSender(sender);
-                message.setReceiver(receiver.get());
+                message.setSender(senderOptional.get());
+                message.setReceiver(receiverOptional.get());
                 message.setDate(new Date());
-                messageService.save(message);
+
+                httpCoreInterface.messageCreate(message);
 
                 Payload payload = new Payload(update);
                 payload.setSendMethod(SendMethod.SEND_MESSAGE);

@@ -5,9 +5,9 @@ import com.marketplace.constant.MessageText;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.ProductStatus;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Product;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Product;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class EditLotHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         Keys keys = getKeys(update);
 
-        Optional<Product> productOptional = productService.getById(Long.valueOf(keys.get("i")));
+        Optional<Product> productOptional = httpCoreInterface.productGet(Long.valueOf(keys.get("i")));
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
@@ -61,7 +61,7 @@ public class EditLotHandler extends AbstractBaseHandler {
             );
 
             product.setStatus(ProductStatus.ACTIVE);
-            productService.save(product);
+            httpCoreInterface.productUpdate(product);
             bot.process(payload);
         }
     }

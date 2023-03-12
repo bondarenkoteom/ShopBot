@@ -6,6 +6,7 @@ import com.marketplace.constant.SendMethod;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
 import com.marketplace.handlers.AbstractBaseHandler;
+import com.marketplace.requests.ProductRequest;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -21,7 +22,7 @@ public class DeleteLotHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.DELETE);
         bot.process(payload);
 
-        productService.deleteById(Long.valueOf(keys.get("i")));
+        httpCoreInterface.productDelete(Long.valueOf(keys.get("i")));
 
         payload.setText("Your lot is completely deleted.");
         payload.setSendMethod(SendMethod.SEND_MESSAGE);

@@ -4,21 +4,21 @@ import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.Category;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Product;
-import com.marketplace.handlers.AbstractBaseHandler;
-import com.marketplace.utils.Buttons;
-import com.marketplace.utils.SimplePagination;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Product;
+import com.marketplace.handlers.AbstractBaseHandler;
+import com.marketplace.requests.SearchRequest;
+import com.marketplace.utils.Buttons;
+import com.marketplace.utils.SimplePagination;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.*;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -38,30 +38,19 @@ public class SearchHandler extends AbstractBaseHandler {
         int elementsPerPage = 5;
 
         Page<Product> products;
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.setQuery(searchQuery);
+        searchRequest.setCategory(category);
+
         if (searchQuery.isEmpty()) {
-            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-            if (category == Category.ALL) {
-                products = productService.findAllProducts(pageable);
-            } else {
-                products = productService.findAllProducts(category, pageable);
-            }
+            products = httpCoreInterface.search(pageNumber, elementsPerPage, new String[]{}, searchRequest);
         } else {
-            Sort sort = Sort.by(Sort.Direction.DESC, "rank");
-            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
-            if (category == Category.ALL) {
-                products = productService.fullTextSearch(searchQuery, pageable);
-            } else {
-                products = productService.fullTextSearch(searchQuery, category, pageable);
-            }
+            products = httpCoreInterface.search(pageNumber, elementsPerPage, new String[]{"rank", Sort.Direction.DESC.name()}, searchRequest);
         }
 
-        if (products.isEmpty()) {
-            payload.setText("Nothing found, but here is all items that we got");
-            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-            products = productService.findAllProducts(pageable);
-        } else {
-            payload.setText("Below is the list of active lots. If you want to search some lots by the name or description just enter a string to search.");
-        }
+        if (products.isEmpty()) return;
+
+        payload.setText("Below is the list of active lots. If you want to search some lots by the name or description just enter a string to search.");
 
         if (SendMethod.valueOf(keys.get("m")).equals(SendMethod.DELETE)) {
             payload.setSendMethod(SendMethod.DELETE);

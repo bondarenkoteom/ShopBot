@@ -1,18 +1,17 @@
 package com.marketplace.handlers.callback_query.byuer_panel.purchases;
 
 import com.marketplace.annotations.BotCommand;
+import com.marketplace.constant.MessageType;
 import com.marketplace.constant.OrderStatus;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.constant.MessageType;
-import com.marketplace.database.model.Purchase;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Purchase;
 import com.marketplace.handlers.AbstractBaseHandler;
+import com.marketplace.requests.PurchaseRequest;
 import com.marketplace.utils.Buttons;
 import com.marketplace.utils.SimplePagination;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -30,13 +29,13 @@ public class PurchasesHandler extends AbstractBaseHandler {
         int pageNumber = Integer.parseInt(keys.get("p"));
         int elementsPerPage = 10;
 
-        Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.EDIT_TEXT);
         payload.setText("Your last deals list");
 
-        Page<Purchase> purchases = purchaseService.getAllPurchases(update.getCallbackQuery().getFrom().getId(), pageable);
+        PurchaseRequest purchaseRequest = new PurchaseRequest();
+        purchaseRequest.setBuyerId(update.getCallbackQuery().getFrom().getId());
+        Page<Purchase> purchases = httpCoreInterface.purchases(pageNumber, elementsPerPage, new String[]{}, purchaseRequest);
 
         Map<String, String> buttons = purchases.stream()
                 .collect(Collectors.toMap(p -> "PURCHASE -i %s -m %s".formatted(p.getId(), SendMethod.SEND_MESSAGE), p -> {

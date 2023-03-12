@@ -3,11 +3,11 @@ package com.marketplace.handlers.callback_query.vendor_panel.messages;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
+import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
-import com.marketplace.database.model.User;
-import com.marketplace.entity.Keys;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -28,7 +28,7 @@ public class SellerMessagesHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
         payload.setText("List of chats");
 
-        List<User> users = userService.getChatsUsers(update.getCallbackQuery().getFrom().getId());
+        List<User> users = httpCoreInterface.messagesUsersGet(update.getCallbackQuery().getFrom().getId());
 
         Map<String, String> buttons = users.stream().collect(Collectors.toMap(
                 k -> "SELLER_MESSAGE -i %s -p -1 -m %s".formatted(k.getId(), SendMethod.EDIT_TEXT),

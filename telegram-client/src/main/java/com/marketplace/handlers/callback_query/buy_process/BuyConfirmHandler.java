@@ -3,7 +3,7 @@ package com.marketplace.handlers.callback_query.buy_process;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Product;
+import com.marketplace.entity.Product;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Keyboard;
 import com.marketplace.entity.Keys;
@@ -23,7 +23,7 @@ public class BuyConfirmHandler extends AbstractBaseHandler {
 
         Long productId = Long.valueOf(keys.get("i"));
 
-        Optional<Product> productOptional = productService.getById(productId);
+        Optional<Product> productOptional = httpCoreInterface.productGet(productId);
 
         if (productOptional.isPresent()) {
 

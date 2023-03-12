@@ -4,9 +4,9 @@ import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.ButtonText;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Purchase;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Purchase;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class PurchaseHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         Keys keys = getKeys(update);
 
-        Optional<Purchase> purchaseOptional = purchaseService.getById(Long.valueOf(keys.get("i")));
+        Optional<Purchase> purchaseOptional = httpCoreInterface.purchaseGet(Long.valueOf(keys.get("i")));
 
         if (purchaseOptional.isPresent()) {
             Purchase purchase = purchaseOptional.get();

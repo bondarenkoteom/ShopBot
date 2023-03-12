@@ -3,10 +3,11 @@ package com.marketplace.database.service;
 import com.marketplace.constant.Category;
 import com.marketplace.database.model.Product;
 import com.marketplace.database.repository.ProductRepository;
-import com.marketplace.database.repository.SearchRepository;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,18 +18,15 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private SearchRepository searchRepository;
-
     public Product save(Product product) {
         return productRepository.save(product);
     }
 
-    public void deleteAllEditing() {
-        productRepository.deleteByIsEditingTrue();
+    public void deleteAllEditing(Long ownerId) {
+        productRepository.deleteByIsEditingTrueAndOwnerId(ownerId);
     }
 
-    public Product getEditingProductByOwnerId(Long ownerId) {
+    public Optional<Product> getEditingProductByOwnerId(Long ownerId) {
         return productRepository.getProductByOwnerIdAndIsEditing(ownerId, true);
     }
 
@@ -44,20 +42,22 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Page<Product> findAllProducts(Pageable pageable) {
-        return searchRepository.findAllProducts(pageable);
-    }
-
-    public Page<Product> findAllProducts(Category category, Pageable pageable) {
-        return searchRepository.findAllProducts(category, pageable);
-    }
-
-    public Page<Product> fullTextSearch(String text, Pageable pageable) {
-        return searchRepository.fullTextSearch(text, pageable);
-    }
-
-    public Page<Product> fullTextSearch(String text, Category category, Pageable pageable) {
-        return searchRepository.fullTextSearch(text, category, pageable);
+    public Page<Product> findAllProducts(String text, Category category, Long ownerId, Pageable pageable) {
+        if (text != null && text.isEmpty() && category != null && ownerId != null) {
+            return productRepository.fullTextSearch(text, category.name(), ownerId, pageable);
+        } else if (text != null && text.isEmpty() && category != null) {
+            return productRepository.fullTextSearch(text, category.name(), pageable);
+        } else if (text != null && text.isEmpty() && ownerId != null) {
+            return productRepository.fullTextSearch(text, ownerId, pageable);
+        } else if (category != null && ownerId != null) {
+            return productRepository.findProducts(category.name(), ownerId, pageable);
+        } else if (category != null) {
+            return productRepository.findProducts(category.name(), pageable);
+        } else if (ownerId != null) {
+            return productRepository.findProducts(ownerId, pageable);
+        } else {
+            return productRepository.findAllProducts(pageable);
+        }
     }
 
     public String pollItem(Long id) {

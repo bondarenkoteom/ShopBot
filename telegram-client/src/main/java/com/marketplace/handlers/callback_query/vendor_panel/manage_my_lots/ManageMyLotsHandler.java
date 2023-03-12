@@ -3,8 +3,11 @@ package com.marketplace.handlers.callback_query.vendor_panel.manage_my_lots;
 import com.marketplace.constant.MessageText;
 import com.marketplace.constant.ProductStatus;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Product;
 import com.marketplace.entity.Keys;
+import com.marketplace.entity.Product;
+import com.marketplace.entity.Purchase;
+import com.marketplace.requests.ProductRequest;
+import com.marketplace.requests.PurchaseRequest;
 import com.marketplace.utils.Buttons;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
@@ -37,7 +40,9 @@ public class ManageMyLotsHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.EDIT_TEXT);
         payload.setText("Your lots list");
 
-        Page<Product> products = productService.getAllProducts(update.getCallbackQuery().getFrom().getId(), pageable);
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setSellerId(update.getCallbackQuery().getFrom().getId());
+        Page<Product> products = httpCoreInterface.products(pageNumber, elementsPerPage, new String[]{}, productRequest);
 
         Map<String, String> buttons = products.stream()
                 .collect(Collectors.toMap(p -> "LOT -i %s -m %s".formatted(p.getId(), SendMethod.SEND_PHOTO), p -> {

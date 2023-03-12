@@ -3,8 +3,8 @@ package com.marketplace.handlers.callback_query.byuer_panel.disputes;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.Purchase;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Purchase;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class BuyerDisputesHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
         payload.setText("List of disputes");
 
-        List<Purchase> purchases = purchaseService.getBuyerChatsPurchases(update.getCallbackQuery().getFrom().getId());
+        List<Purchase> purchases = httpCoreInterface.disputesPurchasesGet(null, update.getCallbackQuery().getFrom().getId());
 
         Map<String, String> buttons = purchases.stream().collect(Collectors.toMap(
                 k -> "BUYER_DISPUTE -i %s".formatted(k.getId()),

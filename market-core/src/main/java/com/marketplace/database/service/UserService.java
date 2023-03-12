@@ -41,8 +41,14 @@ public class UserService {
         return userRepository.findById(id).get();
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> findUser(Long userId, String username) {
+        if (userId != null) {
+            return userRepository.findById(userId);
+        } else if (username != null && !username.isEmpty()) {
+            return userRepository.findByUsername(username);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public User save(User user) {

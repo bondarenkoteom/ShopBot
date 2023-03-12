@@ -1,0 +1,10 @@
+spring:
+  thymeleaf: # Thymeleaf
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: file:admin-panel/src/main/resources/templates/
+  resources: # Static resources
+    static-locations: file:admin-panel/src/main/resources/static/
+    cache:
+      period: 0

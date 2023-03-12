@@ -2,9 +2,9 @@ package com.marketplace.handlers.callback_query.vendor_panel.manage_my_lots;
 
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.*;
-import com.marketplace.database.model.Product;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Product;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class LotHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         Keys keys = getKeys(update);
 
-        Optional<Product> productOptional = productService.getById(Long.valueOf(keys.get("i")));
+        Optional<Product> productOptional = httpCoreInterface.productGet(Long.valueOf(keys.get("i")));
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();

@@ -11,10 +11,16 @@ public class HttpCoreClient {
     private final HttpCoreInterface httpInterface;
 
     public HttpCoreClient() {
-        WebClient webClient = WebClient.builder().baseUrl("http://localhost:4230/")
-                .build();
+        WebClient webClient = WebClient.builder().baseUrl("http://localhost:4230/").build();
         WebClientAdapter webClientAdapter = WebClientAdapter.forClient(webClient);
 
+        HttpServiceProxyFactory httpServiceProxyFactory =
+                HttpServiceProxyFactory.builder(webClientAdapter).build();
+        httpInterface = httpServiceProxyFactory.createClient(HttpCoreInterface.class);
+    }
+
+    public HttpCoreClient(WebClient webClient) {
+        WebClientAdapter webClientAdapter = WebClientAdapter.forClient(webClient);
 
         HttpServiceProxyFactory httpServiceProxyFactory =
                 HttpServiceProxyFactory.builder(webClientAdapter).build();

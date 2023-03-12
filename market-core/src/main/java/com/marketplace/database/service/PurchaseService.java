@@ -49,11 +49,11 @@ public class PurchaseService {
         return purchaseRepository.findById(id);
     }
 
-    public List<Purchase> getBuyerChatsPurchases(Long id) {
-        return purchaseRepository.disputeBuyerPurchasesChats(id);
+    public List<Purchase> getBuyerDisputesPurchases(Long id) {
+        return purchaseRepository.disputePurchasesByBuyer(id);
     }
 
-    public List<Purchase> getSellerChatsPurchases(Long id) {
-        return purchaseRepository.disputeSellerPurchasesChats(id);
+    public List<Purchase> getSellerDisputesPurchases(Long id) {
+        return purchaseRepository.disputePurchasesBySeller(id);
     }
 }

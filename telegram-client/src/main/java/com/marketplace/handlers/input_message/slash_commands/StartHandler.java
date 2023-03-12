@@ -3,7 +3,9 @@ package com.marketplace.handlers.input_message.slash_commands;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageText;
 import com.marketplace.constant.MessageType;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
+import com.marketplace.requests.UserRequest;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @BotCommand(command = "/START", type = MessageType.INPUT_MESSAGE)
@@ -26,7 +29,11 @@ public class StartHandler extends AbstractBaseHandler {
         Message message = update.getMessage();
         returnTriggerValue(update);
 
-        userService.createIfAbsent(message.getFrom().getId(), message.getFrom().getUserName());
+        UserRequest userRequest = new UserRequest();
+        userRequest.setUserId(message.getFrom().getId());
+        userRequest.setUsername(message.getFrom().getUserName());
+        httpCoreInterface.userCreate(userRequest);
+
         SendMessage sendMessage = new SendMessage(message.getChatId().toString(), MessageText.START_MESSAGE.text());
         sendMessage.enableMarkdown(true);
 

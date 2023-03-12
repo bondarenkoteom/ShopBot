@@ -3,8 +3,8 @@ package com.marketplace.handlers.callback_query.byuer_panel.top;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
-import com.marketplace.database.model.User;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class TopUsersHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
         payload.setParseMode(ParseMode.HTML);
 
-        List<User> vendors = userService.findTop25Vendors();
+        List<User> vendors = httpCoreInterface.topUsers();
         StringBuilder stringBuilder = new StringBuilder("<b>Top-25 vendors:</b>");
         vendors.forEach(vendor -> {
             stringBuilder.append(String.format("%n%n<b>%s</b>%nRating: %d  Sells: %d", vendor.getUsername(), vendor.getRating(),  vendor.getSells()));

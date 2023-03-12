@@ -1,13 +1,14 @@
 package com.marketplace.handlers.callback_query.vendor_panel.manage_my_lots;
 
-import com.marketplace.constant.SendMethod;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
+import com.marketplace.constant.SendMethod;
 import com.marketplace.constant.Trigger;
-import com.marketplace.database.model.Product;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Product;
 import com.marketplace.handlers.AbstractBaseHandler;
+import com.marketplace.requests.ProductRequest;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -21,7 +22,7 @@ public class SetLotInstructionHandler extends AbstractBaseHandler {
     public void handle(Update update) {
         Keys keys = getKeys(update);
 
-        Optional<Product> productOptional = productService.getById(Long.valueOf(keys.get("i")));
+        Optional<Product> productOptional = httpCoreInterface.productGet(Long.valueOf(keys.get("i")));
 
         if (productOptional.isPresent()) {
             Payload payload = new Payload(update);
@@ -31,11 +32,12 @@ public class SetLotInstructionHandler extends AbstractBaseHandler {
             bot.process(payload);
 
             setTriggerValue(update, Trigger.EDIT_PRODUCT_INSTRUCTION);
-            productService.deleteAllEditing();
+
+            httpCoreInterface.productEditingDelete(update.getCallbackQuery().getFrom().getId());
 
             Product product = productOptional.get();
-            product.setEditing(true);
-            productService.save(product);
+            product.setIsEditing(true);
+            httpCoreInterface.productUpdate(product);
         }
     }
 

@@ -55,6 +55,6 @@ public class Product {
     private String[] items;
 
     @Column(name = "is_editing")
-    private boolean isEditing;
+    private Boolean isEditing;
 
 }

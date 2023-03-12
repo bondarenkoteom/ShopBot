@@ -1,10 +1,11 @@
 package com.marketplace.handlers;
 
 import com.marketplace.Bot;
+import com.marketplace.client.HttpCoreInterface;
 import com.marketplace.client.TelegramApiClient;
 import com.marketplace.constant.Trigger;
-import com.marketplace.database.service.*;
 import com.marketplace.entity.Keys;
+import com.marketplace.requests.TriggerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,22 +19,10 @@ import java.util.regex.Pattern;
 public abstract class AbstractBaseHandler {
 
     @Autowired
+    protected HttpCoreInterface httpCoreInterface;
+
+    @Autowired
     protected TelegramApiClient telegramApiClient;
-
-    @Autowired
-    protected ProductService productService;
-
-    @Autowired
-    protected UserService userService;
-
-    @Autowired
-    protected MessageService messageService;
-
-    @Autowired
-    protected DisputeService disputeService;
-
-    @Autowired
-    protected PurchaseService purchaseService;
 
     @Autowired
     @Lazy
@@ -55,15 +44,19 @@ public abstract class AbstractBaseHandler {
     protected void returnTriggerValue(Update update) {
         Long id = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
 
-        Trigger trigger = userService.getWaitFor(id);
-        if (!trigger.equals(Trigger.UNDEFINED)) userService.setWaitFor(id, Trigger.UNDEFINED);
+        TriggerRequest triggerRequest = new TriggerRequest();
+        triggerRequest.setUserId(id);
+        triggerRequest.setTrigger(Trigger.UNDEFINED);
+        httpCoreInterface.triggerUpdate(triggerRequest);
     }
 
     protected void setTriggerValue(Update update, Trigger newTriggerValue) {
         Long id = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
 
-        Trigger trigger = userService.getWaitFor(id);
-        if (!trigger.equals(newTriggerValue)) userService.setWaitFor(id, newTriggerValue);
+        TriggerRequest triggerRequest = new TriggerRequest();
+        triggerRequest.setUserId(id);
+        triggerRequest.setTrigger(newTriggerValue);
+        httpCoreInterface.triggerUpdate(triggerRequest);
     }
 
     protected Keys getKeys(Update update) {

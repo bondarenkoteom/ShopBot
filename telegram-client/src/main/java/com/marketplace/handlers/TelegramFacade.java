@@ -1,12 +1,13 @@
 package com.marketplace.handlers;
 
 import com.marketplace.annotations.BotCommand;
+import com.marketplace.client.HttpCoreInterface;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
 import com.marketplace.constant.Trigger;
-import com.marketplace.database.service.UserService;
 import com.marketplace.entity.Payload;
 import com.marketplace.handlers.input_message.UserMessageHandler;
+import com.marketplace.requests.TriggerRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,13 @@ import java.util.stream.Stream;
 public class TelegramFacade {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     List<AbstractBaseHandler> handlers;
 
     @Autowired
     UserMessageHandler userMessageHandler;
+
+    @Autowired
+    protected HttpCoreInterface httpCoreInterface;
 
     public void handleUpdate(Update update) {
         if (update.hasCallbackQuery()) {
@@ -72,7 +73,11 @@ public class TelegramFacade {
 
     public void processCallbackQuery(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
-        userService.setWaitFor(callbackQuery.getFrom().getId(), Trigger.UNDEFINED);
+
+        TriggerRequest triggerRequest = new TriggerRequest();
+        triggerRequest.setUserId(callbackQuery.getFrom().getId());
+        triggerRequest.setTrigger(Trigger.UNDEFINED);
+        httpCoreInterface.triggerUpdate(triggerRequest);
 
         AbstractBaseHandler callbackQueryHandler = getCallbackQueryHandler(callbackQuery.getData());
         callbackQueryHandler.handle(update);

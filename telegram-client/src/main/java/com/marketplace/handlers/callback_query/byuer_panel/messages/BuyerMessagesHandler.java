@@ -3,8 +3,8 @@ package com.marketplace.handlers.callback_query.byuer_panel.messages;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
-import com.marketplace.database.model.User;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class BuyerMessagesHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
         payload.setText("List of chats");
 
-        List<User> users = userService.getChatsUsers(update.getCallbackQuery().getFrom().getId());
+        List<User> users = httpCoreInterface.messagesUsersGet(update.getCallbackQuery().getFrom().getId());
 
         Map<String, String> buttons = users.stream().collect(Collectors.toMap(
                 k -> "BUYER_MESSAGE -i %s -p -1 -m %s".formatted(k.getId(), SendMethod.EDIT_TEXT),

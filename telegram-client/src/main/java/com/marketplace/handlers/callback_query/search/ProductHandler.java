@@ -2,21 +2,23 @@ package com.marketplace.handlers.callback_query.search;
 
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.*;
-import com.marketplace.database.model.Product;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.Product;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
+import com.marketplace.requests.SearchRequest;
+import com.marketplace.requests.UserRequest;
 import com.marketplace.utils.Buttons;
 import com.marketplace.utils.SimplePagination;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @BotCommand(command = "PRODUCT .*", type = MessageType.CALLBACK_QUERY)
@@ -35,21 +37,14 @@ public class ProductHandler extends AbstractBaseHandler {
         int elementsPerPage = 5;
 
         Page<Product> products;
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.setQuery(searchQuery);
+        searchRequest.setCategory(category);
+
         if (searchQuery.isEmpty()) {
-            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-            if (category == Category.ALL) {
-                products = productService.findAllProducts(pageable);
-            } else {
-                products = productService.findAllProducts(category, pageable);
-            }
+            products = httpCoreInterface.search(pageNumber, elementsPerPage, new String[]{}, searchRequest);
         } else {
-            Sort sort = Sort.by(Sort.Direction.DESC, "rank");
-            Pageable pageable = PageRequest.of(pageNumber, elementsPerPage, sort);
-            if (category == Category.ALL) {
-                products = productService.fullTextSearch(searchQuery, pageable);
-            } else {
-                products = productService.fullTextSearch(searchQuery, category, pageable);
-            }
+            products = httpCoreInterface.search(pageNumber, elementsPerPage, new String[]{"rank", Sort.Direction.DESC.name()}, searchRequest);
         }
 
         if (products.isEmpty()) return;
@@ -58,6 +53,12 @@ public class ProductHandler extends AbstractBaseHandler {
 
         if (originalProducts.get(itemPosition) != null) {
             Product currentProduct = originalProducts.get(itemPosition);
+
+            Optional<User> userOptional = httpCoreInterface.userGet(currentProduct.getOwnerId(), null);
+
+            if (userOptional.isEmpty()) return;
+
+
             Payload payload = new Payload(update);
 
             if (SendMethod.valueOf(keys.get("m")).equals(SendMethod.DELETE)) {
@@ -68,7 +69,7 @@ public class ProductHandler extends AbstractBaseHandler {
                 payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
             }
 
-            payload.setText(getFormattedTextMessage(currentProduct));
+            payload.setText(getFormattedTextMessage(currentProduct, userOptional.get()));
             payload.setFileId(currentProduct.getImageId());
 
             Map<String, String> button = Map.of("BUY_CONFIRM -i %s -m %s".formatted(currentProduct.getId(), SendMethod.SEND_MESSAGE),
@@ -87,12 +88,12 @@ public class ProductHandler extends AbstractBaseHandler {
 
     }
 
-    private String getFormattedTextMessage(Product product) {
+    private String getFormattedTextMessage(Product product, User user) {
         return MessageText.PRODUCT.text().formatted(
                 product.getProductName(),
                 product.getDescription(),
                 product.getPrice(),
-                userService.getUser(product.getOwnerId()).getUsername(),
+                user.getUsername(),
                 product.getRatingGood(), product.getRatingBad()
         );
     }
