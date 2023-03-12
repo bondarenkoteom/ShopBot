@@ -5,28 +5,38 @@ import com.marketplace.client.HttpCoreClient;
 import com.marketplace.client.HttpCoreInterface;
 import com.marketplace.handlers.TelegramFacade;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Configuration
 @AllArgsConstructor
 public class SpringConfig {
+
     private final BotConfig botConfig;
-
-    @Bean
-    public Bot springLongPollingBot(TelegramFacade telegramFacade) {
-        Bot bot = new Bot(telegramFacade);
-
-        bot.setBotPath(botConfig.getBotPath());
-        bot.setBotUsername(botConfig.getBotUsername());
-        bot.setBotToken(botConfig.getBotToken());
-
-        return bot;
-    }
 
     @Bean
     public HttpCoreInterface httpCoreInterface(HttpCoreClient httpCoreClient) {
         return httpCoreClient.getHttpInterface();
+    }
+
+    @Bean
+    TelegramBotsApi telegramBotsApi() throws TelegramApiException {
+        return new TelegramBotsApi(DefaultBotSession.class);
+    }
+
+    @Bean
+    public Bot springLongPollingBot(TelegramFacade telegramFacade, TelegramBotsApi telegramBotsApi) throws TelegramApiException {
+        Bot bot = new Bot(telegramFacade);
+        bot.setBotPath(botConfig.getBotPath());
+        bot.setBotUsername(botConfig.getBotUsername());
+        bot.setBotToken(botConfig.getBotToken());
+        telegramBotsApi.registerBot(bot);
+        return bot;
     }
 
 

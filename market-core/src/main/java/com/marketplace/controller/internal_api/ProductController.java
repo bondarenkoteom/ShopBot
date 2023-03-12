@@ -15,34 +15,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/v1/product")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/api/v1/product", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     Optional<Product> productGet(@RequestParam Long productId) {
         return productService.getById(productId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value = "/api/v1/product", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     void productUpdate(@RequestBody Product product) {
         productService.save(product);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/v1/product", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     void productDelete(@RequestParam Long productId) {
         productService.deleteById(productId);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/api/v1/products", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     Page<Product> products(@ParameterObject Pageable pageable, @RequestBody ProductRequest productRequest) {
@@ -51,14 +50,14 @@ public class ProductController {
                 pageable);
     }
 
-    @RequestMapping(value = "/editing", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/v1/product/editing", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     Optional<Product> productEditingGet(@RequestParam Long ownerId) {
         return productService.getEditingProductByOwnerId(ownerId);
     }
 
-    @RequestMapping(value = "/editing", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/v1/product/editing", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     void productEditingDelete(@RequestParam Long ownerId) {
