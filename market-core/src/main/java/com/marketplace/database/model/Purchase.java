@@ -36,11 +36,11 @@ public class Purchase {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToOne
-    private User buyer;
+    @Column(name = "buyer_id")
+    private Long buyerId;
 
-    @ManyToOne
-    private User seller;
+    @Column(name = "seller_id")
+    private Long sellerId;
 
     @Column
     private Date date;

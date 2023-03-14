@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MessageService {
@@ -17,6 +18,7 @@ public class MessageService {
         messageRepository.save(message);
     }
 
+    @Transactional
     public Page<Message> getChatMessages(Long superId, Long id, Pageable pageable) {
         return messageRepository.findChatMessages(superId, id, pageable);
     }

@@ -19,8 +19,8 @@ public class Dispute {
     @Column
     private String text;
 
-    @ManyToOne
-    private User sender;
+    @Column(name = "sender_id")
+    private Long sender;
 
     @Column
     private Date date;

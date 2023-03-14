@@ -1,6 +1,8 @@
 package com.marketplace.database.repository;
 
 import com.marketplace.database.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM t_user ORDER BY sells ASC, rating ASC", nativeQuery = true)
     List<User> findTop25Vendors();
+
+    Page<User> findAll(Pageable pageable);
 }

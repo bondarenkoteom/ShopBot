@@ -6,6 +6,7 @@ import com.marketplace.constant.SendMethod;
 import com.marketplace.entity.Dispute;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
+import com.marketplace.entity.User;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.DateFormat;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,20 +33,23 @@ public class BuyerDisputeHandler extends AbstractBaseHandler {
 
         List<Dispute> messages = httpCoreInterface.disputesGet(purchaseId);
 
-        String chatText = getFormattedChatText(messages, superUserId);
-        if (chatText.isEmpty()) chatText = "No messages yet";
-        payload.setText(chatText);
-        payload.setParseMode(ParseMode.HTML);
+        Optional<User> optionalUser = httpCoreInterface.userGet(superUserId, null);
+        if (optionalUser.isPresent()) {
+            String chatText = getFormattedChatText(messages, optionalUser.get(), superUserId);
+            if (chatText.isEmpty()) chatText = "No messages yet";
+            payload.setText(chatText);
+            payload.setParseMode(ParseMode.HTML);
 
-        bot.process(payload);
+            bot.process(payload);
+        }
     }
 
-    private String getFormattedChatText(List<Dispute> messages, Long superUserId) {
+    private String getFormattedChatText(List<Dispute> messages, User user, Long superUserId) {
         return messages.stream().map(message -> {
-            if (message.getSender().getId().equals(superUserId)) {
+            if (user.getId().equals(superUserId)) {
                 return String.format("<b># You</b> [%s]%n", DateFormat.format(message.getDate())) + message.getText();
             } else {
-                return String.format("<b># %s</b> [%s]%n", message.getSender().getUsername(), DateFormat.format(message.getDate())) + message.getText();
+                return String.format("<b># %s</b> [%s]%n", user.getUsername(), DateFormat.format(message.getDate())) + message.getText();
             }
         }).collect(Collectors.joining("\n\n"));
     }

@@ -60,8 +60,8 @@ public class BuyProcess {
                 purchase.setInstruction(product.getInstruction());
                 purchase.setItem(item);
                 purchase.setStatus(OrderStatus.IN_PROGRESS);
-                purchase.setBuyer(buyer);
-                purchase.setSeller(seller);
+                purchase.setBuyerId(buyer.getId());
+                purchase.setSellerId(seller.getId());
                 purchase.setPrice(product.getPrice());
                 purchaseService.createOrder(purchase);
 
@@ -72,8 +72,8 @@ public class BuyProcess {
                 purchase.setInstruction(purchase.getInstruction());
                 purchase.setItem(purchase.getInstruction());
                 purchase.setStatus(purchase.getStatus());
-                purchase.setBuyer(purchase.getBuyer());
-                purchase.setSeller(purchase.getSeller());
+                purchase.setBuyerId(purchase.getBuyerId());
+                purchase.setSellerId(purchase.getSellerId());
                 purchase.setPrice(purchase.getPrice());
 
                 buyResponse.setPurchase(purchase1);

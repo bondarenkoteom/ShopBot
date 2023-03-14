@@ -1,14 +1,16 @@
 package com.marketplace.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class Message {
     Long id;
     String text;
-    User sender;
-    User receiver;
+    Long senderId;
+    Long receiverId;
     Date date;
 }

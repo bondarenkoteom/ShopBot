@@ -667,7 +667,7 @@ class HttpCoreClientMockServerTest {
         Dispute dispute = new Dispute();
         dispute.setId(0L);
         dispute.setText("string");
-        dispute.setSender(user);
+        dispute.setSenderId(user.getId());
         dispute.setPurchaseId(0L);
 
         ResponseEntity<Void> response = httpCoreInterface.disputeCreate(dispute);
@@ -776,8 +776,8 @@ class HttpCoreClientMockServerTest {
         Message message = new Message();
         message.setId(0L);
         message.setText("string");
-        message.setSender(sender);
-        message.setReceiver(receiver);
+        message.setSenderId(sender.getId());
+        message.setReceiverId(receiver.getId());
 
         ResponseEntity<Void> response = httpCoreInterface.messageCreate(message);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());

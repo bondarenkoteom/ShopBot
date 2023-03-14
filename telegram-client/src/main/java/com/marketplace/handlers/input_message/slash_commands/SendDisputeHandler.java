@@ -32,7 +32,7 @@ public class SendDisputeHandler extends AbstractBaseHandler {
             if (purchaseOptional.isPresent() && senderOptional.isPresent()) {
                 Dispute dispute = new Dispute();
                 dispute.setText(commandParts.getMessage());
-                dispute.setSender(senderOptional.get());
+                dispute.setSenderId(senderOptional.get().getId());
                 dispute.setPurchaseId(purchaseOptional.get().getId());
                 dispute.setDate(new Date());
 

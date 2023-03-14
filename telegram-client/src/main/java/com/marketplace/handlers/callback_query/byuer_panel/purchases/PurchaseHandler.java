@@ -9,6 +9,7 @@ import com.marketplace.entity.Payload;
 import com.marketplace.entity.Purchase;
 import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.utils.Buttons;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @BotCommand(command = "PURCHASE .*", type = MessageType.CALLBACK_QUERY)
 public class PurchaseHandler extends AbstractBaseHandler {
@@ -32,7 +34,7 @@ public class PurchaseHandler extends AbstractBaseHandler {
 
             Map<String, String> firstRow = Map.of(
                     "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY,
-                    "CHAT -i " + purchase.getSeller().getId(), ButtonText.CHAT_WITH_SELLER
+                    "CHAT -i " + purchase.getSellerId(), ButtonText.CHAT_WITH_SELLER
             );
             Map<String, String> secondRow = Map.of(
                     "OPEN_DISPUTE -i " + purchase.getId(), ButtonText.OPEN_DISPUTE,
@@ -57,6 +59,8 @@ public class PurchaseHandler extends AbstractBaseHandler {
                         <code>%s</code>
                         """.formatted(purchase.getName(), purchase.getPrice(), purchase.getInstruction(), purchase.getItem()));
             bot.process(payload);
+        } else {
+            log.error("");
         }
         
     }

@@ -1,12 +1,14 @@
 package com.marketplace.controller.internal_api;
 
-import com.marketplace.constant.Trigger;
 import com.marketplace.database.model.User;
 import com.marketplace.database.service.UserService;
 import com.marketplace.requests.TriggerRequest;
 import com.marketplace.requests.UserRequest;
 import com.marketplace.responses.TriggerResponse;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,13 @@ public class UserController {
     public @ResponseBody
     void userUpdate(@RequestBody User user) {
         userService.save(user);
+    }
+
+    @RequestMapping(value = "/api/v1/users", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody
+    Page<User> users(@ParameterObject Pageable pageable) {
+        return userService.getAllUsers(pageable);
     }
 
     @RequestMapping(value = "/api/v1/user/trigger", method = RequestMethod.GET)

@@ -19,11 +19,11 @@ public class Message {
     @Column
     private String text;
 
-    @ManyToOne
-    private User sender;
+    @Column(name = "sender_id")
+    private Long sender;
 
-    @ManyToOne
-    private User receiver;
+    @Column(name = "receiver_id")
+    private Long receiver;
 
     @Column
     private Date date;

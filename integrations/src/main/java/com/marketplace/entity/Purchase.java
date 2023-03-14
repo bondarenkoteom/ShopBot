@@ -14,7 +14,7 @@ public class Purchase {
     String instruction;
     Long productId;
     OrderStatus status;
-    User buyer;
-    User seller;
+    Long buyerId;
+    Long sellerId;
     Date date;
 }

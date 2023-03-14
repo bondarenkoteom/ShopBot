@@ -32,8 +32,8 @@ public class SendMessageHandler extends AbstractBaseHandler {
             if (receiverOptional.isPresent() && senderOptional.isPresent() && !receiverOptional.get().equals(senderOptional.get())) {
                 Message message = new Message();
                 message.setText(commandParts.getMessage());
-                message.setSender(senderOptional.get());
-                message.setReceiver(receiverOptional.get());
+                message.setSenderId(senderOptional.get().getId());
+                message.setReceiverId(receiverOptional.get().getId());
                 message.setDate(new Date());
 
                 httpCoreInterface.messageCreate(message);

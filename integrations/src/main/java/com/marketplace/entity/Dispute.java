@@ -9,7 +9,7 @@ import java.util.Date;
 public class Dispute {
     Long id;
     String text;
-    User sender;
+    Long senderId;
     Date date;
     Long purchaseId;
 }

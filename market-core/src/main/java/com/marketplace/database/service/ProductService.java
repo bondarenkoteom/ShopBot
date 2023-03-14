@@ -44,15 +44,23 @@ public class ProductService {
 
     public Page<Product> findAllProducts(String text, Category category, Long ownerId, Pageable pageable) {
         if (text != null && text.isEmpty() && category != null && ownerId != null) {
-            return productRepository.fullTextSearch(text, category.name(), ownerId, pageable);
+            return category.equals(Category.ALL) ?
+                    productRepository.fullTextSearch(text, ownerId, pageable) :
+                    productRepository.fullTextSearch(text, category.name(), ownerId, pageable);
         } else if (text != null && text.isEmpty() && category != null) {
-            return productRepository.fullTextSearch(text, category.name(), pageable);
+            return category.equals(Category.ALL) ?
+                    productRepository.fullTextSearch(text, pageable) :
+                    productRepository.fullTextSearch(text, category.name(), pageable);
         } else if (text != null && text.isEmpty() && ownerId != null) {
             return productRepository.fullTextSearch(text, ownerId, pageable);
         } else if (category != null && ownerId != null) {
-            return productRepository.findProducts(category.name(), ownerId, pageable);
+            return category.equals(Category.ALL) ?
+                    productRepository.findProducts(ownerId, pageable) :
+                    productRepository.findProducts(category, ownerId, pageable);
         } else if (category != null) {
-            return productRepository.findProducts(category.name(), pageable);
+            return category.equals(Category.ALL) ?
+                    productRepository.findAllProducts(pageable) :
+                    productRepository.findProducts(category, pageable);
         } else if (ownerId != null) {
             return productRepository.findProducts(ownerId, pageable);
         } else {

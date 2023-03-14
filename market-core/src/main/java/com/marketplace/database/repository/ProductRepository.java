@@ -1,5 +1,6 @@
 package com.marketplace.database.repository;
 
+import com.marketplace.constant.Category;
 import com.marketplace.database.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +37,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllProducts(Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.category = :category AND p.ownerId = :ownerId")
-    Page<Product> findProducts(@Param("category") String category, @Param("ownerId") Long ownerId, Pageable pageable);
+    Page<Product> findProducts(@Param("category") Category category, @Param("ownerId") Long ownerId, Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.category = :category")
-    Page<Product> findProducts(@Param("category") String category, Pageable pageable);
+    Page<Product> findProducts(@Param("category") Category category, Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.ownerId = :ownerId")
     Page<Product> findProducts(@Param("ownerId") Long ownerId, Pageable pageable);
@@ -70,4 +71,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     WHERE query @@ product_vector AND status = 'ACTIVE' AND owner_id = :ownerId""",
             nativeQuery = true)
     Page<Product> fullTextSearch(@Param("text") String text, @Param("ownerId") Long ownerId, Pageable pageable);
+
+    @Query(value = """
+            SELECT * FROM t_product, to_tsquery(:text) query, ts_rank_cd(product_vector, query) rank
+            WHERE query @@ product_vector AND status = 'ACTIVE' ORDER BY id""",
+            countQuery = """
+                    SELECT COUNT(*) FROM t_product, to_tsquery(:text) query, ts_rank_cd(product_vector, query) rank
+                    WHERE query @@ product_vector AND status = 'ACTIVE'""",
+            nativeQuery = true)
+    Page<Product> fullTextSearch(@Param("text") String text, Pageable pageable);
 }
