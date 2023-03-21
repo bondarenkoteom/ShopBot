@@ -22,8 +22,68 @@
     <meta name="theme-color" content="#712cf9">
 
     <style type="text/css">/* Chart.js */
-@keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style>
+    @keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}
+    </style>
+    <style type="text/css">/* Chart.js */
+    .fs--1 {
+        font-size: .8rem !important;
+    }
+    .table-sm>:not(caption)>*>* {
+        padding: 0.25rem 0.25rem;
+    }
+    .table>thead>tr>th {
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        line-height: 1;
+    }
+    .text-end {
+        text-align: right !important;
+    }
 
+    [data-list] .sort[data-sort] {
+        white-space: nowrap;
+        cursor: pointer
+    }
+
+    [data-list] .sort[data-sort]::after {
+        content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNyIgaGVpZ2h0PSI5IiB2aWV3Qm94PSIwIDAgNyA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMy4xNDkgMC42NDY3NjhDMy4zNDM2NiAwLjQ1NDg4NSAzLjY1NjM0IDAuNDU0ODg1IDMuODUxIDAuNjQ2NzY4TDYuMTMxNTEgMi44OTQ2OUM2LjQ0OTk4IDMuMjA4NjIgNi4yMjc2OSAzLjc1MDc4IDUuNzgwNSAzLjc1MDc4SDEuMjE5NUMwLjc3MjMwNyAzLjc1MDc4IDAuNTUwMDE4IDMuMjA4NjIgMC44Njg0OTUgMi44OTQ2OUwzLjE0OSAwLjY0Njc2OFoiIGZpbGw9IiM2RTc4OTEiLz4KPHBhdGggZD0iTTMuMTQ5IDguMTU0MDFDMy4zNDM2NiA4LjM0NTkgMy42NTYzNCA4LjM0NTkgMy44NTEgOC4xNTQwMUw2LjEzMTUxIDUuOTA2MDlDNi40NDk5OCA1LjU5MjE2IDYuMjI3NjkgNS4wNSA1Ljc4MDUgNS4wNUgxLjIxOTVDMC43NzIzMDcgNS4wNSAwLjU1MDAxOCA1LjU5MjE2IDAuODY4NDk1IDUuOTA2MDlMMy4xNDkgOC4xNTQwMVoiIGZpbGw9IiM2RTc4OTEiLz4KPC9zdmc+Cg==");
+        margin-left: .25rem
+    }
+
+    [data-list] .sort[data-sort].asc::after {
+        content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNyIgaGVpZ2h0PSI5IiB2aWV3Qm94PSIwIDAgNyA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMy4xNDkgOC4xNTQwMUMzLjM0MzY2IDguMzQ1OSAzLjY1NjM0IDguMzQ1OSAzLjg1MSA4LjE1NDAxTDYuMTMxNTEgNS45MDYwOUM2LjQ0OTk4IDUuNTkyMTYgNi4yMjc2OSA1LjA1IDUuNzgwNSA1LjA1SDEuMjE5NUMwLjc3MjMwNyA1LjA1IDAuNTUwMDE4IDUuNTkyMTYgMC44Njg0OTUgNS45MDYwOUwzLjE0OSA4LjE1NDAxWiIgZmlsbD0iIzZFNzg5MSIvPgo8L3N2Zz4K") !important;
+        margin-top: -1px !important
+    }
+
+    [data-list] .sort[data-sort].desc::after {
+        content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNyIgaGVpZ2h0PSI5IiB2aWV3Qm94PSIwIDAgNyA5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMy4xNDkgMC42NDY3NjhDMy4zNDM2NiAwLjQ1NDg4NSAzLjY1NjM0IDAuNDU0ODg1IDMuODUxIDAuNjQ2NzY4TDYuMTMxNTEgMi44OTQ2OUM2LjQ0OTk4IDMuMjA4NjIgNi4yMjc2OSAzLjc1MDc4IDUuNzgwNSAzLjc1MDc4SDEuMjE5NUMwLjc3MjMwNyAzLjc1MDc4IDAuNTUwMDE4IDMuMjA4NjIgMC44Njg0OTUgMi44OTQ2OUwzLjE0OSAwLjY0Njc2OFoiIGZpbGw9IiM2RTc4OTEiLz4KPC9zdmc+Cg==") !important
+    }
+    .form-check-input:checked[type=checkbox] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e")
+    }
+    .form-check-input[type=checkbox][indeterminate] {
+        background-color: #3874ff;
+        border-color: #3874ff;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e")
+    }
+    input[type=checkbox] {
+        border-radius: 0.25em;
+    }
+    .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+    }
+    #members {
+        margin-left: -1.5rem !important;
+    }
+    a {
+        color: #3874ff;
+        text-decoration: none;
+    }
+    .text-900 {
+        color: rgba(49, 55, 74, 1) !important;
+    }
+    </style>
 </head>
 <body>
 
@@ -110,8 +170,18 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Customers</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-primary me-2">Save changes</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2">Add money</button>
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Block</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Unblock</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        Role
+                    </button>
+                </div>
             </div>
-
             <div id="members" data-list="{&quot;valueNames&quot;:[&quot;customer&quot;,&quot;email&quot;,&quot;mobile_number&quot;,&quot;city&quot;,&quot;last_active&quot;,&quot;joined&quot;],&quot;page&quot;:10,&quot;pagination&quot;:true}">
                 <div class="row align-items-center justify-content-between g-3 mb-4">
                     <div class="col col-auto">
@@ -121,7 +191,7 @@
 
                     </div>
                 </div>
-                <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+                <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 mt-2 position-relative top-1">
                     <div class="table-responsive scrollbar ms-n1 ps-1">
                         <table class="table table-sm fs--1 mb-0">
                             <thead>
@@ -129,150 +199,71 @@
                                 <th class="white-space-nowrap fs--1 align-middle ps-0">
                                     <div class="form-check mb-0 fs-0"><input class="form-check-input" id="checkbox-bulk-members-select" type="checkbox" data-bulk-select="{&quot;body&quot;:&quot;members-table-body&quot;}"></div>
                                 </th>
-                                <th class="sort align-middle" scope="col" data-sort="customer" style="width:15%; min-width:200px;">CUSTOMER</th>
-                                <th class="sort align-middle" scope="col" data-sort="email" style="width:15%; min-width:200px;">EMAIL</th>
-                                <th class="sort align-middle pe-3" scope="col" data-sort="mobile_number" style="width:20%; min-width:200px;">MOBILE NUMBER</th>
-                                <th class="sort align-middle" scope="col" data-sort="city" style="width:10%;">CITY</th>
+                                <th class="sort align-middle" scope="col" data-sort="id" style="width:15%; min-width:200px;">ID</th>
+                                <th class="sort align-middle" scope="col" data-sort="customer" style="width:15%; min-width:200px;">
+                                    <span class="ms-3">CUSTOMER</span>
+                                </th>
+                                <th class="sort align-middle" scope="col" data-sort="email" style="width:15%;">BALANCE</th>
+                                <th class="sort align-middle pe-3" scope="col" data-sort="mobile_number" style="width:15%;">ROLE</th>
+                                <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">DEPOSED</th>
+                                <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">SELLS</th>
+                                <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">BUYS</th>
+                                <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">STATUS</th>
                                 <th class="sort align-middle text-end" scope="col" data-sort="last_active" style="width:21%;  min-width:200px;">LAST ACTIVE</th>
                                 <th class="sort align-middle text-end pe-0" scope="col" data-sort="joined" style="width:19%;  min-width:200px;">JOINED</th>
                             </tr>
                             </thead>
-                            <tbody class="list" id="members-table-body"><tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                            <tbody class="list" id="members-table-body">
+                            <tr th:each="user: ${users}" class="hover-actions-trigger btn-reveal-trigger position-static">
                                 <td class="fs--1 align-middle ps-0 py-3">
                                     <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/32.webp&quot;,&quot;name&quot;:&quot;Carry Anna&quot;},&quot;email&quot;:&quot;annac34@gmail.com&quot;,&quot;mobile&quot;:&quot;+912346578&quot;,&quot;city&quot;:&quot;Budapest&quot;,&quot;lastActive&quot;:&quot;34 min ago&quot;,&quot;joined&quot;:&quot;Dec 12, 12:56 PM&quot;}"></div>
                                 </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/32.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Carry Anna</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:annac34@gmail.com">annac34@gmail.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+912346578">+912346578</a></td>
-                                <td class="align-middle">Budapest</td>
-                                <td class="align-middle">34 min ago</td>
-                                <td class="align-middle">Dec 12, 12:56 PM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/avatar.webp&quot;,&quot;name&quot;:&quot;Milind Mikuja&quot;,&quot;placeholder&quot;:true},&quot;email&quot;:&quot;mimiku@yahoo.com&quot;,&quot;mobile&quot;:&quot;+8801564768976&quot;,&quot;city&quot;:&quot;Manchester&quot;,&quot;lastActive&quot;:&quot;6 hours ago&quot;,&quot;joined&quot;:&quot;Dec 9, 2:28 PM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle avatar-placeholder" src="../assets/img/team/avatar.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Milind Mikuja</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:mimiku@yahoo.com">mimiku@yahoo.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+8801564768976">+8801564768976</a></td>
-                                <td class="align-middle">Manchester</td>
-                                <td class="align-middle">6 hours ago</td>
-                                <td class="align-middle">Dec 9, 2:28 PM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/35.webp&quot;,&quot;name&quot;:&quot;Stanly Drinkwater&quot;},&quot;email&quot;:&quot;stnlwasser@hotmail.com&quot;,&quot;mobile&quot;:&quot;+78675436798&quot;,&quot;city&quot;:&quot;Smallville&quot;,&quot;lastActive&quot;:&quot;43 min ago&quot;,&quot;joined&quot;:&quot;Dec 4, 12:56 PM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/35.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Stanly Drinkwater</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:stnlwasser@hotmail.com">stnlwasser@hotmail.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+78675436798">+78675436798</a></td>
-                                <td class="align-middle">Smallville</td>
-                                <td class="align-middle">43 min ago</td>
-                                <td class="align-middle">Dec 4, 12:56 PM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/57.webp&quot;,&quot;name&quot;:&quot;Josef Stravinsky&quot;},&quot;email&quot;:&quot;Josefsky@sni.it&quot;,&quot;mobile&quot;:&quot;+118796567894&quot;,&quot;city&quot;:&quot;Metropolis&quot;,&quot;lastActive&quot;:&quot;2 hours ago&quot;,&quot;joined&quot;:&quot;Dec 1,  4:07 AM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/57.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Josef Stravinsky</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:Josefsky@sni.it">Josefsky@sni.it</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+118796567894">+118796567894</a></td>
-                                <td class="align-middle">Metropolis</td>
-                                <td class="align-middle">2 hours ago</td>
-                                <td class="align-middle">Dec 1, 4:07 AM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/58.webp&quot;,&quot;name&quot;:&quot;Igor Borvibson&quot;},&quot;email&quot;:&quot;vibigorr@technext.it&quot;,&quot;mobile&quot;:&quot;+65899655678&quot;,&quot;city&quot;:&quot;Central city&quot;,&quot;lastActive&quot;:&quot;5 days ago&quot;,&quot;joined&quot;:&quot;Nov 28, 7:28 PM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/58.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Igor Borvibson</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:vibigorr@technext.it">vibigorr@technext.it</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+65899655678">+65899655678</a></td>
-                                <td class="align-middle">Central city</td>
-                                <td class="align-middle">5 days ago</td>
-                                <td class="align-middle">Nov 28, 7:28 PM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/59.webp&quot;,&quot;name&quot;:&quot;Katerina Karenin&quot;},&quot;email&quot;:&quot;karkat99@gmail.com&quot;,&quot;mobile&quot;:&quot;+00564327890&quot;,&quot;city&quot;:&quot;Gotham&quot;,&quot;lastActive&quot;:&quot;2 weeks ago&quot;,&quot;joined&quot;:&quot;Nov 24, 10:16 AM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/59.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Katerina Karenin</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:karkat99@gmail.com">karkat99@gmail.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+00564327890">+00564327890</a></td>
-                                <td class="align-middle">Gotham</td>
-                                <td class="align-middle">2 weeks ago</td>
-                                <td class="align-middle">Nov 24, 10:16 AM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;&quot;,&quot;name&quot;:&quot;Roy Anderson&quot;},&quot;email&quot;:&quot;andersonroy@netflix.chill&quot;,&quot;mobile&quot;:&quot;+55890776&quot;,&quot;city&quot;:&quot;Vancouver&quot;,&quot;lastActive&quot;:&quot;4 days ago&quot;,&quot;joined&quot;:&quot;Nov 18, 5:43 PM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
+                                <td th:text="${user.id}" class="align-middle text-900"/>
+                                <td class="align-middle">
+                                    <a class="d-flex align-items-center" href="#!">
                                     <div class="avatar avatar-m">
-                                        <div class="avatar-name rounded-circle"><span>R</span></div>
+                                        <img class="rounded-circle" src="../assets/img/team/32.webp" alt="">
                                     </div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Roy Anderson</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:andersonroy@netflix.chill">andersonroy@netflix.chill</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+55890776">+55890776</a></td>
-                                <td class="align-middle">Vancouver</td>
-                                <td class="align-middle">4 days ago</td>
-                                <td class="align-middle">Nov 18, 5:43 PM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/31.webp&quot;,&quot;name&quot;:&quot;Martina scorcese&quot;},&quot;email&quot;:&quot;cesetina1@gmail.com&quot;,&quot;mobile&quot;:&quot;+666611896&quot;,&quot;city&quot;:&quot;Viena&quot;,&quot;lastActive&quot;:&quot;6 min ago&quot;,&quot;joined&quot;:&quot;Nov 18, 2:09 AM&quot;}"></div>
+                                    <h6 th:text="${user.username}" class="mb-0 ms-3 fw-semi-bold text-900"/>
+                                    </a>
                                 </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/31.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Martina scorcese</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:cesetina1@gmail.com">cesetina1@gmail.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+666611896">+666611896</a></td>
-                                <td class="align-middle">Viena</td>
-                                <td class="align-middle">6 min ago</td>
-                                <td class="align-middle">Nov 18, 2:09 AM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/33.webp&quot;,&quot;name&quot;:&quot;Luis Bunuel&quot;},&quot;email&quot;:&quot;luisuel@live.com&quot;,&quot;mobile&quot;:&quot;+55786534&quot;,&quot;city&quot;:&quot;Bangalore&quot;,&quot;lastActive&quot;:&quot;56 min ago&quot;,&quot;joined&quot;:&quot;Nov 16, 3:22 PM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/33.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Luis Bunuel</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:luisuel@live.com">luisuel@live.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+55786534">+55786534</a></td>
-                                <td class="align-middle">Bangalore</td>
-                                <td class="align-middle">56 min ago</td>
-                                <td class="align-middle">Nov 16, 3:22 PM</td>
-                            </tr><tr class="hover-actions-trigger btn-reveal-trigger position-static">
-                                <td class="fs--1 align-middle ps-0 py-3">
-                                    <div class="form-check mb-0 fs-0"><input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/34.webp&quot;,&quot;name&quot;:&quot;Jean Renoir&quot;},&quot;email&quot;:&quot;renoirjean1836@gmail.com&quot;,&quot;mobile&quot;:&quot;+8801765458767&quot;,&quot;city&quot;:&quot;Chittagong&quot;,&quot;lastActive&quot;:&quot;Yesterday&quot;,&quot;joined&quot;:&quot;Nov 09, 8:49 AM&quot;}"></div>
-                                </td>
-                                <td class="align-middle"><a class="d-flex align-items-center" href="#!">
-                                    <div class="avatar avatar-m"><img class="rounded-circle" src="../assets/img/team/34.webp" alt=""></div>
-                                    <h6 class="mb-0 ms-3 fw-semi-bold">Jean Renoir</h6>
-                                </a></td>
-                                <td class="align-middle"><a class="fw-semi-bold" href="mailto:renoirjean1836@gmail.com">renoirjean1836@gmail.com</a></td>
-                                <td class="align-middle"><a class="fw-bold text-1100" href="tel:+8801765458767">+8801765458767</a></td>
-                                <td class="align-middle">Chittagong</td>
-                                <td class="align-middle">Yesterday</td>
-                                <td class="align-middle">Nov 09, 8:49 AM</td>
-                            </tr></tbody>
+                                <td th:text="${user.balance}" class="align-middle text-900"></td>
+                                <td class="align-middle text-900">USER</td>
+                                <td class="align-middle text-900">1</td>
+                                <td th:text="${user.sells}" class="align-middle text-900"/>
+                                <td th:text="${user.purchases}" class="align-middle text-900"/>
+                                <td class="align-middle text-900">ACTIVE</td>
+                                <td class="align-middle text-end text-900">34 min ago</td>
+                                <td class="align-middle text-end text-900">Dec 12, 12:56 PM</td>
+                            </tr>
+
+                            </tbody>
                         </table>
                     </div>
-
+                    <div class="row align-items-center justify-content-between py-3 pe-0 fs--1">
+                        <div class="col-auto d-flex">
+                            <p class="d-none d-sm-block me-3 fw-semi-bold text-900" data-list-info="data-list-info"><span th:text="${fromCount}"/> to <span th:text="${toCount}"/> <span class="text-600"> Items of </span><span th:text="${ofCount}"/></p>
+                        </div>
+                        <div th:if="${totalPages > 0}" class="col-auto d-flex">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a class="page-link" th:href="@{/customers(page=1)}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" th:each="pageNumber : ${pageNumbers}" th:classappend="${pageNumber==currentPage} ? disabled">
+                                        <a class="page-link" th:href="@{/customers(page=${pageNumber})}" th:text=${pageNumber}></a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" th:href="@{/customers(page=${totalPages})}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -285,17 +276,6 @@
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <script th:src="@{js/dashboard.js}"></script>
-<script>
-  var eventSource = new EventSource('/sse');
-
-  eventSource.onmessage = (e) => {
-    console.log("Новое сообщение", e.data);
-  };
-
-  eventSource.onopen = function () {
-     console.log('connection is established');
-  };
-</script>
-
+<script th:src="@{js/bulk-select.js}"></script>
 
 </body></html>
