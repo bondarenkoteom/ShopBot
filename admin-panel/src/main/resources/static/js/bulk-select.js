@@ -5,11 +5,13 @@ function clickBulkCheckbox(bulkCheckbox, simpleCheckboxes) {
             bulkCheckbox.removeAttribute('indeterminate');
             simpleCheckboxes.forEach(el => {
                 el.checked = false;
+                el.nextElementSibling.value = false;
             });
           } else {
             bulkCheckbox.checked = true;
             simpleCheckboxes.forEach(el => {
                 el.checked = true;
+                el.nextElementSibling.value = true;
             });
           }
         });
@@ -18,6 +20,13 @@ function clickBulkCheckbox(bulkCheckbox, simpleCheckboxes) {
 function clickSimpleCheckbox(bulkCheckbox, simpleCheckboxes) {
     simpleCheckboxes.forEach(el => {
         el.addEventListener('click', () => {
+
+            if (!el.checked) {
+                el.nextElementSibling.value = false;
+            } else {
+                el.nextElementSibling.value = true;
+            }
+
             let checkedElements = document.querySelectorAll('[type="checkbox"]:not(#checkbox-bulk-members-select):checked');
             if(checkedElements.length === 0) {
                 bulkCheckbox.checked = false;

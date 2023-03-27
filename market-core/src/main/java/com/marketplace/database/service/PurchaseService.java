@@ -26,6 +26,10 @@ public class PurchaseService {
         return purchaseRepository.getPurchasesByBuyerId(buyerId, pageable);
     }
 
+    public Page<Purchase> getAllPurchases(Pageable pageable) {
+        return purchaseRepository.findAll(pageable);
+    }
+
     public void createOrder(Purchase purchase) {
         purchaseRepository.save(purchase);
     }

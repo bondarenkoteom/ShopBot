@@ -89,7 +89,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders}">
+                        <a class="nav-link active disabled" th:href="@{/orders}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="feather feather-file align-text-bottom"
@@ -114,7 +114,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active disabled" aria-current="page" th:href="@{/customers}">
+                        <a class="nav-link" aria-current="page" th:href="@{/customers}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="feather feather-users align-text-bottom"
@@ -234,9 +234,9 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-            <form action="#" th:action="@{/customers}" th:object="${usersForm}" method="post">
+            <form action="#" th:action="@{/orders}" th:object="${purchasesForm}" method="post">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h1 class="h2 pt-3">Customers</h1>
+                    <h1 class="h2 pt-3">Orders</h1>
 
 
                     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -255,22 +255,9 @@
 
                     <div class="btn-toolbar pt-3 mb-2 mb-md-0">
                         <button type="submit" class="btn btn-sm btn-outline-primary me-2">Save changes</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary me-2" data-bs-toggle="modal"
-                                data-bs-target="#topUpModal">
-                            Add money
-                        </button>
                         <div class="btn-group me-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="blockUser()">Block</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="unblockUser()">Unblock</button>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="roleDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                Role
-                            </button>
-                            <ul class="dropdown-menu gap-1 p-2 rounded-3 mx-0 shadow w-220px" aria-labelledby="roleDropdown">
-                                <li><a class="dropdown-item rounded-2" href="#">ROLE_USER</a></li>
-                                <li><a class="dropdown-item rounded-2" href="#">ROLE_VENDOR</a></li>
-                            </ul>
                         </div>
 
                     </div>
@@ -302,57 +289,47 @@
                                     </th>
                                     <th class="sort align-middle" scope="col" data-sort="customer"
                                         style="width:15%; min-width:200px;">
-                                        <span class="ms-3">CUSTOMER</span>
+                                        <span class="ms-3">NAME</span>
                                     </th>
-                                    <th class="sort align-middle" scope="col" data-sort="email" style="width:15%;">BALANCE
+                                    <th class="sort align-middle" scope="col" data-sort="email" style="width:15%;">
+                                        ITEM
                                     </th>
                                     <th class="sort align-middle pe-3" scope="col" data-sort="mobile_number"
-                                        style="width:15%;">ROLE
+                                        style="width:15%;">PRICE
                                     </th>
-                                    <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">DEPOSED
-                                    </th>
-                                    <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">SELLS</th>
-                                    <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">BUYS</th>
-                                    <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">STATUS
-                                    </th>
-                                    <th class="sort align-middle text-end" scope="col" data-sort="last_active"
-                                        style="width:21%;  min-width:200px;">LAST ACTIVE
+                                    <th class="sort align-middle" scope="col" data-sort="city" style="width:15%;">
+                                        STATUS
                                     </th>
                                     <th class="sort align-middle text-end pe-0" scope="col" data-sort="joined"
-                                        style="width:19%;  min-width:200px;">JOINED
+                                        style="width:19%;  min-width:200px;">DATE
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody class="list" id="members-table-body">
                                     <fieldset>
-                                        <tr th:each="usersModel, itemStat : *{usersModels}"
+                                        <tr th:each="purchasesModel, itemStat : *{purchasesModels}"
                                             class="hover-actions-trigger btn-reveal-trigger position-static">
                                             <td class="fs--1 align-middle ps-0 py-3">
                                                 <div class="form-check mb-0 fs-0">
                                                     <input class="form-check-input" type="checkbox"
                                                            data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/32.webp&quot;,&quot;name&quot;:&quot;Carry Anna&quot;},&quot;email&quot;:&quot;annac34@gmail.com&quot;,&quot;mobile&quot;:&quot;+912346578&quot;,&quot;city&quot;:&quot;Budapest&quot;,&quot;lastActive&quot;:&quot;34 min ago&quot;,&quot;joined&quot;:&quot;Dec 12, 12:56 PM&quot;}">
-                                                    <input type="hidden" th:field="*{usersModels[__${itemStat.index}__].checked}">
+                                                    <input type="hidden" th:field="*{purchasesModels[__${itemStat.index}__].checked}">
                                                 </div>
                                             </td>
-                                            <td th:text="${usersModel.user.id}" class="align-middle text-900"/>
-                                            <input type="hidden" th:field="*{usersModels[__${itemStat.index}__].user.id}">
+                                            <td th:text="${purchasesModel.purchase.id}" class="align-middle text-900"/>
+                                            <input type="hidden" th:field="*{purchasesModels[__${itemStat.index}__].purchase.id}">
 
-                                            <td class="align-middle"><h6 th:text="${usersModel.user.username}" class="mb-0 ms-3 fw-semi-bold text-900"/></td>
+                                            <td class="align-middle"><h6 th:text="${purchasesModel.purchase.name}" class="mb-0 ms-3 fw-semi-bold text-900"/></td>
 
-                                            <td th:text="${usersModel.user.balance}" class="align-middle text-900 balance"></td>
-                                            <input type="hidden" th:field="*{usersModels[__${itemStat.index}__].user.balance}">
+                                            <td th:text="${purchasesModel.purchase.item}" class="align-middle text-900 balance"></td>
+                                            <input type="hidden" th:field="*{purchasesModels[__${itemStat.index}__].purchase.item}">
 
-                                            <td th:text="${usersModel.user.role.name}" class="align-middle text-900 role"></td>
-                                            <input type="hidden" th:field="*{usersModels[__${itemStat.index}__].user.role.name}">
+                                            <td th:text="${purchasesModel.purchase.price}" class="align-middle text-900 role"></td>
+                                            <input type="hidden" th:field="*{purchasesModels[__${itemStat.index}__].purchase.price}">
 
-                                            <td class="align-middle text-900">1</td>
-                                            <td th:text="${usersModel.user.sells}" class="align-middle text-900"/>
-                                            <td th:text="${usersModel.user.purchases}" class="align-middle text-900"/>
+                                            <td th:text="${purchasesModel.purchase.status}" class="align-middle text-900"/>
+                                            <input type="hidden" th:field="*{purchasesModels[__${itemStat.index}__].purchase.status}">
 
-                                            <td th:text="${usersModel.user.status}" class="align-middle text-900 status"></td>
-                                            <input type="hidden" th:field="*{usersModels[__${itemStat.index}__].user.status}">
-
-                                            <td class="align-middle text-end text-900">34 min ago</td>
                                             <td class="align-middle text-end text-900">Dec 12, 12:56 PM</td>
                                         </tr>
                                     </fieldset>
@@ -368,17 +345,17 @@
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
                                         <li class="page-item">
-                                            <a class="page-link" th:href="@{/customers(page=1)}" aria-label="Previous">
+                                            <a class="page-link" th:href="@{/orders(page=1)}" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
                                         <li class="page-item" th:each="pageNumber : ${pageNumbers}"
                                             th:classappend="${pageNumber==currentPage} ? disabled">
-                                            <a class="page-link" th:href="@{/customers(page=${pageNumber})}"
+                                            <a class="page-link" th:href="@{/orders(page=${pageNumber})}"
                                                th:text=${pageNumber}></a>
                                         </li>
                                         <li class="page-item">
-                                            <a class="page-link" th:href="@{/customers(page=${totalPages})}"
+                                            <a class="page-link" th:href="@{/orders(page=${totalPages})}"
                                                aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </a>

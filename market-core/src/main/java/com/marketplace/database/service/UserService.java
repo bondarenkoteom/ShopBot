@@ -1,7 +1,6 @@
 package com.marketplace.database.service;
 
 import com.marketplace.constant.Trigger;
-import com.marketplace.database.model.Product;
 import com.marketplace.database.model.User;
 import com.marketplace.database.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +68,10 @@ public class UserService {
 
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    public Page<User> findByIds(List<Long> userIds, Pageable pageable) {
+        return userRepository.findByIdIn(userIds, pageable);
     }
 
     public void incrementSells(Long userId) {

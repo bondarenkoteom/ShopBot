@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -23,8 +25,15 @@ public class User {
     @Id
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name="role_id", nullable=false)
+    private Role role;
+
     @Column(name = "username")
     private String username;
+
+    @Column(name = "status")
+    private String status;
 
     @Column(name = "rating")
     private Integer rating;

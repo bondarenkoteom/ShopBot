@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findTop25Vendors();
 
     Page<User> findAll(Pageable pageable);
+
+    Page<User> findByIdIn(List<Long> userIds, Pageable pageable);
 }

@@ -18,7 +18,9 @@ public class User {
     }
 
     Long id;
+    Role role;
     String username;
+    String status;
     Integer rating;
     Trigger waitFor;
     Double balance;

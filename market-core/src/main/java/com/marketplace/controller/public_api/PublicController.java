@@ -52,9 +52,13 @@ public class PublicController {
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     Page<Purchase> purchases(@ParameterObject Pageable pageable, @RequestBody PurchaseRequest purchaseRequest) {
-        return purchaseService.getAllPurchases(
-                purchaseRequest.getBuyerId(),
-                pageable);
+        if (purchaseRequest.getBuyerId() == null) {
+            return purchaseService.getAllPurchases(pageable);
+        } else {
+            return purchaseService.getAllPurchases(
+                    purchaseRequest.getBuyerId(),
+                    pageable);
+        }
     }
 
 

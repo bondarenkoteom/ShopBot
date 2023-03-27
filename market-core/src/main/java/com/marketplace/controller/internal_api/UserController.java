@@ -5,6 +5,7 @@ import com.marketplace.database.service.UserService;
 import com.marketplace.requests.TriggerRequest;
 import com.marketplace.requests.UserRequest;
 import com.marketplace.responses.TriggerResponse;
+import org.apache.logging.log4j.util.Strings;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,8 +48,12 @@ public class UserController {
     @RequestMapping(value = "/api/v1/users", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Page<User> users(@ParameterObject Pageable pageable) {
-        return userService.getAllUsers(pageable);
+    Page<User> users(@ParameterObject Pageable pageable, @RequestParam(required = false) List<Long> userIds) {
+        if (userIds != null && !userIds.isEmpty()) {
+            return userService.findByIds(userIds, pageable);
+        } else {
+            return userService.getAllUsers(pageable);
+        }
     }
 
     @RequestMapping(value = "/api/v1/user/trigger", method = RequestMethod.GET)
