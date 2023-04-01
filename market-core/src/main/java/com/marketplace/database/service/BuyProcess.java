@@ -35,7 +35,7 @@ public class BuyProcess {
             Product product = productOptional.get();
 
             User buyer = userService.getUser(userId);
-            User seller = userService.getUser(product.getOwnerId());
+            User seller = product.getOwner();
 
             if (product.getPrice() > buyer.getBalance()) {
                 buyResponse.setMessage("Not enough money");
@@ -45,11 +45,9 @@ public class BuyProcess {
 
             String item = productService.pollItem(product.getId());
             if (!item.isEmpty()) {
-                userService.incrementSells(product.getOwnerId());
 
                 buyer.setBalance(BigDecimal.valueOf(buyer.getBalance() - product.getPrice())
                         .setScale(2, RoundingMode.DOWN).doubleValue());
-                buyer.setPurchases(buyer.getPurchases() + 1);
 
                 userService.save(buyer);
 
@@ -60,23 +58,12 @@ public class BuyProcess {
                 purchase.setInstruction(product.getInstruction());
                 purchase.setItem(item);
                 purchase.setStatus(OrderStatus.IN_PROGRESS);
-                purchase.setBuyerId(buyer.getId());
-                purchase.setSellerId(seller.getId());
+                purchase.setBuyer(buyer);
+                purchase.setSeller(seller);
                 purchase.setPrice(product.getPrice());
                 purchaseService.createOrder(purchase);
 
-                com.marketplace.entity.Purchase purchase1 = new com.marketplace.entity.Purchase();
-                purchase.setDate(purchase.getDate());
-                purchase.setName(purchase.getName());
-                purchase.setProductId(purchase.getProductId());
-                purchase.setInstruction(purchase.getInstruction());
-                purchase.setItem(purchase.getInstruction());
-                purchase.setStatus(purchase.getStatus());
-                purchase.setBuyerId(purchase.getBuyerId());
-                purchase.setSellerId(purchase.getSellerId());
-                purchase.setPrice(purchase.getPrice());
-
-                buyResponse.setPurchase(purchase1);
+                buyResponse.setPurchase(purchase.toIntegrationPurchase());
                 buyResponse.setBalance(buyer.getBalance());
                 buyResponse.setMessage("success");
                 buyResponse.setError(false);

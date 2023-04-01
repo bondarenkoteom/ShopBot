@@ -5,6 +5,7 @@ import com.marketplace.database.service.UserService;
 import com.marketplace.requests.TriggerRequest;
 import com.marketplace.requests.UserRequest;
 import com.marketplace.responses.TriggerResponse;
+import com.marketplace.utils.Values;
 import org.apache.logging.log4j.util.Strings;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static com.marketplace.utils.Values.isNotEmpty;
+
 @RestController
 public class UserController {
 
@@ -25,8 +28,8 @@ public class UserController {
     @RequestMapping(value = "/api/v1/user", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Optional<User> userGet(@RequestParam(required = false) Long userId, @RequestParam(required = false) String username) {
-        return userService.findUser(userId, username);
+    Optional<com.marketplace.entity.User> userGet(@RequestParam(required = false) Long userId, @RequestParam(required = false) String username) {
+        return userService.findUser(userId, username).map(User::toIntegrationUser);
     }
 
     @RequestMapping(value = "/api/v1/user", method = RequestMethod.POST)
@@ -48,11 +51,15 @@ public class UserController {
     @RequestMapping(value = "/api/v1/users", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Page<User> users(@ParameterObject Pageable pageable, @RequestParam(required = false) List<Long> userIds) {
-        if (userIds != null && !userIds.isEmpty()) {
-            return userService.findByIds(userIds, pageable);
+    Page<com.marketplace.entity.User> users(@ParameterObject Pageable pageable,
+                                            @RequestParam(required = false) List<Long> userIds,
+                                            @RequestParam(required = false) String username) {
+        if (isNotEmpty(userIds)) {
+            return userService.findByIds(userIds, pageable).map(User::toIntegrationUser);
+        } else if(isNotEmpty(username)) {
+            return userService.findByUsername(username, pageable).map(User::toIntegrationUser);
         } else {
-            return userService.getAllUsers(pageable);
+            return userService.getAllUsers(pageable).map(User::toIntegrationUser);
         }
     }
 

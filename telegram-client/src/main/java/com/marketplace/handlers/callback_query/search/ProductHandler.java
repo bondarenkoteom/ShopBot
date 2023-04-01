@@ -54,11 +54,6 @@ public class ProductHandler extends AbstractBaseHandler {
         if (originalProducts.get(itemPosition) != null) {
             Product currentProduct = originalProducts.get(itemPosition);
 
-            Optional<User> userOptional = httpCoreInterface.userGet(currentProduct.getOwnerId(), null);
-
-            if (userOptional.isEmpty()) return;
-
-
             Payload payload = new Payload(update);
 
             if (SendMethod.valueOf(keys.get("m")).equals(SendMethod.DELETE)) {
@@ -69,7 +64,7 @@ public class ProductHandler extends AbstractBaseHandler {
                 payload.setSendMethod(SendMethod.valueOf(keys.get("m")));
             }
 
-            payload.setText(getFormattedTextMessage(currentProduct, userOptional.get()));
+            payload.setText(getFormattedTextMessage(currentProduct, currentProduct.getOwner()));
             payload.setFileId(currentProduct.getImageId());
 
             Map<String, String> button = Map.of("BUY_CONFIRM -i %s -m %s".formatted(currentProduct.getId(), SendMethod.SEND_MESSAGE),
@@ -78,7 +73,7 @@ public class ProductHandler extends AbstractBaseHandler {
             Map<String, String> pagination = SimplePagination.floatingItemPagination2(products, searchQuery, itemPosition, SendMethod.EDIT_MEDIA, "PRODUCT");
 
             Buttons.Builder builder = Buttons.newBuilder().setButtonsHorizontal(pagination);
-            if (!Long.valueOf(payload.getChatId()).equals(currentProduct.getOwnerId())) {
+            if (!Long.valueOf(payload.getChatId()).equals(currentProduct.getOwner().getId())) {
                 builder.setButtonsHorizontal(button);
             }
             builder.setGoBackButton("SEARCH -p %s -m %s -q '%s' -c %s".formatted(pageNumber, SendMethod.DELETE, searchQuery, category.name()));

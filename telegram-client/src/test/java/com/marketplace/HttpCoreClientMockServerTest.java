@@ -148,10 +148,7 @@ class HttpCoreClientMockServerTest {
                                 .withBody("{\"totalPages\":1,\"totalElements\":1,\"size\":1,\"content\":[{\"id\":0,\"price\":0,\"item\":\"string\",\"name\":\"string\",\"instruction\":\"string\",\"productId\":0,\"status\":\"CONFIRMED\",\"buyer\":{\"id\":0,\"username\":\"string\",\"rating\":0,\"waitFor\":\"UNDEFINED\",\"balance\":0,\"sells\":0,\"purchases\":0},\"seller\":{\"id\":0,\"username\":\"string\",\"rating\":0,\"waitFor\":\"UNDEFINED\",\"balance\":0,\"sells\":0,\"purchases\":0},\"date\":\"2023-03-12T13:13:01.477Z\"}],\"number\":0,\"sort\":{\"empty\":true,\"sorted\":true,\"unsorted\":true},\"pageable\":{\"offset\":0,\"sort\":{\"empty\":true,\"sorted\":true,\"unsorted\":true},\"pageNumber\":0,\"pageSize\":0,\"paged\":true,\"unpaged\":true},\"first\":true,\"last\":true,\"numberOfElements\":0,\"empty\":true}")
                 );
 
-        PurchaseRequest purchaseRequest = new PurchaseRequest();
-        purchaseRequest.setBuyerId(1L);
-
-        Page<Purchase> products = httpCoreInterface.purchases(0, 1, new String[]{}, purchaseRequest);
+        Page<Purchase> products = httpCoreInterface.purchases(0, 1, new String[]{}, 1L, null);
         assertEquals(1, products.getSize());
 
         mockServer.verify(
@@ -207,7 +204,7 @@ class HttpCoreClientMockServerTest {
 
         Product product = new Product();
         product.setId(0L);
-        product.setOwnerId(0L);
+        product.setOwner(new User());
         product.setStatus(ProductStatus.ACTIVE);
         product.setRatingGood(0);
         product.setRatingBad(0);
@@ -276,11 +273,7 @@ class HttpCoreClientMockServerTest {
                                 .withBody("{\"totalPages\":1,\"totalElements\":1,\"size\":1,\"content\":[{\"id\":0,\"ownerId\":0,\"status\":\"ACTIVE\",\"ratingGood\":0,\"ratingBad\":0,\"productName\":\"string\",\"instruction\":\"string\",\"description\":\"string\",\"price\":0,\"category\":\"PS_5_KEYS\",\"imageId\":\"string\",\"items\":[\"string\"],\"isEditing\":true}],\"number\":0,\"sort\":{\"empty\":true,\"sorted\":true,\"unsorted\":true},\"pageable\":{\"offset\":0,\"sort\":{\"empty\":true,\"sorted\":true,\"unsorted\":true},\"pageNumber\":0,\"pageSize\":0,\"paged\":true,\"unpaged\":true},\"first\":true,\"last\":true,\"numberOfElements\":0,\"empty\":true}")
                 );
 
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setSellerId(1L);
-        productRequest.setIsEditing(true);
-
-        Page<Product> products = httpCoreInterface.products(0, 1, null, productRequest);
+        Page<Product> products = httpCoreInterface.products(0, 1, null, null, 1L, null);
         assertEquals(1, products.getSize());
 
         mockServer.verify(

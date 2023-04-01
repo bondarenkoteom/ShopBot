@@ -3,6 +3,7 @@ package com.marketplace.handlers.input_message;
 import com.marketplace.constant.ProductStatus;
 import com.marketplace.constant.SendMethod;
 import com.marketplace.constant.Trigger;
+import com.marketplace.entity.CustomMultipartFile;
 import com.marketplace.entity.Payload;
 import com.marketplace.entity.Product;
 import com.marketplace.entity.User;
@@ -11,15 +12,29 @@ import com.marketplace.handlers.callback_query.search.SearchHandler;
 import com.marketplace.handlers.callback_query.user_settings.UserSettingsCommandHandler;
 import com.marketplace.handlers.callback_query.vendor_panel.VendorPanelCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
 @Component
 public class UserMessageHandler extends AbstractBaseHandler {
+
+    @Value("classpath:2.jpg")
+    Resource resourceFile;
 
     @Autowired
     private ApplicationContext context;
@@ -27,12 +42,14 @@ public class UserMessageHandler extends AbstractBaseHandler {
     @Override
     public void handle(Update update) {
 
+        Long userId = getUserId(update);
         Message message = update.getMessage();
-        Trigger trigger = httpCoreInterface.triggerGet(message.getFrom().getId()).getTrigger();
+        Trigger trigger = httpCoreInterface.triggerGet(userId).getTrigger();
+
 
         switch (trigger) {
             case USERNAME -> {
-                Optional<User> optionalUser = httpCoreInterface.userGet(message.getFrom().getId(), null);
+                Optional<User> optionalUser = httpCoreInterface.userGet(userId, null);
 
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
@@ -53,31 +70,38 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case NEW_PRODUCT_IMAGE -> {
-                httpCoreInterface.productEditingDelete(update.getCallbackQuery().getFrom().getId());
+                Optional<User> optionalUser = httpCoreInterface.userGet(userId, null);
 
-                String fileId = message.getDocument() == null ? message.getPhoto().get(1).getFileId() : message.getDocument().getFileId();
+                if (optionalUser.isPresent()) {
+                    httpCoreInterface.productEditingDelete(userId);
 
-                Product product = new Product();
-                product.setImageId(fileId);
-                product.setOwnerId(message.getFrom().getId());
-                product.setIsEditing(true);
-                product.setStatus(ProductStatus.NOT_ACTIVE);
-                httpCoreInterface.productUpdate(product);
+                    String fileId = message.getDocument() == null ? message.getPhoto().get(1).getFileId() : message.getDocument().getFileId();
 
-                setTriggerValue(update, Trigger.NEW_PRODUCT_NAME);
+//                    String filePath = telegramApiClient.getFilePath(fileId);
+//                    byte[] bytea = telegramApiClient.getDownloadFile(filePath);
 
-                Payload payload = new Payload(update);
-                payload.setSendMethod(SendMethod.SEND_MESSAGE);
-                payload.setText("""
+                    Product product = new Product();
+                    product.setImageId(fileId);
+                    product.setOwner(optionalUser.get());
+                    product.setIsEditing(true);
+                    product.setStatus(ProductStatus.NOT_ACTIVE);
+                    httpCoreInterface.productUpdate(product);
+
+                    setTriggerValue(update, Trigger.NEW_PRODUCT_NAME);
+
+                    Payload payload = new Payload(update);
+                    payload.setSendMethod(SendMethod.SEND_MESSAGE);
+                    payload.setText("""
                         👍 The image was set successfully.
 
                         Please enter the short and clear name of your lot. Try not to use more than 100 symbols.""");
-                bot.process(payload);
+                    bot.process(payload);
+                }
             }
             case EDIT_PRODUCT_IMAGE -> {
                 String fileId = message.getDocument() == null ? message.getPhoto().get(0).getFileId() : message.getDocument().getFileId();
 
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -96,7 +120,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case NEW_PRODUCT_NAME -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -116,7 +140,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case EDIT_PRODUCT_NAME -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -135,7 +159,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case NEW_PRODUCT_DESCRIPTION -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -155,7 +179,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case EDIT_PRODUCT_DESCRIPTION -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -174,7 +198,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case NEW_PRODUCT_PRICE -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -194,7 +218,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case EDIT_PRODUCT_PRICE -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -213,7 +237,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case NEW_PRODUCT_ITEMS -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -241,7 +265,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 }
             }
             case NEW_PRODUCT_INSTRUCTION -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();
@@ -267,7 +291,7 @@ public class UserMessageHandler extends AbstractBaseHandler {
 
             }
             case EDIT_PRODUCT_ITEMS -> {
-                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(message.getFrom().getId());
+                Optional<Product> optionalProduct = httpCoreInterface.productEditingGet(userId);
 
                 if (optionalProduct.isPresent()) {
                     Product product = optionalProduct.get();

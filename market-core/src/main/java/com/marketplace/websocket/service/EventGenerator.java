@@ -1,6 +1,6 @@
-package com.marketplace.service;
+package com.marketplace.websocket.service;
 
-import com.marketplace.model.Event;
+import com.marketplace.websocket.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

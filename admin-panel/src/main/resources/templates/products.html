@@ -46,13 +46,13 @@
 <div class="container-fluid mt-5">
     <div class="row">
 
-        <div th:replace="fragments/sidebarMenu.html :: sidebarMenuFragment(controller='orders')"/>
+        <div th:replace="fragments/sidebarMenu.html :: sidebarMenuFragment(controller='products')"/>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
 
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2 pt-3">Orders</h1>
+                <h1 class="h2 pt-3">Products</h1>
 
 
                 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -83,10 +83,10 @@
 
                 </div>
             </div>
-            <div id="orders"
+            <div id="products"
                  data-list="{&quot;valueNames&quot;:[&quot;customer&quot;,&quot;email&quot;,&quot;mobile_number&quot;,&quot;city&quot;,&quot;last_active&quot;,&quot;joined&quot;],&quot;page&quot;:10,&quot;pagination&quot;:true}">
 
-                <div th:replace="fragments/searchInput.html :: searchInputFragment(controller='orders')"/>
+                <div th:replace="fragments/searchInput.html :: searchInputFragment(controller='products')"/>
 
                 <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 mt-2 position-relative top-1">
                     <div class="table-responsive scrollbar ms-n1 ps-1">
@@ -103,17 +103,20 @@
                                 <th class="sort align-middle" scope="col" data-sort="id">
                                     ID
                                 </th>
+                                <th class="sort align-middle" scope="col" data-sort="id">
+                                    IMAGE
+                                </th>
                                 <th class="sort align-middle" scope="col" data-sort="customer">
                                     <span class="ms-3">NAME</span>
                                 </th>
                                 <th class="sort align-middle" scope="col" data-sort="email">
-                                    ITEM
+                                    DESCRIPTION
+                                </th>
+                                <th class="sort align-middle" scope="col" data-sort="email">
+                                    CATEGORY
                                 </th>
                                 <th class="sort align-middle pe-3" scope="col" data-sort="mobile_number">
-                                    SELLER
-                                </th>
-                                <th class="sort align-middle" scope="col" data-sort="mobile_number">
-                                    BUYER
+                                    OWNER
                                 </th>
                                 <th class="sort align-middle" scope="col" data-sort="mobile_number">
                                     PRICE
@@ -122,68 +125,71 @@
                                     STATUS
                                 </th>
                                 <th class="sort align-middle text-end pe-0" scope="col" data-sort="joined">
-                                    DATE
+                                    RATING
                                 </th>
                             </tr>
                             </thead>
-                            <form id="saveForm" action="#" th:action="@{/orders}" th:object="${purchasesForm}" method="post">
+                            <form id="saveForm" action="#" th:action="@{/product}" th:object="${productsForm}" method="post">
                                 <tbody class="list" id="members-table-body">
                                 <fieldset>
-                                    <tr th:each="purchasesModel, itemStat : *{purchasesModels}"
+                                    <tr th:each="productsModel, itemStat : *{productsModels}"
                                         class="hover-actions-trigger btn-reveal-trigger position-static">
                                         <td class="fs--1 align-middle ps-0 py-3">
                                             <div class="form-check mb-0 fs-0">
                                                 <input class="form-check-input" type="checkbox"
                                                        data-bulk-select-row="{&quot;customer&quot;:{&quot;avatar&quot;:&quot;/team/32.webp&quot;,&quot;name&quot;:&quot;Carry Anna&quot;},&quot;email&quot;:&quot;annac34@gmail.com&quot;,&quot;mobile&quot;:&quot;+912346578&quot;,&quot;city&quot;:&quot;Budapest&quot;,&quot;lastActive&quot;:&quot;34 min ago&quot;,&quot;joined&quot;:&quot;Dec 12, 12:56 PM&quot;}">
                                                 <input type="hidden"
-                                                       th:field="*{purchasesModels[__${itemStat.index}__].checked}">
+                                                       th:field="*{productsModels[__${itemStat.index}__].checked}">
                                             </div>
                                         </td>
-                                        <td th:text="${purchasesModel.purchase.id}" class="align-middle text-900"/>
+                                        <td th:text="${productsModel.product.id}" class="align-middle text-900"/>
                                         <input type="hidden"
-                                               th:field="*{purchasesModels[__${itemStat.index}__].purchase.id}">
+                                               th:field="*{productsModels[__${itemStat.index}__].product.id}">
 
-                                        <td class="align-middle"><h6 th:text="${purchasesModel.purchase.name}"
+                                        <td>
+                                            <img th:src="@{${'/image/display/'+ productsModel.product.id}}"
+                                                 class="card img-fluid" style="width:100px" alt=""/>
+                                        </td>
+
+                                        <td class="align-middle"><h6 th:text="${productsModel.product.productName}"
                                                                      class="mb-0 ms-3 fw-semi-bold text-900"/></td>
 
-                                        <td th:text="${purchasesModel.purchase.item}"
+                                        <td th:text="${productsModel.product.description}"
                                             class="align-middle text-900 balance"></td>
-                                        <input type="hidden"
-                                               th:field="*{purchasesModels[__${itemStat.index}__].purchase.item}">
 
-                                        <td th:text="${purchasesModel.purchase.seller.username}"
+                                        <td th:text="${productsModel.product.category}"
+                                            class="align-middle text-900 balance"></td>
+
+                                        <td th:text="${productsModel.product.owner.username}"
                                             class="align-middle text-900 role"></td>
 
-                                        <td th:text="${purchasesModel.purchase.buyer.username}"
-                                            class="align-middle text-900 role"></td>
-
-                                        <td th:text="${purchasesModel.purchase.price}"
+                                        <td th:text="${productsModel.product.price}"
                                             class="align-middle text-900 role"></td>
                                         <input type="hidden"
-                                               th:field="*{purchasesModels[__${itemStat.index}__].purchase.price}">
+                                               th:field="*{productsModels[__${itemStat.index}__].product.price}">
 
-                                        <td th:switch="${purchasesModel.purchase.status.name()}"
+                                        <td th:switch="${productsModel.product.status.name()}"
                                             class="align-middle text-900">
-                                            <span th:case="'CONFIRMED'" th:text="${purchasesModel.purchase.status}"
+                                            <span th:case="'CONFIRMED'" th:text="${productsModel.product.status}"
                                                   class="badge bg-success"/>
-                                            <span th:case="'IN_PROGRESS'" th:text="${purchasesModel.purchase.status}"
+                                            <span th:case="'IN_PROGRESS'" th:text="${productsModel.product.status}"
                                                   class="badge bg-warning"/>
-                                            <span th:case="*" th:text="${purchasesModel.purchase.status}"
+                                            <span th:case="*" th:text="${productsModel.product.status}"
                                                   class="badge bg-danger"/>
                                         </td>
 
-
                                         <input type="hidden"
-                                               th:field="*{purchasesModels[__${itemStat.index}__].purchase.status}">
+                                               th:field="*{productsModels[__${itemStat.index}__].product.status}">
 
-                                        <td class="align-middle text-end text-900">Dec 12, 12:56 PM</td>
+                                        <td th:text="${productsModel.product.ratingGood - productsModel.product.ratingBad}"
+                                            class="align-middle text-end text-900 role"></td>
                                     </tr>
                                 </fieldset>
                                 </tbody>
                             </form>
                         </table>
                     </div>
-                    <div th:replace="fragments/pagination.html :: paginationFragment(controller='orders')"/>
+                    <div th:replace="fragments/pagination.html :: paginationFragment(controller='products')"/>
                 </div>
             </div>
         </main>

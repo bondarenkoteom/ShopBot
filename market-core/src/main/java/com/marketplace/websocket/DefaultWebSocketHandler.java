@@ -2,7 +2,7 @@ package com.marketplace.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marketplace.service.EventUnicastService;
+import com.marketplace.websocket.service.EventUnicastService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.socket.WebSocketHandler;

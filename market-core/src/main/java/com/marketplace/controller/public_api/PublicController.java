@@ -6,7 +6,6 @@ import com.marketplace.database.service.BuyProcess;
 import com.marketplace.database.service.ProductService;
 import com.marketplace.database.service.PurchaseService;
 import com.marketplace.requests.BuyRequest;
-import com.marketplace.requests.PurchaseRequest;
 import com.marketplace.requests.SearchRequest;
 import com.marketplace.responses.BuyResponse;
 import org.springdoc.core.annotations.ParameterObject;
@@ -45,19 +44,21 @@ public class PublicController {
     BuyResponse buy(@RequestBody BuyRequest buyRequest) {
         return buyProcess.run(
                 buyRequest.getProductId(),
-                buyRequest.getProductId());
+                buyRequest.getUserId());
     }
 
-    @RequestMapping(value = "/api/v1/purchases", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/v1/purchases", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Page<Purchase> purchases(@ParameterObject Pageable pageable, @RequestBody PurchaseRequest purchaseRequest) {
-        if (purchaseRequest.getBuyerId() == null) {
-            return purchaseService.getAllPurchases(pageable);
+    Page<Purchase> purchases(@ParameterObject Pageable pageable,
+                             @RequestParam(required = false) Long buyerId,
+                             @RequestParam(required = false) Long orderId) {
+        if (buyerId != null) {
+            return purchaseService.findByBuyerId(buyerId, pageable);
+        } else if(orderId != null) {
+            return purchaseService.findByOrderId(orderId, pageable);
         } else {
-            return purchaseService.getAllPurchases(
-                    purchaseRequest.getBuyerId(),
-                    pageable);
+            return purchaseService.getAllPurchases(pageable);
         }
     }
 

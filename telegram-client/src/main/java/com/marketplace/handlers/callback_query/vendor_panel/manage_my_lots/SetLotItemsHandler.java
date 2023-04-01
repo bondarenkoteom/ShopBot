@@ -8,7 +8,6 @@ import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
 import com.marketplace.entity.Product;
 import com.marketplace.handlers.AbstractBaseHandler;
-import com.marketplace.requests.ProductRequest;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

@@ -1,25 +1,31 @@
 package com.marketplace.database.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marketplace.constant.Category;
 import com.marketplace.constant.ProductStatus;
 import io.hypersistence.utils.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
+import java.util.Set;
 @Data
 @NoArgsConstructor
 @Entity
+@SequenceGenerator(name = "product_gen", sequenceName = "product_gen",  initialValue = 100000)
 @Table(name = "t_product")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "product_gen")
     private Long id;
 
-    @Column(name = "owner_id")
-    private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -56,5 +62,11 @@ public class Product {
 
     @Column(name = "is_editing")
     private Boolean isEditing;
+
+//    @JsonIgnore
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    @OneToOne(mappedBy="product")
+//    private ProductImage productImage;
 
 }

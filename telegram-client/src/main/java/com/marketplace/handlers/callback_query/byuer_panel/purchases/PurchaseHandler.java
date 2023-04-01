@@ -34,7 +34,7 @@ public class PurchaseHandler extends AbstractBaseHandler {
 
             Map<String, String> firstRow = Map.of(
                     "CONFIRM_DELIVERY -i " + purchase.getId(), ButtonText.CONFIRM_DELIVERY,
-                    "CHAT -i " + purchase.getSellerId(), ButtonText.CHAT_WITH_SELLER
+                    "CHAT -i " + purchase.getSeller().getId(), ButtonText.CHAT_WITH_SELLER
             );
             Map<String, String> secondRow = Map.of(
                     "OPEN_DISPUTE -i " + purchase.getId(), ButtonText.OPEN_DISPUTE,

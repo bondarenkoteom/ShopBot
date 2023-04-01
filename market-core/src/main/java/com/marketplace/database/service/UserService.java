@@ -2,7 +2,9 @@ package com.marketplace.database.service;
 
 import com.marketplace.constant.Trigger;
 import com.marketplace.database.model.User;
+import com.marketplace.database.repository.RoleRepository;
 import com.marketplace.database.repository.UserRepository;
+import com.marketplace.utils.Values;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +19,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public void createIfAbsent(Long userId, String username) {
         Optional<User> optional = userRepository.findById(userId);
         if (optional.isEmpty()) {
             User user = new User(userId, username);
+            user.setRole(roleRepository.findByName("ROLE_USER"));
             userRepository.save(user);
         }
     }
@@ -46,7 +52,7 @@ public class UserService {
     public Optional<User> findUser(Long userId, String username) {
         if (userId != null) {
             return userRepository.findById(userId);
-        } else if (username != null && !username.isEmpty()) {
+        } else if (Values.isNotEmpty(username)) {
             return userRepository.findByUsername(username);
         } else {
             return Optional.empty();
@@ -74,9 +80,8 @@ public class UserService {
         return userRepository.findByIdIn(userIds, pageable);
     }
 
-    public void incrementSells(Long userId) {
-        User user = getUser(userId);
-        user.setSells(user.getSells() + 1);
-        userRepository.save(user);
+    public Page<User> findByUsername(String username, Pageable pageable) {
+        return userRepository.findByUsernameContainingIgnoreCase(username, pageable);
     }
+
 }

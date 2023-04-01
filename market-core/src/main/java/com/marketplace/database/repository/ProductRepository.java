@@ -10,14 +10,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
 import java.util.Optional;
 
 @Repository
 @Transactional
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Product getProductById(Long id);
+    Page<Product> findById(Long id, Pageable pageable);
 
     void deleteByIsEditingTrueAndOwnerId(Long ownerId);
 
@@ -25,24 +24,21 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> getProductsByOwnerIdAndIsEditing(Long ownerId, boolean isEditing, Pageable pageable);
 
+    Page<Product> getProductsByProductNameAndIsEditing(String productName, boolean isEditing, Pageable pageable);
+
     @Query(value = "SELECT pull_element(:id)", nativeQuery = true)
     String pollItem(@Param("id") Long id);
-
-
-
-
-
 
     @Query("SELECT p FROM Product p")
     Page<Product> findAllProducts(Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.category = :category AND p.ownerId = :ownerId")
+    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.category = :category AND p.owner.id = :ownerId")
     Page<Product> findProducts(@Param("category") Category category, @Param("ownerId") Long ownerId, Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.category = :category")
     Page<Product> findProducts(@Param("category") Category category, Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.ownerId = :ownerId")
+    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.owner.id = :ownerId")
     Page<Product> findProducts(@Param("ownerId") Long ownerId, Pageable pageable);
 
     @Query(value = """

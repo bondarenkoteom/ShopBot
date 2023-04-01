@@ -7,8 +7,11 @@ import com.marketplace.requests.*;
 import com.marketplace.responses.BuyResponse;
 import com.marketplace.responses.PageResponse;
 import com.marketplace.responses.TriggerResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.PostExchange;
@@ -40,11 +43,12 @@ public interface HttpCoreInterface {
     /**
      * Список покупок
      */
-    @PostExchange(value = "/api/v1/purchases")
+    @GetExchange(value = "/api/v1/purchases")
     PageResponse<Purchase> purchases(@RequestParam int page,
                                      @RequestParam int size,
                                      @RequestParam(required = false) String[] sort,
-                                     @RequestBody PurchaseRequest purchaseRequest);
+                                     @RequestParam(required = false) Long buyerId,
+                                     @RequestParam(required = false) Long orderId);
 
 
 
@@ -72,11 +76,13 @@ public interface HttpCoreInterface {
     /**
      * Список товаров
      */
-    @PostExchange(value = "/api/v1/products")
+    @GetExchange(value = "/api/v1/products")
     PageResponse<Product> products(@RequestParam int page,
                                    @RequestParam int size,
                                    @RequestParam(required = false) String[] sort,
-                                   @RequestBody ProductRequest productRequest);
+                                   @RequestParam(required = false) Long productId,
+                                   @RequestParam(required = false) Long sellerId,
+                                   @RequestParam(required = false) String name);
 
     /**
      * Получение товара, который находится в состоянии редактирования
@@ -89,6 +95,12 @@ public interface HttpCoreInterface {
      */
     @DeleteExchange(value = "/api/v1/product/editing")
     ResponseEntity<Void> productEditingDelete(@RequestParam Long ownerId);
+
+    /**
+     * Сохранение фото продукта
+     */
+    @PostExchange(value = "/api/v1/product/image", contentType = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<Object> saveImage(@RequestPart Product product, @RequestPart MultipartFile document);
 
 
     //+++++++++++++++++++++++ PURCHASE +++++++++++++++++++++++

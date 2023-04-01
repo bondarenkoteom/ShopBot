@@ -1,6 +1,6 @@
-package com.marketplace.service;
+package com.marketplace.websocket.service;
 
-import com.marketplace.model.Event;
+import com.marketplace.websocket.model.Event;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;

@@ -1,11 +1,16 @@
 package com.marketplace.database.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marketplace.constant.Trigger;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,9 +22,11 @@ public class User {
         this.id = id;
         this.username = username;
         this.rating = 0;
-        this.sells = 0;
         this.waitFor = Trigger.UNDEFINED;
         this.balance = 0.0;
+        this.status = "ACTIVE";
+        this.joinDate = new Date();
+        this.lastActiveDate = new Date();
     }
 
     @Id
@@ -45,10 +52,41 @@ public class User {
     @Column(name = "balance")
     private Double balance;
 
-    @Column(name = "sells")
-    private Integer sells;
+    @Column(name = "join_date")
+    private Date joinDate;
 
-    @Column(name = "purchases")
-    private Integer purchases;
+    @Column(name = "last_active_date")
+    private Date lastActiveDate;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy="buyer", fetch = FetchType.EAGER)
+    private Set<Purchase> purchases;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy="seller", fetch = FetchType.EAGER)
+    private Set<Purchase> sells;
+
+    public com.marketplace.entity.User toIntegrationUser() {
+        com.marketplace.entity.User integrationUser = new com.marketplace.entity.User();
+        com.marketplace.entity.Role integrationRole = new com.marketplace.entity.Role();
+        integrationRole.setId(getRole().getId());
+        integrationRole.setName(getRole().getName());
+        integrationUser.setId(getId());
+        integrationUser.setRole(integrationRole);
+        integrationUser.setUsername(getUsername());
+        integrationUser.setStatus(getStatus());
+        integrationUser.setRating(getRating());
+        integrationUser.setWaitFor(getWaitFor());
+        integrationUser.setBalance(getBalance());
+        //todo joinDate
+        //todo lastActiveDate
+        integrationUser.setPurchases(getPurchases().size());
+        integrationUser.setSells(getSells().size());
+        return integrationUser;
+    }
 
 }

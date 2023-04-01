@@ -1,10 +1,9 @@
 package com.marketplace.client;
 
+import com.marketplace.entity.Product;
 import com.marketplace.entity.Purchase;
 import com.marketplace.entity.User;
-import com.marketplace.requests.PurchaseRequest;
 import com.marketplace.responses.PageResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.service.annotation.GetExchange;
@@ -22,7 +21,8 @@ public interface HttpCoreInterface {
     PageResponse<User> usersGet(@RequestParam int page,
                                 @RequestParam int size,
                                 @RequestParam(required = false) String[] sort,
-                                @RequestParam(required = false) List<Long> userIds);
+                                @RequestParam(required = false) List<Long> userIds,
+                                @RequestParam(required = false) String username);
 
     /**
      * Обновление пользователя
@@ -33,10 +33,21 @@ public interface HttpCoreInterface {
     /**
      * Список покупок
      */
-    @PostExchange(value = "/api/v1/purchases")
+    @GetExchange(value = "/api/v1/purchases")
     PageResponse<Purchase> purchases(@RequestParam int page,
                                      @RequestParam int size,
                                      @RequestParam(required = false) String[] sort,
-                                     @RequestBody PurchaseRequest purchaseRequest);
+                                     @RequestParam(required = false) Long buyerId,
+                                     @RequestParam(required = false) Long orderId);
 
+    /**
+     * Список товаров
+     */
+    @GetExchange(value = "/api/v1/products")
+    PageResponse<Product> products(@RequestParam int page,
+                                   @RequestParam int size,
+                                   @RequestParam(required = false) String[] sort,
+                                   @RequestParam(required = false) Long productId,
+                                   @RequestParam(required = false) Long sellerId,
+                                   @RequestParam(required = false) String name);
 }

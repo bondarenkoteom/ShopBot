@@ -5,9 +5,6 @@ import com.marketplace.constant.ProductStatus;
 import com.marketplace.constant.SendMethod;
 import com.marketplace.entity.Keys;
 import com.marketplace.entity.Product;
-import com.marketplace.entity.Purchase;
-import com.marketplace.requests.ProductRequest;
-import com.marketplace.requests.PurchaseRequest;
 import com.marketplace.utils.Buttons;
 import com.marketplace.annotations.BotCommand;
 import com.marketplace.constant.MessageType;
@@ -34,15 +31,11 @@ public class ManageMyLotsHandler extends AbstractBaseHandler {
         int pageNumber = Integer.parseInt(keys.get("p"));
         int elementsPerPage = 10;
 
-        Pageable pageable = PageRequest.of(pageNumber, elementsPerPage);
-
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.EDIT_TEXT);
         payload.setText("Your lots list");
 
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setSellerId(update.getCallbackQuery().getFrom().getId());
-        Page<Product> products = httpCoreInterface.products(pageNumber, elementsPerPage, new String[]{}, productRequest);
+        Page<Product> products = httpCoreInterface.products(pageNumber, elementsPerPage, new String[]{}, null, getUserId(update),  null);
 
         Map<String, String> buttons = products.stream()
                 .collect(Collectors.toMap(p -> "LOT -i %s -m %s".formatted(p.getId(), SendMethod.SEND_PHOTO), p -> {

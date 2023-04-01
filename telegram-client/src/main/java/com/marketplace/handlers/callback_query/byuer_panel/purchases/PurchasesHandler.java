@@ -8,7 +8,6 @@ import com.marketplace.entity.Keys;
 import com.marketplace.entity.Payload;
 import com.marketplace.entity.Purchase;
 import com.marketplace.handlers.AbstractBaseHandler;
-import com.marketplace.requests.PurchaseRequest;
 import com.marketplace.utils.Buttons;
 import com.marketplace.utils.SimplePagination;
 import org.springframework.data.domain.Page;
@@ -33,9 +32,7 @@ public class PurchasesHandler extends AbstractBaseHandler {
         payload.setSendMethod(SendMethod.EDIT_TEXT);
         payload.setText("Your last deals list");
 
-        PurchaseRequest purchaseRequest = new PurchaseRequest();
-        purchaseRequest.setBuyerId(update.getCallbackQuery().getFrom().getId());
-        Page<Purchase> purchases = httpCoreInterface.purchases(pageNumber, elementsPerPage, new String[]{}, purchaseRequest);
+        Page<Purchase> purchases = httpCoreInterface.purchases(pageNumber, elementsPerPage, new String[]{}, getUserId(update), null);
 
         Map<String, String> buttons = purchases.stream()
                 .collect(Collectors.toMap(p -> "PURCHASE -i %s -m %s".formatted(p.getId(), SendMethod.SEND_MESSAGE), p -> {

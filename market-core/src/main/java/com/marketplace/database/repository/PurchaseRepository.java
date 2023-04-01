@@ -29,7 +29,9 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
     @Query(value = "CALL decline_order(:order_id);", nativeQuery = true)
     void declineDispute(@Param("order_id") Long purchaseId);
 
-    Page<Purchase> getPurchasesByBuyerId(Long buyerId, Pageable pageable);
+    Page<Purchase> findByBuyerId(Long buyerId, Pageable pageable);
+
+    Page<Purchase> findById(Long id, Pageable pageable);
 
     @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND buyer_id = :id", nativeQuery = true)
     List<Purchase> disputePurchasesByBuyer(@Param("id") Long id);

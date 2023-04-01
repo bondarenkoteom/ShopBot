@@ -1,5 +1,17 @@
 ---------------------------------
 ```
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get -y install postgresql
+```
+---------------------------------
+```
+CREATE DATABASE centaur;
+ALTER USER postgres WITH PASSWORD 'Kill';
+```
+---------------------------------
+```
 ALTER TABLE t_product ADD COLUMN product_vector tsvector
 GENERATED ALWAYS AS (to_tsvector('english', coalesce(product_name, '') || ' ' || coalesce(description, ''))) STORED;
 
@@ -64,5 +76,9 @@ WHERE query @@ product_vector ORDER BY rank DESC;
 ---------------------------------
 ```
 SELECT pull_element(18);
+```
+---------------------------------
+```
+INSERT INTO t_role(id, name) VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'ROLE_VENDOR');
 ```
 ---------------------------------

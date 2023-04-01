@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class Product {
     Long id;
-    Long ownerId;
+    User owner;
     ProductStatus status;
     Integer ratingGood;
     Integer ratingBad;

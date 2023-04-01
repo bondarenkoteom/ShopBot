@@ -1,4 +1,4 @@
-package com.marketplace.model;
+package com.marketplace.websocket.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

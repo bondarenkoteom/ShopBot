@@ -22,8 +22,12 @@ public class PurchaseService {
     @Autowired
     private PurchaseRepository purchaseRepository;
 
-    public Page<Purchase> getAllPurchases(Long buyerId, Pageable pageable) {
-        return purchaseRepository.getPurchasesByBuyerId(buyerId, pageable);
+    public Page<Purchase> findByBuyerId(Long buyerId, Pageable pageable) {
+        return purchaseRepository.findByBuyerId(buyerId, pageable);
+    }
+
+    public Page<Purchase> findByOrderId(Long orderId, Pageable pageable) {
+        return purchaseRepository.findById(orderId, pageable);
     }
 
     public Page<Purchase> getAllPurchases(Pageable pageable) {

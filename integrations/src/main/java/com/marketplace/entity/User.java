@@ -8,15 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-    public User(Long id, String username) {
-        this.id = id;
-        this.username = username;
-        this.rating = 0;
-        this.sells = 0;
-        this.waitFor = Trigger.UNDEFINED;
-        this.balance = 0.0;
-    }
-
     Long id;
     Role role;
     String username;

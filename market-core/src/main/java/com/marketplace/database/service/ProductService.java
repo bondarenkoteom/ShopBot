@@ -3,11 +3,11 @@ package com.marketplace.database.service;
 import com.marketplace.constant.Category;
 import com.marketplace.database.model.Product;
 import com.marketplace.database.repository.ProductRepository;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,6 +34,18 @@ public class ProductService {
         return productRepository.getProductsByOwnerIdAndIsEditing(ownerId, false, pageable);
     }
 
+    public Page<Product> getAllProducts(String productName, Pageable pageable) {
+        return productRepository.getProductsByProductNameAndIsEditing(productName, false, pageable);
+    }
+
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAllProducts(pageable);
+    }
+
+    public Page<Product> findById(Long id, Pageable pageable) {
+        return productRepository.findById(id, pageable);
+    }
+
     public Optional<Product> getById(Long id) {
         return productRepository.findById(id);
     }
@@ -43,6 +55,11 @@ public class ProductService {
     }
 
     public Page<Product> findAllProducts(String text, Category category, Long ownerId, Pageable pageable) {
+        Pageable simpleSearchPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("price").descending());
+
         if (text != null && text.isEmpty() && category != null && ownerId != null) {
             return category.equals(Category.ALL) ?
                     productRepository.fullTextSearch(text, ownerId, pageable) :
@@ -55,16 +72,16 @@ public class ProductService {
             return productRepository.fullTextSearch(text, ownerId, pageable);
         } else if (category != null && ownerId != null) {
             return category.equals(Category.ALL) ?
-                    productRepository.findProducts(ownerId, pageable) :
-                    productRepository.findProducts(category, ownerId, pageable);
+                    productRepository.findProducts(ownerId, simpleSearchPageable) :
+                    productRepository.findProducts(category, ownerId, simpleSearchPageable);
         } else if (category != null) {
             return category.equals(Category.ALL) ?
-                    productRepository.findAllProducts(pageable) :
-                    productRepository.findProducts(category, pageable);
+                    productRepository.findAllProducts(simpleSearchPageable) :
+                    productRepository.findProducts(category, simpleSearchPageable);
         } else if (ownerId != null) {
-            return productRepository.findProducts(ownerId, pageable);
+            return productRepository.findProducts(ownerId, simpleSearchPageable);
         } else {
-            return productRepository.findAllProducts(pageable);
+            return productRepository.findAllProducts(simpleSearchPageable);
         }
     }
 

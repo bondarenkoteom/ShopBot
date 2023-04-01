@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerfiles">
+  <meta charset="UTF-8" />
+</head>
+<body>
+  <div th:fragment="paginationFragment (controller)" class="row align-items-center justify-content-between py-3 pe-0 fs--1">
+    <div class="ps-3 col-auto d-flex">
+      <p class="d-none d-sm-block me-3 fw-semi-bold text-900" data-list-info="data-list-info">
+        <span th:text="${fromCount}"/> to <span th:text="${toCount}"/> <span class="text-600"> Items of </span><span th:text="${ofCount}"/>
+      </p>
+    </div>
+    <div th:if="${totalPages > 0}" class="col-auto d-flex">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" th:href="@{/{controller}(controller=${controller}, page=1)}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+              th:classappend="${pageNumber==currentPage} ? disabled">
+            <a class="page-link" th:href="@{/{controller}(controller=${controller}, page=${pageNumber})}"
+               th:text=${pageNumber}></a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" th:href="@{/{controller}(controller=${controller}, page=${totalPages})}"
+               aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</body>
+</html>
