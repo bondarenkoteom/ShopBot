@@ -2,6 +2,7 @@ package com.marketplace.controller;
 
 import com.marketplace.client.HttpCoreInterface;
 import com.marketplace.entity.Product;
+import com.marketplace.entity.ProductImage;
 import com.marketplace.entity.Purchase;
 import com.marketplace.model.ProductForm;
 import com.marketplace.model.ProductsModel;
@@ -64,15 +65,12 @@ public class ProductsController {
         return "products";
     }
 
-    @Value("classpath:2.jpg")
-    Resource resourceFile;
-
     @RequestMapping(value = "/image/display/{id}", method = RequestMethod.GET)
     @ResponseBody
     public void showImage(Model model, @PathVariable("id") Long id, HttpServletResponse response) throws IOException {
-
+        ProductImage productImage = httpCoreInterface.getImage(id).getBody();
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        response.getOutputStream().write(resourceFile.getContentAsByteArray());
+        response.getOutputStream().write(productImage.getImage().array());
         response.getOutputStream().close();
     }
 

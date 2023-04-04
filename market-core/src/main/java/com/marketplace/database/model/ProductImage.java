@@ -1,25 +1,29 @@
 package com.marketplace.database.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.core.io.Resource;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+import java.nio.ByteBuffer;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "t_image")
+@Table(value = "product_image")
 public class ProductImage {
 
+    @SneakyThrows
+    public ProductImage(Resource image) {
+        this.image = ByteBuffer.wrap(image.getContentAsByteArray());
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @Lob
-    @Column(name = "image", length = Integer.MAX_VALUE, nullable = true)
-    private byte[] image;
+    @Column("image")
+    private ByteBuffer image;
 
 }

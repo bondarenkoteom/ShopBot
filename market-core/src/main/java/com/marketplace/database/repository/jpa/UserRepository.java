@@ -1,4 +1,4 @@
-package com.marketplace.database.repository;
+package com.marketplace.database.repository.jpa;
 
 import com.marketplace.database.model.User;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
+@Transactional("transactionManager")
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);

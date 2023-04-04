@@ -14,7 +14,7 @@ public class CustomMultipartFile implements MultipartFile {
 
     @Override
     public String getName() {
-        return "document";
+        return "fileParts";
     }
 
     @Override

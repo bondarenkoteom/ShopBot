@@ -1,13 +1,11 @@
-package com.marketplace.controller.internal_api;
+package com.marketplace.controller;
 
 import com.marketplace.constant.OrderStatus;
 import com.marketplace.database.model.Purchase;
 import com.marketplace.database.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.service.annotation.PutExchange;
 
 import java.util.Optional;
 

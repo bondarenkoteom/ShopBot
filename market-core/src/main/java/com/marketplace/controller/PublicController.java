@@ -1,4 +1,4 @@
-package com.marketplace.controller.public_api;
+package com.marketplace.controller;
 
 import com.marketplace.database.model.Product;
 import com.marketplace.database.model.Purchase;

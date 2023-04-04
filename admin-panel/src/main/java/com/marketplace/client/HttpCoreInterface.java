@@ -1,6 +1,7 @@
 package com.marketplace.client;
 
 import com.marketplace.entity.Product;
+import com.marketplace.entity.ProductImage;
 import com.marketplace.entity.Purchase;
 import com.marketplace.entity.User;
 import com.marketplace.responses.PageResponse;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.PostExchange;
 import org.springframework.web.service.annotation.PutExchange;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -50,4 +52,7 @@ public interface HttpCoreInterface {
                                    @RequestParam(required = false) Long productId,
                                    @RequestParam(required = false) Long sellerId,
                                    @RequestParam(required = false) String name);
+
+    @GetExchange(value = "/api/v1/product/image/{id}")
+    ResponseEntity<ProductImage> getImage(@PathVariable Long id);
 }

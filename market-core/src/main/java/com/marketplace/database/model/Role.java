@@ -1,7 +1,6 @@
 package com.marketplace.database.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

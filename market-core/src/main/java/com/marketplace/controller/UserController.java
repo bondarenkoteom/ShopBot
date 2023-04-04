@@ -1,12 +1,10 @@
-package com.marketplace.controller.internal_api;
+package com.marketplace.controller;
 
 import com.marketplace.database.model.User;
 import com.marketplace.database.service.UserService;
 import com.marketplace.requests.TriggerRequest;
 import com.marketplace.requests.UserRequest;
 import com.marketplace.responses.TriggerResponse;
-import com.marketplace.utils.Values;
-import org.apache.logging.log4j.util.Strings;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

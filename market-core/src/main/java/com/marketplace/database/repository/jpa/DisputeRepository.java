@@ -1,4 +1,4 @@
-package com.marketplace.database.repository;
+package com.marketplace.database.repository.jpa;
 
 import com.marketplace.database.model.Dispute;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
+@Transactional("transactionManager")
 public interface DisputeRepository extends JpaRepository<Dispute, Long> {
 
     @Query(value = """

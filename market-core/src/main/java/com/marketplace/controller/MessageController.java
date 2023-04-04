@@ -1,4 +1,4 @@
-package com.marketplace.controller.internal_api;
+package com.marketplace.controller;
 
 import com.marketplace.database.model.Message;
 import com.marketplace.database.model.User;

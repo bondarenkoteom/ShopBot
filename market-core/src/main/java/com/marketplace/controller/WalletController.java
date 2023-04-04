@@ -1,4 +1,4 @@
-package com.marketplace.controller.internal_api;
+package com.marketplace.controller;
 
 import com.marketplace.client.BitcoinCoreClient;
 import lombok.SneakyThrows;

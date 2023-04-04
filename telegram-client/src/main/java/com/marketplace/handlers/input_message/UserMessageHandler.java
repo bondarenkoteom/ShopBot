@@ -11,9 +11,13 @@ import com.marketplace.handlers.AbstractBaseHandler;
 import com.marketplace.handlers.callback_query.search.SearchHandler;
 import com.marketplace.handlers.callback_query.user_settings.UserSettingsCommandHandler;
 import com.marketplace.handlers.callback_query.vendor_panel.VendorPanelCommandHandler;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -23,23 +27,25 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Component
 public class UserMessageHandler extends AbstractBaseHandler {
 
-    @Value("classpath:2.jpg")
-    Resource resourceFile;
-
     @Autowired
     private ApplicationContext context;
 
     @Override
+    @SneakyThrows
     public void handle(Update update) {
 
         Long userId = getUserId(update);
@@ -77,14 +83,26 @@ public class UserMessageHandler extends AbstractBaseHandler {
 
                     String fileId = message.getDocument() == null ? message.getPhoto().get(1).getFileId() : message.getDocument().getFileId();
 
-//                    String filePath = telegramApiClient.getFilePath(fileId);
-//                    byte[] bytea = telegramApiClient.getDownloadFile(filePath);
+                    String filePath = telegramApiClient.getFilePath(fileId);
+                    byte[] bytea = telegramApiClient.getDownloadFile(filePath);
+
+                    WebClient webClient = WebClient.builder().build();
+                    Long productImageId = webClient.post()
+                            .uri("http://localhost:4230/api/v1/product/image")
+                            .contentType(MediaType.MULTIPART_FORM_DATA)
+                            .body(BodyInserters.fromMultipartData(fromByteArray(filePath, bytea)))
+                            .retrieve()
+                            .bodyToMono(Long.class)
+                            .block();
 
                     Product product = new Product();
                     product.setImageId(fileId);
+                    product.setRatingGood(0);
+                    product.setRatingBad(0);
                     product.setOwner(optionalUser.get());
                     product.setIsEditing(true);
                     product.setStatus(ProductStatus.NOT_ACTIVE);
+                    product.setProductImageId(productImageId);
                     httpCoreInterface.productUpdate(product);
 
                     setTriggerValue(update, Trigger.NEW_PRODUCT_NAME);
@@ -322,6 +340,12 @@ public class UserMessageHandler extends AbstractBaseHandler {
                 searchHandler.handle(update);
             }
         }
+    }
+
+    public MultiValueMap<String, HttpEntity<?>> fromByteArray(String filename, byte[] file) {
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("fileParts", new ByteArrayResource(file)).filename(filename);
+        return builder.build();
     }
 
 }

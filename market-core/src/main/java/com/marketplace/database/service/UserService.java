@@ -2,8 +2,8 @@ package com.marketplace.database.service;
 
 import com.marketplace.constant.Trigger;
 import com.marketplace.database.model.User;
-import com.marketplace.database.repository.RoleRepository;
-import com.marketplace.database.repository.UserRepository;
+import com.marketplace.database.repository.jpa.RoleRepository;
+import com.marketplace.database.repository.jpa.UserRepository;
 import com.marketplace.utils.Values;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -147,8 +147,7 @@
                                                th:field="*{productsModels[__${itemStat.index}__].product.id}">
 
                                         <td>
-                                            <img th:src="@{${'/image/display/'+ productsModel.product.id}}"
-                                                 class="card img-fluid" style="width:100px" alt=""/>
+                                            <img th:src="@{ '/image/display/' + ${productsModel.product.productImageId ?: '0'} }" class="card img-fluid" style="width:100px" alt=""/>
                                         </td>
 
                                         <td class="align-middle"><h6 th:text="${productsModel.product.productName}"

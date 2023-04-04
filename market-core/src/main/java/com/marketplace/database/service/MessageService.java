@@ -1,7 +1,7 @@
 package com.marketplace.database.service;
 
 import com.marketplace.database.model.Message;
-import com.marketplace.database.repository.MessageRepository;
+import com.marketplace.database.repository.jpa.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    @Transactional
+    @Transactional("transactionManager")
     public Page<Message> getChatMessages(Long superId, Long id, Pageable pageable) {
         return messageRepository.findChatMessages(superId, id, pageable);
     }

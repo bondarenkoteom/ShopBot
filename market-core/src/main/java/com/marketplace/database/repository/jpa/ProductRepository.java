@@ -1,4 +1,4 @@
-package com.marketplace.database.repository;
+package com.marketplace.database.repository.jpa;
 
 import com.marketplace.constant.Category;
 import com.marketplace.database.model.Product;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Repository
-@Transactional
+@Transactional("transactionManager")
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findById(Long id, Pageable pageable);

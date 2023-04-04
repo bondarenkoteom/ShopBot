@@ -1,4 +1,4 @@
-package com.marketplace.database.repository;
+package com.marketplace.database.repository.jpa;
 
 import com.marketplace.database.model.Settings;
 import org.springframework.data.jpa.repository.JpaRepository;

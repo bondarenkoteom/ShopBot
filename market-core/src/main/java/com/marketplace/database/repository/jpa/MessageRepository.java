@@ -1,4 +1,4 @@
-package com.marketplace.database.repository;
+package com.marketplace.database.repository.jpa;
 
 import com.marketplace.database.model.Message;
 import org.springframework.data.domain.Page;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
+@Transactional("transactionManager")
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = """

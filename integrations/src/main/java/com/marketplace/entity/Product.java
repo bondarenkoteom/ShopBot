@@ -19,4 +19,5 @@ public class Product {
     String imageId;
     String[] items;
     Boolean isEditing;
+    Long productImageId;
 }

@@ -9,6 +9,30 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("destinations")
 public class RabbitConfig {
 
+    //    @Autowired
+    //    private AmqpAdmin amqpAdmin;
+
+    //    @PostConstruct
+    //    public void setupQueueDestinations() {
+    //        rabbitConfig.getQueues()
+    //                .forEach((key, destination) -> {
+    //                    Exchange ex = ExchangeBuilder.directExchange(
+    //                                    destination.getExchange())
+    //                            .durable(true)
+    //                            .build();
+    //                    amqpAdmin.declareExchange(ex);
+    //                    Queue q = QueueBuilder.durable(
+    //                                    destination.getRoutingKey())
+    //                            .build();
+    //                    amqpAdmin.declareQueue(q);
+    //                    Binding b = BindingBuilder.bind(q)
+    //                            .to(ex)
+    //                            .with(destination.getRoutingKey())
+    //                            .noargs();
+    //                    amqpAdmin.declareBinding(b);
+    //                });
+    //    }
+
 
     private Map<String, DestinationInfo> queues = new HashMap<>();
 

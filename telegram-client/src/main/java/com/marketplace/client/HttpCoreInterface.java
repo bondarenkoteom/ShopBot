@@ -1,16 +1,19 @@
 package com.marketplace.client;
 
 import com.marketplace.constant.OrderStatus;
-import com.marketplace.constant.Trigger;
 import com.marketplace.entity.*;
-import com.marketplace.requests.*;
+import com.marketplace.requests.BuyRequest;
+import com.marketplace.requests.SearchRequest;
+import com.marketplace.requests.TriggerRequest;
+import com.marketplace.requests.UserRequest;
 import com.marketplace.responses.BuyResponse;
 import com.marketplace.responses.PageResponse;
 import com.marketplace.responses.TriggerResponse;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
@@ -100,7 +103,7 @@ public interface HttpCoreInterface {
      * Сохранение фото продукта
      */
     @PostExchange(value = "/api/v1/product/image", contentType = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<Object> saveImage(@RequestPart Product product, @RequestPart MultipartFile document);
+    ResponseEntity<Object> saveImage(@RequestPart MultipartFile fileParts);
 
 
     //+++++++++++++++++++++++ PURCHASE +++++++++++++++++++++++

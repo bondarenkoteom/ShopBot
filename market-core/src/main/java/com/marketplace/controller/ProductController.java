@@ -1,16 +1,23 @@
-package com.marketplace.controller.internal_api;
+package com.marketplace.controller;
 
 import com.marketplace.database.model.Product;
+import com.marketplace.database.model.ProductImage;
 import com.marketplace.database.service.ProductImageService;
 import com.marketplace.database.service.ProductService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -24,6 +31,9 @@ public class ProductController {
 
     @Autowired
     private ProductImageService productImageService;
+
+    @Value("classpath:no-content.png")
+    Resource resourceFile;
 
 
     @RequestMapping(value = "/api/v1/product", method = RequestMethod.GET)
@@ -79,24 +89,50 @@ public class ProductController {
         productService.deleteAllEditing(ownerId);
     }
 
-//    @PostMapping(value = "/xuy", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public Mono<Void> upload(@RequestPart Mono<FilePart> fileParts) {
-//        return fileParts.doOnNext(c -> {
-//            File convFile = new File(c.filename());
-//            c.transferTo(convFile);
-//            ProductImage productImage = new ProductImage();
-//            try {
-//                productImage.setImage(Files.readAllBytes(convFile.toPath()));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-////            productImageService.save(productImage);
-//        }).then();
-//    }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public void save(@RequestParam(value = "file") MultipartFile file) {
-        System.out.println();
+
+
+    @RequestMapping(value = "/api/v1/product/image/{id}", method = RequestMethod.GET)
+    public Mono<ResponseEntity<ProductImage>> getImage(@PathVariable Long id) {
+        return productImageService.findById(id)
+                .map(post -> ResponseEntity.ok().body(post))
+                .switchIfEmpty(Mono.just(ResponseEntity.of(Optional.of(new ProductImage(resourceFile)))));
+    }
+
+    @RequestMapping(value = "/api/v1/product/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<ResponseEntity<?>> saveImage(@RequestPart Mono<FilePart> fileParts) {
+
+        return Mono
+                .zip(objects -> {
+                            ProductImage productImage = new ProductImage();
+                            var filePart = (DataBuffer)objects[0];
+                            productImage.setImage(filePart.toByteBuffer());
+                            return productImage;
+                        },
+                        fileParts.flatMap(filePart -> DataBufferUtils.join(filePart.content()))
+                )
+                .flatMap(productImageService::save)
+                .map(saved -> ResponseEntity.of(Optional.of(saved.getId())));
+
+    }
+
+    @RequestMapping(value = "/api/v1/product/image/{id}", method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<ResponseEntity<?>> updateImage(@PathVariable Long id, @RequestPart Mono<FilePart> fileParts) {
+
+        return Mono
+                .zip(objects -> {
+                            var productImage = (ProductImage) objects[0];
+                            var filePart = (DataBuffer)objects[1];
+                            productImage.setImage(filePart.toByteBuffer());
+                            return productImage;
+                        },
+                        productImageService.findById(id),
+                        fileParts.flatMap(filePart -> DataBufferUtils.join(filePart.content()))
+                )
+                .flatMap(productImageService::save)
+                .map(saved -> ResponseEntity.noContent().build());
+
     }
 }

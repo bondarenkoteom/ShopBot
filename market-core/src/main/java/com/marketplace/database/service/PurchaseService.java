@@ -2,7 +2,7 @@ package com.marketplace.database.service;
 
 import com.marketplace.constant.OrderStatus;
 import com.marketplace.database.model.Purchase;
-import com.marketplace.database.repository.PurchaseRepository;
+import com.marketplace.database.repository.jpa.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
+@Transactional("transactionManager")
 public class PurchaseService {
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.marketplace.database.repository;
+package com.marketplace.database.repository.jpa;
 
 import com.marketplace.database.model.Purchase;
 import org.springframework.data.domain.Page;
@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
-@Transactional
 @Repository
+@Transactional("transactionManager")
 public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     @Modifying

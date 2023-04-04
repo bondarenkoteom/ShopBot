@@ -1,17 +1,13 @@
 package com.marketplace.database.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marketplace.constant.Category;
 import com.marketplace.constant.ProductStatus;
 import io.hypersistence.utils.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.Type;
 
-import java.util.Set;
 @Data
 @NoArgsConstructor
 @Entity
@@ -63,10 +59,7 @@ public class Product {
     @Column(name = "is_editing")
     private Boolean isEditing;
 
-//    @JsonIgnore
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    @OneToOne(mappedBy="product")
-//    private ProductImage productImage;
+    @Column(name = "product_image_id")
+    private Long productImageId;
 
 }
