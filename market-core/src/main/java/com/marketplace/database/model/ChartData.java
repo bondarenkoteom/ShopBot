@@ -1,18 +1,17 @@
-package com.marketplace.websocket.model;
+package com.marketplace.database.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @NoArgsConstructor
-public class Event {
+public class ChartData {
 
     private List<Integer> data;
 
-    public Event(List<Integer> data) {
+    public ChartData(List<Integer> data) {
         this.data = data;
     }
 
