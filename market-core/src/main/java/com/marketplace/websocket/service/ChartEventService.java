@@ -22,9 +22,13 @@ public class ChartEventService implements EventService<ChartData> {
 
     @Override
     public Flux<ChartData> getMessages(String session) {
-        sinks.putIfAbsent(session, Sinks.many().multicast().onBackpressureBuffer());
         return sinks.get(session).asFlux().log()
                 .doOnCancel(() -> sinks.remove(session));
+    }
+
+    @Override
+    public void onStart(String session) {
+        sinks.putIfAbsent(session, Sinks.many().multicast().onBackpressureBuffer());
     }
 
     @Scheduled(initialDelay = 1000, fixedDelay = 2000)
