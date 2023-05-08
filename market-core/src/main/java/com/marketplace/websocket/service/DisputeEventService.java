@@ -46,7 +46,10 @@ public class DisputeEventService implements EventService<Object> {
     @Override
     public Flux<Object> getMessages(String session) {
         return sinks.get(session).asFlux()
-                .doOnCancel(() -> sinks.remove(session));
+                .doOnCancel(() -> {
+                    System.out.println("EEEEEEEEEEEEEEEEEEE!!!!!!!!!!RRRRRRRRRR");
+                    sinks.remove(session);
+                });
     }
 
     @Override
