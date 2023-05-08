@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class DisputeWebSocketHandler implements WebSocketHandler {
 
-    private final EventService<DisputeMessage> eventService;
+    private final EventService<Object> eventService;
 
     private final ObjectMapper localDateTimeObjectMapper;
 
@@ -34,9 +34,9 @@ public class DisputeWebSocketHandler implements WebSocketHandler {
                 );
     }
 
-    String conwertToString(DisputeMessage disputeMessage) {
+    String conwertToString(Object o) {
         try {
-            return localDateTimeObjectMapper.writeValueAsString(disputeMessage);
+            return localDateTimeObjectMapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
             return "";
         }

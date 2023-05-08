@@ -70,23 +70,6 @@ $$;
 ```
 ---------------------------------
 ```
-CREATE OR REPLACE FUNCTION table_update_notify() RETURNS trigger AS $$
-DECLARE
-  payload TEXT;
-BEGIN
-  payload := json_build_object('id', NEW.id, 'message', NEW.message, 'sender', NEW.sender, 'receiver', NEW.receiver, 'channelId', NEW.channel_id, 'date', TO_CHAR(NEW.date, 'YYYY-MM-DD HH24:MI'));
-  PERFORM pg_notify('dispute_channel', payload);
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER dispute_trigger
-    AFTER INSERT ON dispute_message
-    FOR EACH ROW
-    EXECUTE FUNCTION table_update_notify();
-```
----------------------------------
-```
 SELECT product_name, description, ts_rank_cd(product_vector, query) as rank FROM t_product, to_tsquery('cc:*|1') query 
 WHERE query @@ product_vector ORDER BY rank DESC;
 ```
@@ -100,7 +83,7 @@ INSERT INTO t_role(id, name) VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER'), (3, 'RO
 ```
 ---------------------------------
 ```
-LISTEN dispute_channel;
+LISTEN dispute_message_notify;
 SELECT 1;
 
 SELECT * FROM pg_listening_channels();
