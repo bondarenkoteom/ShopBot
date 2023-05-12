@@ -5,6 +5,7 @@ import com.marketplace.database.model.Product;
 import com.marketplace.database.model.Purchase;
 import com.marketplace.database.model.User;
 import com.marketplace.responses.BuyResponse;
+import com.marketplace.utils.Values;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class BuyProcess {
             }
 
             String item = productService.pollItem(product.getId());
-            if (!item.isEmpty()) {
+            if (Values.isNotEmpty(item)) {
 
                 buyer.setBalance(BigDecimal.valueOf(buyer.getBalance() - product.getPrice())
                         .setScale(2, RoundingMode.DOWN).doubleValue());

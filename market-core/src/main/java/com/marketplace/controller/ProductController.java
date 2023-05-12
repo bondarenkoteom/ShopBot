@@ -37,14 +37,15 @@ public class ProductController {
 
 
     @RequestMapping(value = "/api/v1/product", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Optional<Product> productGet(@RequestParam Long productId) {
-        return productService.getById(productId);
+    ResponseEntity<Product> productGet(@RequestParam Long productId) {
+        return productService.getById(productId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @RequestMapping(value = "/api/v1/product", method = RequestMethod.PUT)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     void productUpdate(@RequestBody Product product) {
         productService.save(product);
@@ -76,10 +77,11 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/api/v1/product/editing", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Optional<Product> productEditingGet(@RequestParam Long ownerId) {
-        return productService.getEditingProductByOwnerId(ownerId);
+    ResponseEntity<Product> productEditingGet(@RequestParam Long ownerId) {
+        return productService.getEditingProductByOwnerId(ownerId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @RequestMapping(value = "/api/v1/product/editing", method = RequestMethod.DELETE)
@@ -93,6 +95,7 @@ public class ProductController {
 
 
     @RequestMapping(value = "/api/v1/product/image/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
     public Mono<ResponseEntity<ProductImage>> getImage(@PathVariable Long id) {
         return productImageService.findById(id)
                 .map(post -> ResponseEntity.ok().body(post))

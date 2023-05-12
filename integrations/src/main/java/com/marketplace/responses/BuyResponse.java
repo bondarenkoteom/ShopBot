@@ -11,12 +11,4 @@ public class BuyResponse {
     String message;
     Purchase purchase;
     Double balance;
-
-    public Optional<Purchase> getPurchase() {
-        return purchase == null ? Optional.empty() : Optional.of(purchase);
-    }
-
-    public void setPurchase(Purchase purchase) {
-        this.purchase = purchase;
-    }
 }

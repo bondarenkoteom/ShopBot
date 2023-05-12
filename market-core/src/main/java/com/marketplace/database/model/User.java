@@ -1,6 +1,7 @@
 package com.marketplace.database.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.marketplace.constant.Trigger;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,6 +13,9 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
+@ToString(exclude = {"purchases", "sells"})
+@EqualsAndHashCode(exclude = {"purchases", "sells"})
+@JsonIgnoreProperties(value = {"purchases", "sells"})
 @NoArgsConstructor
 @Entity
 @Table(name = "t_user")
@@ -57,15 +61,9 @@ public class User {
     @Column(name = "last_active_date")
     private Date lastActiveDate;
 
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy="buyer", fetch = FetchType.EAGER)
     private Set<Purchase> purchases;
 
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy="seller", fetch = FetchType.EAGER)
     private Set<Purchase> sells;
 

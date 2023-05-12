@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,12 +40,11 @@ public class PublicController {
     }
 
     @RequestMapping(value = "/api/v1/product/buy", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    BuyResponse buy(@RequestBody BuyRequest buyRequest) {
-        return buyProcess.run(
+    ResponseEntity<BuyResponse> buy(@RequestBody BuyRequest buyRequest) {
+        return ResponseEntity.ok(buyProcess.run(
                 buyRequest.getProductId(),
-                buyRequest.getUserId());
+                buyRequest.getUserId()));
     }
 
     @RequestMapping(value = "/api/v1/purchases", method = RequestMethod.GET)

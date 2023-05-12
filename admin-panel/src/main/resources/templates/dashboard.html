@@ -258,7 +258,7 @@
     }
   })
 
-  var clientWebSocket = new WebSocket("ws://localhost:4230/api/v1/chart");
+  var clientWebSocket = new WebSocket("ws://localhost:4230/api/v1/ws/chart");
   clientWebSocket.onopen = function() {
       console.log("clientWebSocket.onopen", clientWebSocket);
       console.log("clientWebSocket.readyState", "websocketstatus");

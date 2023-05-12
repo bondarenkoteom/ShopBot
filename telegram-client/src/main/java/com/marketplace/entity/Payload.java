@@ -2,11 +2,13 @@ package com.marketplace.entity;
 
 import com.marketplace.constant.SendMethod;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Data
+@NoArgsConstructor
 public class Payload {
     private Integer messageId;
     private String chatId;

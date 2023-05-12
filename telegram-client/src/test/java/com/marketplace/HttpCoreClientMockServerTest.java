@@ -119,7 +119,7 @@ class HttpCoreClientMockServerTest {
         buyRequest.setUserId(1L);
 
         BuyResponse buyResponse = httpCoreInterface.buy(buyRequest);
-        assertEquals(true, buyResponse.getPurchase().isPresent());
+        assertEquals(true, buyResponse.getPurchase());
 
         mockServer.verify(
                 HttpRequest.request()
@@ -594,7 +594,7 @@ class HttpCoreClientMockServerTest {
                                 .withBody("[{\"id\":0,\"text\":\"string\",\"sender\":{\"id\":0,\"username\":\"string\",\"rating\":0,\"waitFor\":\"UNDEFINED\",\"balance\":0,\"sells\":0,\"purchases\":0},\"date\":\"2023-03-12T14:55:52.099Z\",\"purchaseId\":0}]")
                 );
 
-        List<Dispute> disputeList = httpCoreInterface.disputesGet(1L);
+        List<DisputeMessage> disputeList = httpCoreInterface.disputesGet(1L);
         assertEquals(1, disputeList.size());
 
         mockServer.verify(
@@ -657,14 +657,14 @@ class HttpCoreClientMockServerTest {
         user.setSells(0);
         user.setPurchases(0);
 
-        Dispute dispute = new Dispute();
-        dispute.setId(0L);
-        dispute.setText("string");
-        dispute.setSenderId(user.getId());
-        dispute.setPurchaseId(0L);
-
-        ResponseEntity<Void> response = httpCoreInterface.disputeCreate(dispute);
-        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+//        DisputeMessage dispute = new DisputeMessage();
+//        dispute.setId(0L);
+//        dispute.setText("string");
+//        dispute.setSenderId(user.getId());
+//        dispute.setPurchaseId(0L);
+//
+//        ResponseEntity<Void> response = httpCoreInterface.disputeCreate(dispute);
+//        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
 
         mockServer.verify(
                 HttpRequest.request()

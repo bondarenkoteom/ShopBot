@@ -47,7 +47,9 @@ public class DisputeWebSocketHandler implements WebSocketHandler {
                                 disputeMessage.setDate(LocalDateTime.now());
                                 return disputeMessageRepository.save(disputeMessage);
                             } else {
-                                return disputeChannelRepository.save(deserialize(message.getObject(), DisputeChannel.class));
+                                DisputeChannel disputeChannel = deserialize(message.getObject(), DisputeChannel.class);
+                                disputeChannel.isNew(false);
+                                return disputeChannelRepository.save(disputeChannel);
                             }
                         }).then()
                 );

@@ -6,7 +6,7 @@ import com.marketplace.constant.MessageType;
 import com.marketplace.constant.SendMethod;
 import com.marketplace.constant.Trigger;
 import com.marketplace.entity.Payload;
-import com.marketplace.handlers.input_message.UserMessageHandler;
+import com.marketplace.handlers.message.UserMessageHandler;
 import com.marketplace.requests.TriggerRequest;
 import lombok.Getter;
 import lombok.Setter;

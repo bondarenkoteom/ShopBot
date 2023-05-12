@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,14 +25,15 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/api/v1/user", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    Optional<com.marketplace.entity.User> userGet(@RequestParam(required = false) Long userId, @RequestParam(required = false) String username) {
-        return userService.findUser(userId, username).map(User::toIntegrationUser);
+    ResponseEntity<com.marketplace.entity.User> userGet(@RequestParam(required = false) Long userId, @RequestParam(required = false) String username) {
+        return userService.findUser(userId, username).map(User::toIntegrationUser)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @RequestMapping(value = "/api/v1/user", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     void userCreate(@RequestBody UserRequest userRequest) {
         userService.createIfAbsent(

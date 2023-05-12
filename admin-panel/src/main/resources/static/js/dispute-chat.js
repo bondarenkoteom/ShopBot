@@ -1,26 +1,26 @@
-  const chat = document.getElementById('chat');
-  const allTabs = new Array();
-  let currentFilter = "all";
+    const chat = document.getElementById('chat');
+    const allTabs = new Array();
+    let currentFilter = "all";
 
-  var clientWebSocket = new WebSocket("ws://localhost:4230/api/v1/dispute");
-  clientWebSocket.onopen = function() {
+    var clientWebSocket = new WebSocket("ws://localhost:4230/api/v1/ws/dispute");
+    clientWebSocket.onopen = function() {
       console.log("clientWebSocket.onopen", clientWebSocket);
       console.log("clientWebSocket.readyState", "websocketstatus");
-  }
-  clientWebSocket.onclose = function(error) {
+    }
+    clientWebSocket.onclose = function(error) {
       console.log("clientWebSocket.onclose", clientWebSocket, error);
-  }
-  clientWebSocket.onerror = function(error) {
+    }
+    clientWebSocket.onerror = function(error) {
       console.log("clientWebSocket.onerror", clientWebSocket, error);
-  }
-  clientWebSocket.onmessage = function(message) {
+    }
+    clientWebSocket.onmessage = function(message) {
       receiveMessage(message.data)
-  }
+    }
 
-  function receiveMessage(data) {
+    function receiveMessage(data) {
       let json = JSON.parse(data);
       if(json.type == 'channel') {
-          updateTab(json.object.id, json.object.name, json.object.unread);
+          updateTab(json.object.id, json.object.name, json.object.description, json.object.unread);
           createChatScreen(json.object.id, json.object.name);
       } else if(json.type == 'message') {
           createChatScreen(json.object.channelId, "");
@@ -52,9 +52,9 @@
           }
           scrollChatScreen(json.object.channelId);
       }
-  }
+    }
 
-  function createChatScreen(threadId, name) {
+    function createChatScreen(threadId, name) {
      let tabThread = document.querySelector('#tab-thread-content-' + threadId);
      if(!tabThread) {
          let tabThreadContent =
@@ -91,51 +91,49 @@
      if(name != "") {
         tabThread = document.querySelector('#tab-thread-content-' + threadId + ' h5').textContent=name;
      }
-  }
+    }
 
-  function updateTab(threadId, name, unread) {
+    function updateTab(threadId, name, description, unread) {
 
-     if(allTabs.filter(element => element.querySelector('a').getAttribute('href') == "#tab-thread-content-" + threadId).length == 0) {
-         createTab(threadId, name, unread)
-     } else {
-         updateTabBadge(threadId, unread);
-     }
-  }
+        if(allTabs.filter(element => element.querySelector('a').getAttribute('href') == "#tab-thread-content-" + threadId).length == 0) {
+            createTab(threadId, name, description, unread)
+        } else {
+            updateTabBadge(threadId, unread);
+        }
+    }
 
-  function createTab(threadId, name, unread) {
+    function createTab(threadId, name, description, unread) {
        let tabContent =
-            `<li class="nav-item my-1">
-                <a data-bs-toggle="tab" data-chat-thread="data-chat-thread" href="#tab-thread-content-${threadId}"
-                   role="tab"
-                   aria-selected="true"
-                   class="${unread > 0 ? 'unread' : 'read'} nav-link nav-link-item d-flex align-items-center justify-content-center"
-                   onclick = "onTabClick(${threadId}, '${name}')">
-                    <div class="flex-grow-1 d-sm-none d-xl-block">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="primary-text">${name}</h5>
-                            <p class="secondary-text">Just now</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p class="secondary-text">This is a message from
-                                you</p>
-                            ${unread > 0 ? '<span class="badge badge-phoenix px-1">' + unread + '+</span>' : ''}
-                        </div>
+            `<a data-bs-toggle="tab" data-chat-thread="data-chat-thread" href="#tab-thread-content-${threadId}"
+               role="tab"
+               aria-selected="true"
+               class="${unread > 0 ? 'unread' : 'read'} nav-link nav-link-item d-flex align-items-center justify-content-center"
+               onclick = "onTabClick(${threadId}, '${name}', '${description}')">
+                <div class="flex-grow-1 d-sm-none d-xl-block">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="primary-text">${name}</h5>
                     </div>
-                </a>
-            </li>`;
+                    <div class="d-flex justify-content-between">
+                        <p class="secondary-text">${description}</p>
+                        ${unread > 0 ? '<span class="badge badge-phoenix px-1">' + unread + '+</span>' : ''}
+                    </div>
+                </div>
+            </a>`;
 
-       document.getElementById('tabs').innerHTML += tabContent;
-       let tab = document.querySelector(`[href="#tab-thread-content-${threadId}"]`);
+       let tab = document.createElement('li');
+       tab.classList.add("nav-item");
+       tab.classList.add("my-1");
+       tab.innerHTML = tabContent;
 
-       allTabs.push(tab.parentNode);
+       allTabs.push(tab);
        filterTabs();
-  }
+    }
 
-  function updateTabBadge(threadId, unread) {
+    function updateTabBadge(threadId, unread) {
       let tab = document.querySelector(`[href="#tab-thread-content-${threadId}"]`);
       if(unread > 0) {
           allTabs.filter(element => element.querySelector('a').getAttribute('href') == "#tab-thread-content-" + threadId)
-                  .map(el => el.childNodes[1])
+                  .map(el => el.querySelector('a'))
                   .forEach(el => {
                       if (el.classList.contains('read')) {
                           el.classList.remove('read');
@@ -146,7 +144,7 @@
           filterTabs();
       } else {
           allTabs.filter(element => element.querySelector('a').getAttribute('href') == "#tab-thread-content-" + threadId)
-                  .map(el => el.childNodes[1])
+                  .map(el => el.querySelector('a'))
                   .forEach(el => {
                       if (el.classList.contains('unread')) {
                           el.classList.remove('unread');
@@ -158,14 +156,14 @@
                tab.querySelector('div div span').remove();
           }
       }
-  }
+    }
 
-  function onTabClick(threadId, name) {
-     scrollChatScreen(threadId);
-     sendChannel(threadId, name);
-  }
+    function onTabClick(threadId, name, description) {
+        scrollChatScreen(threadId);
+        sendChannel(threadId, name, description);
+    }
 
-  function scrollChatScreen(threadId) {
+    function scrollChatScreen(threadId) {
      let chatScreen = document.querySelector(`#tab-thread-content-${threadId} [class^=card-body]`);
 
      setTimeout(() => {
@@ -175,9 +173,9 @@
         }
      }, 400);
 
-  }
+    }
 
-  function sendMessage(threadId) {
+    function sendMessage(threadId) {
       let textarea = document.querySelector('#tab-thread-content-' + threadId + ' [class~=chat-textarea]');
       let message = textarea.outerText;
       if(message != null && message != "" && message.match(/^[\n ]+$/) == null) {
@@ -187,13 +185,13 @@
           clientWebSocket.send(JSON.stringify(json));
       }
       textarea.innerText = "";
-  }
+    }
 
-  function sendChannel(threadId, name) {
-      clientWebSocket.send(`{"type":"channel","object":{"id":${threadId},"name":"${name}","unread":0}}`);
-  }
+    function sendChannel(threadId, name, description) {
+      clientWebSocket.send(`{"type":"channel","object":{"id":${threadId},"name":"${name}","description":"${description}","unread":0}}`);
+    }
 
-  function filterTabs(filter) {
+    function filterTabs(filter) {
       if(filter) {
             currentFilter = filter;
             document.querySelectorAll('[role=tablist] a').forEach(el => el.classList.remove('active'));
@@ -206,4 +204,12 @@
                 .filter(element => element.querySelector('a').classList.contains(currentFilter))
                 .map(element => element.outerHTML).join("");
       }
-  }
+    }
+
+
+    setTimeout(()=> {
+        if(!document.querySelector('[href^="#tab-thread-content"][class~=active]')) {
+           document.querySelector('[href^="#tab-thread-content"]').click();
+        }
+    }
+    ,500);

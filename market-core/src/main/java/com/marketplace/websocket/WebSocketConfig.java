@@ -24,8 +24,8 @@ public class WebSocketConfig {
     @Bean
     public HandlerMapping handlerMapping() {
         Map<String, WebSocketHandler> map = new HashMap<>();
-        map.put("/api/v1/chart", chartWebSocketHandler);
-        map.put("/api/v1/dispute", disputeWebSocketHandler);
+        map.put("/api/v1/ws/chart", chartWebSocketHandler);
+        map.put("/api/v1/ws/dispute", disputeWebSocketHandler);
         return new SimpleUrlHandlerMapping(map, -1);
     }
 

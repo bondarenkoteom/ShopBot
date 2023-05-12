@@ -1,12 +1,19 @@
 package com.marketplace.controller;
 
 import com.marketplace.database.model.Dispute;
+import com.marketplace.database.model.DisputeMessage;
 import com.marketplace.database.model.Purchase;
 import com.marketplace.database.service.DisputeService;
 import com.marketplace.database.service.PurchaseService;
+import com.marketplace.requests.DisputeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +29,7 @@ public class DisputeController {
 
     @RequestMapping(value = "/api/v1/disputes", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    List<Dispute> disputesGet(@RequestParam Long purchaseId) {
+    public Flux<DisputeMessage> disputesGet(@RequestParam Long purchaseId) {
         return disputeService.getDisputeMessages(purchaseId);
     }
 
@@ -42,9 +48,8 @@ public class DisputeController {
     }
 
     @RequestMapping(value = "/api/v1/dispute", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    void disputeCreate(@RequestBody Dispute dispute) {
-        disputeService.save(dispute);
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Mono<DisputeMessage> disputeCreate(@RequestBody DisputeRequest dispute) {
+        return disputeService.save(dispute);
     }
 }

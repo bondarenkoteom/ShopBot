@@ -2,10 +2,7 @@ package com.marketplace.client;
 
 import com.marketplace.constant.OrderStatus;
 import com.marketplace.entity.*;
-import com.marketplace.requests.BuyRequest;
-import com.marketplace.requests.SearchRequest;
-import com.marketplace.requests.TriggerRequest;
-import com.marketplace.requests.UserRequest;
+import com.marketplace.requests.*;
 import com.marketplace.responses.BuyResponse;
 import com.marketplace.responses.PageResponse;
 import com.marketplace.responses.TriggerResponse;
@@ -168,7 +165,7 @@ public interface HttpCoreInterface {
      * Список сообщений диспута
      */
     @GetExchange(value = "/api/v1/disputes")
-    List<Dispute> disputesGet(@RequestParam Long purchaseId);
+    List<DisputeMessage> disputesGet(@RequestParam Long purchaseId);
 
     /**
      * Список диспутов
@@ -181,7 +178,7 @@ public interface HttpCoreInterface {
      * Создание сообщения диспута
      */
     @PostExchange(value = "/api/v1/dispute")
-    ResponseEntity<Void> disputeCreate(@RequestBody Dispute dispute);
+    DisputeMessage disputeCreate(@RequestBody DisputeRequest disputeRequest);
 
 
     //+++++++++++++++++++++++ MESSAGES +++++++++++++++++++++++
