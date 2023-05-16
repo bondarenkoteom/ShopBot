@@ -1,11 +1,12 @@
 package com.marketplace.database.service;
 
 import com.marketplace.constant.Trigger;
-import com.marketplace.database.model.User;
-import com.marketplace.database.repository.jpa.RoleRepository;
-import com.marketplace.database.repository.jpa.UserRepository;
+import com.marketplace.database.jpa.model.User;
+import com.marketplace.database.jpa.repository.RoleRepository;
+import com.marketplace.database.jpa.repository.UserRepository;
 import com.marketplace.utils.Values;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -2,27 +2,43 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
-  <link rel="stylesheet" th:href="@{/css/main.css}"/>
-  <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Marketplace v1.0.0</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Marketplace v1.0.0</title>
 
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
 
-  <!-- Favicons -->
-  <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-  <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-  <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
-  <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-  <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
-  <meta name="theme-color" content="#712cf9">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#712cf9">
 
-  <style type="text/css">/* Chart.js */
-@keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style>
+    <style type="text/css">/* Chart.js */
+@keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}
+
+        .row>* {
+            margin-top: 1rem;
+        }
+        .primary-text {
+            font-weight: 400 !important;
+            color:rgba(49, 55, 74, 1) !important;
+            font-size: 1rem;
+        }
+        .secondary-text {
+            font-weight: 400 !important;
+            color:rgba(110, 120, 145, 1) !important;
+            margin-bottom: 0;
+            font-size: .8rem !important;
+        }
+    </style>
 
 </head>
 <body>
@@ -30,190 +46,331 @@
 <div th:replace="~{fragments/header :: header}"/>
 
 <div class="container-fluid mt-5">
-  <div class="row">
+    <div class="row">
 
-    <div th:replace="fragments/sidebarMenu.html :: sidebarMenuFragment(controller='dashboard')"/>
+        <div th:replace="fragments/sidebarMenu.html :: sidebarMenuFragment(controller='dashboard')"/>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar align-text-bottom" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            This week
-          </button>
-        </div>
-      </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-calendar align-text-bottom" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        This week
+                    </button>
+                </div>
+            </div>
 
-      <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" style="display: block; width: 1492px; height: 629px;" width="1492" height="629"></canvas>
 
-      <h2>Section title</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Header</th>
-            <th scope="col">Header</th>
-            <th scope="col">Header</th>
-            <th scope="col">Header</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>1,001</td>
-            <td>random</td>
-            <td>data</td>
-            <td>placeholder</td>
-            <td>text</td>
-          </tr>
-          <tr>
-            <td>1,002</td>
-            <td>placeholder</td>
-            <td>irrelevant</td>
-            <td>visual</td>
-            <td>layout</td>
-          </tr>
-          <tr>
-            <td>1,003</td>
-            <td>data</td>
-            <td>rich</td>
-            <td>dashboard</td>
-            <td>tabular</td>
-          </tr>
-          <tr>
-            <td>1,003</td>
-            <td>information</td>
-            <td>placeholder</td>
-            <td>illustrative</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,004</td>
-            <td>text</td>
-            <td>random</td>
-            <td>layout</td>
-            <td>dashboard</td>
-          </tr>
-          <tr>
-            <td>1,005</td>
-            <td>dashboard</td>
-            <td>irrelevant</td>
-            <td>text</td>
-            <td>placeholder</td>
-          </tr>
-          <tr>
-            <td>1,006</td>
-            <td>dashboard</td>
-            <td>illustrative</td>
-            <td>rich</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,007</td>
-            <td>placeholder</td>
-            <td>tabular</td>
-            <td>information</td>
-            <td>irrelevant</td>
-          </tr>
-          <tr>
-            <td>1,008</td>
-            <td>random</td>
-            <td>data</td>
-            <td>placeholder</td>
-            <td>text</td>
-          </tr>
-          <tr>
-            <td>1,009</td>
-            <td>placeholder</td>
-            <td>irrelevant</td>
-            <td>visual</td>
-            <td>layout</td>
-          </tr>
-          <tr>
-            <td>1,010</td>
-            <td>data</td>
-            <td>rich</td>
-            <td>dashboard</td>
-            <td>tabular</td>
-          </tr>
-          <tr>
-            <td>1,011</td>
-            <td>information</td>
-            <td>placeholder</td>
-            <td>illustrative</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,012</td>
-            <td>text</td>
-            <td>placeholder</td>
-            <td>layout</td>
-            <td>dashboard</td>
-          </tr>
-          <tr>
-            <td>1,013</td>
-            <td>dashboard</td>
-            <td>irrelevant</td>
-            <td>text</td>
-            <td>visual</td>
-          </tr>
-          <tr>
-            <td>1,014</td>
-            <td>dashboard</td>
-            <td>illustrative</td>
-            <td>rich</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,015</td>
-            <td>random</td>
-            <td>tabular</td>
-            <td>information</td>
-            <td>text</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </main>
-  </div>
+            <div class="row">
+                <div class="col">
+                    <div class="row my-3">
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center">
+                                <img src="icons/bitcoin.svg" alt="" height="46" width="46">
+                                <div class="ms-3">
+                                    <h4 class="mb-0">$57</h4>
+                                    <p class="secondary-text">Top up commission</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center">
+                                <img src="icons/wallet.svg" alt="" height="46" width="46">
+                                <div class="ms-3">
+                                    <h4 class="mb-0">$764</h4>
+                                    <p class="secondary-text">Withdraw commission</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center">
+                                <img src="icons/chart.svg" alt="" height="46" width="46">
+                                <div class="ms-3">
+                                    <h4 class="mb-0">$821</h4>
+                                    <p class="secondary-text">Total profit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h3>Total profit</h3>
+                    <canvas class="my-4 w-100 chartjs-render-monitor" id="totalProfitChart"
+                            style="display: block; width: 1492px; height: 629px;" width="1492" height="629">
+                    </canvas>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-body p-3 d-flex flex-column overflow-auto">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="mb-1">Total orders
+                                                <span class="badge badge-phoenix badge-phoenix-warning rounded-pill ms-2">
+                                                    <span class="badge-label">-6.8%</span>
+                                                </span>
+                                            </h5>
+                                            <h6 class="primary-text">Last 7 days</h6>
+                                        </div>
+                                        <h4>16,247</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-center px-4 py-6">
+                                        <canvas class="my-4 w-100 chartjs-render-monitor" id="totalOrdersChart"
+                                                width="300" height="150">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-body p-3 d-flex flex-column overflow-auto">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="mb-1">Total orders<span class="badge badge-phoenix badge-phoenix-warning rounded-pill fs--1 ms-2"><span class="badge-label">-6.8%</span></span></h5>
+                                            <h6 class="text-700">Last 7 days</h6>
+                                        </div>
+                                        <h4>16,247</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-center px-4 py-6">
+                                        <div class="echart-total-orders" style="height: 85px; width: 115px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); position: relative;" _echarts_instance_="ec_1684178309098"><div style="position: relative; width: 115px; height: 85px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;"><canvas data-zr-dom-id="zr_0" width="115" height="85" style="position: absolute; left: 0px; top: 0px; width: 115px; height: 85px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas></div><div class="" style="position: absolute; display: block; border-style: solid; white-space: nowrap; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 10px; background-color: rgb(239, 242, 246); border-width: 1px; border-radius: 4px; color: rgb(20, 24, 36); font: 14px / 21px sans-serif; padding: 7px 10px; top: 0px; left: 0px; transform: translate3d(-93px, 17px, 0px); border-color: rgb(203, 208, 221); pointer-events: none; visibility: hidden; opacity: 0;"><strong>02 May:</strong> 200</div></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="bullet-item bg-primary me-2"></div>
+                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0">Completed</h6>
+                                            <h6 class="text-900 fw-semi-bold mb-0">52%</h6>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bullet-item bg-primary-100 me-2"></div>
+                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0">Pending payment</h6>
+                                            <h6 class="text-900 fw-semi-bold mb-0">48%</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-body p-3 d-flex flex-column overflow-auto">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="mb-1">Total orders<span class="badge badge-phoenix badge-phoenix-warning rounded-pill fs--1 ms-2"><span class="badge-label">-6.8%</span></span></h5>
+                                            <h6 class="text-700">Last 7 days</h6>
+                                        </div>
+                                        <h4>16,247</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-center px-4 py-6">
+                                        <div class="echart-total-orders" style="height: 85px; width: 115px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); position: relative;" _echarts_instance_="ec_1684178309098"><div style="position: relative; width: 115px; height: 85px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;"><canvas data-zr-dom-id="zr_0" width="115" height="85" style="position: absolute; left: 0px; top: 0px; width: 115px; height: 85px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas></div><div class="" style="position: absolute; display: block; border-style: solid; white-space: nowrap; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 10px; background-color: rgb(239, 242, 246); border-width: 1px; border-radius: 4px; color: rgb(20, 24, 36); font: 14px / 21px sans-serif; padding: 7px 10px; top: 0px; left: 0px; transform: translate3d(-93px, 17px, 0px); border-color: rgb(203, 208, 221); pointer-events: none; visibility: hidden; opacity: 0;"><strong>02 May:</strong> 200</div></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="bullet-item bg-primary me-2"></div>
+                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0">Completed</h6>
+                                            <h6 class="text-900 fw-semi-bold mb-0">52%</h6>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bullet-item bg-primary-100 me-2"></div>
+                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0">Pending payment</h6>
+                                            <h6 class="text-900 fw-semi-bold mb-0">48%</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-body p-3 d-flex flex-column overflow-auto">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="mb-1">Total orders<span class="badge badge-phoenix badge-phoenix-warning rounded-pill fs--1 ms-2"><span class="badge-label">-6.8%</span></span></h5>
+                                            <h6 class="text-700">Last 7 days</h6>
+                                        </div>
+                                        <h4>16,247</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-center px-4 py-6">
+                                        <div class="echart-total-orders" style="height: 85px; width: 115px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); position: relative;" _echarts_instance_="ec_1684178309098"><div style="position: relative; width: 115px; height: 85px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                            <canvas data-zr-dom-id="zr_0" width="115" height="85" style="position: absolute; left: 0px; top: 0px; width: 115px; height: 85px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                        </div><div class="" style="position: absolute; display: block; border-style: solid; white-space: nowrap; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 10px; background-color: rgb(239, 242, 246); border-width: 1px; border-radius: 4px; color: rgb(20, 24, 36); font: 14px / 21px sans-serif; padding: 7px 10px; top: 0px; left: 0px; transform: translate3d(-93px, 17px, 0px); border-color: rgb(203, 208, 221); pointer-events: none; visibility: hidden; opacity: 0;"><strong>02 May:</strong> 200</div></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="bullet-item bg-primary me-2"></div>
+                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0">Completed</h6>
+                                            <h6 class="text-900 fw-semi-bold mb-0">52%</h6>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bullet-item bg-primary-100 me-2"></div>
+                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0">Pending payment</h6>
+                                            <h6 class="text-900 fw-semi-bold mb-0">48%</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Section title</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Header</th>
+                        <th scope="col">Header</th>
+                        <th scope="col">Header</th>
+                        <th scope="col">Header</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1,001</td>
+                        <td>random</td>
+                        <td>data</td>
+                        <td>placeholder</td>
+                        <td>text</td>
+                    </tr>
+                    <tr>
+                        <td>1,002</td>
+                        <td>placeholder</td>
+                        <td>irrelevant</td>
+                        <td>visual</td>
+                        <td>layout</td>
+                    </tr>
+                    <tr>
+                        <td>1,003</td>
+                        <td>data</td>
+                        <td>rich</td>
+                        <td>dashboard</td>
+                        <td>tabular</td>
+                    </tr>
+                    <tr>
+                        <td>1,003</td>
+                        <td>information</td>
+                        <td>placeholder</td>
+                        <td>illustrative</td>
+                        <td>data</td>
+                    </tr>
+                    <tr>
+                        <td>1,004</td>
+                        <td>text</td>
+                        <td>random</td>
+                        <td>layout</td>
+                        <td>dashboard</td>
+                    </tr>
+                    <tr>
+                        <td>1,005</td>
+                        <td>dashboard</td>
+                        <td>irrelevant</td>
+                        <td>text</td>
+                        <td>placeholder</td>
+                    </tr>
+                    <tr>
+                        <td>1,006</td>
+                        <td>dashboard</td>
+                        <td>illustrative</td>
+                        <td>rich</td>
+                        <td>data</td>
+                    </tr>
+                    <tr>
+                        <td>1,007</td>
+                        <td>placeholder</td>
+                        <td>tabular</td>
+                        <td>information</td>
+                        <td>irrelevant</td>
+                    </tr>
+                    <tr>
+                        <td>1,008</td>
+                        <td>random</td>
+                        <td>data</td>
+                        <td>placeholder</td>
+                        <td>text</td>
+                    </tr>
+                    <tr>
+                        <td>1,009</td>
+                        <td>placeholder</td>
+                        <td>irrelevant</td>
+                        <td>visual</td>
+                        <td>layout</td>
+                    </tr>
+                    <tr>
+                        <td>1,010</td>
+                        <td>data</td>
+                        <td>rich</td>
+                        <td>dashboard</td>
+                        <td>tabular</td>
+                    </tr>
+                    <tr>
+                        <td>1,011</td>
+                        <td>information</td>
+                        <td>placeholder</td>
+                        <td>illustrative</td>
+                        <td>data</td>
+                    </tr>
+                    <tr>
+                        <td>1,012</td>
+                        <td>text</td>
+                        <td>placeholder</td>
+                        <td>layout</td>
+                        <td>dashboard</td>
+                    </tr>
+                    <tr>
+                        <td>1,013</td>
+                        <td>dashboard</td>
+                        <td>irrelevant</td>
+                        <td>text</td>
+                        <td>visual</td>
+                    </tr>
+                    <tr>
+                        <td>1,014</td>
+                        <td>dashboard</td>
+                        <td>illustrative</td>
+                        <td>rich</td>
+                        <td>data</td>
+                    </tr>
+                    <tr>
+                        <td>1,015</td>
+                        <td>random</td>
+                        <td>tabular</td>
+                        <td>information</td>
+                        <td>text</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
 </div>
 
 
 <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <script th:src="@{js/dashboard.js}"></script>
 <script>
-  const ctx = document.getElementById('myChart')
-
-  const myChart = new Chart(document.getElementById('myChart'), {
+  const totalProfitChart = new Chart(document.getElementById('totalProfitChart'), {
     type: 'line',
     data: {
-      labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ],
+      labels: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
       datasets: [{
-        data: [
-          15339,
-          21345,
-          18483,
-          24003,
-          23489,
-          24092,
-          12034
-        ],
+        data: [ 15339, 21345, 18483, 24003, 23489, 24092, 12034 ],
         lineTension: 0,
         backgroundColor: 'transparent',
         borderColor: '#007bff',
@@ -222,39 +379,15 @@
       }]
     },
     options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: false
-          }
-        }]
-      },
-      legend: {
-        display: false
+      plugins: {
+        legend: {
+          display: false
+        }
       },
       transitions: {
-            show: {
-              animations: {
-                x: {
-                  from: 0
-                },
-                y: {
-                  from: 0
-                }
-              }
-            },
-            hide: {
-              animations: {
-                x: {
-                  to: 0
-                },
-                y: {
-                  to: 0
-                }
-              }
-            }
+            show: { animations: { x: { from: 0 }, y: { from: 0 } } },
+            hide: { animations: { x: { to: 0 }, y: { to: 0 } } }
       }
-
     }
   })
 
@@ -276,12 +409,67 @@
   }
 
   function addData(data) {
-      myChart.data.datasets.forEach((dataset) => {
+      totalProfitChart.data.datasets.forEach((dataset) => {
           dataset.data = JSON.parse(data).data;
       });
-      myChart.update();
+      totalProfitChart.update();
   }
+
+</script>
+<script>
+const data = {
+  labels: [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ],
+  datasets: [{
+  categoryPercentage: 0.8,
+    barPercentage: 0.8,
+    label: 'Completed   14%',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    backgroundColor: '#007bff',
+    barThickness: 6
+  },
+  {
+  categoryPercentage: 0.8,
+    barPercentage: 0.8,
+    label: 'Pending payment   89%',
+    data: [35, 41, 20, 19, 44, 45, 60],
+    backgroundColor: '#e5edff',
+    barThickness: 6
+  }]
+};
+
+  const chart = new Chart(document.getElementById('totalOrdersChart'), {
+  type: 'bar',
+  data: data,
+  options: {
+    responsive: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        align: 'start'
+      },
+         beforeInit: function(chart, options) {
+          chart.legend.afterFit = function() {
+            this.height = this.height + 50;
+          };
+        }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        display: false,
+        grid: { display: false }
+      },
+      y: {
+        stacked: true,
+        display: false,
+        grid: { display: false }
+      }
+    }
+  },
+})
 </script>
 
 
-</body></html>
+</body>
+</html>

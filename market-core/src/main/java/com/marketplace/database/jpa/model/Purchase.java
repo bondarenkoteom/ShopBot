@@ -1,4 +1,4 @@
-package com.marketplace.database.model;
+package com.marketplace.database.jpa.model;
 
 import com.marketplace.constant.OrderStatus;
 import jakarta.persistence.*;

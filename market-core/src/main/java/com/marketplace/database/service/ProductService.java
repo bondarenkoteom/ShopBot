@@ -1,8 +1,8 @@
 package com.marketplace.database.service;
 
 import com.marketplace.constant.Category;
-import com.marketplace.database.model.Product;
-import com.marketplace.database.repository.jpa.ProductRepository;
+import com.marketplace.database.jpa.model.Product;
+import com.marketplace.database.jpa.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

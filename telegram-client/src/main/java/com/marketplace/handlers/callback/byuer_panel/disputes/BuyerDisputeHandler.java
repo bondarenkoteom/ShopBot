@@ -25,16 +25,17 @@ public class BuyerDisputeHandler extends AbstractBaseHandler {
         Keys keys = getKeys(update);
 
         Long purchaseId = Long.parseLong(keys.get("i"));
-        Long superUserId = update.getCallbackQuery().getFrom().getId();
 
         Payload payload = new Payload(update);
         payload.setSendMethod(SendMethod.SEND_MESSAGE);
 
         List<DisputeMessage> messages = httpCoreInterface.disputesGet(purchaseId);
 
-        Optional<User> optionalUser = httpCoreInterface.userGet(superUserId, null);
-        if (optionalUser.isPresent()) {
-            String chatText = getFormattedChatText(messages, optionalUser.get(), superUserId);
+        Optional<User> optionalUser = httpCoreInterface.userGet(getUserId(update), null);
+
+        if (optionalUser.isPresent() && checkUser(messages, optionalUser.get())) {
+
+            String chatText = getFormattedChatText(messages);
             if (chatText.isEmpty()) chatText = "No messages yet";
             payload.setText(chatText);
             payload.setParseMode(ParseMode.HTML);
@@ -43,13 +44,13 @@ public class BuyerDisputeHandler extends AbstractBaseHandler {
         }
     }
 
-    private String getFormattedChatText(List<DisputeMessage> messages, User user, Long superUserId) {
-        return messages.stream().map(message -> {
-            if (user.getId().equals(superUserId)) {
-                return String.format("<b># You</b> [%s]%n", message.getDate().toString()) + message.getMessage();
-            } else {
-                return String.format("<b># %s</b> [%s]%n", user.getUsername(), message.getDate().toString()) + message.getMessage();
-            }
-        }).collect(Collectors.joining("\n\n"));
+    private String getFormattedChatText(List<DisputeMessage> messages) {
+        return messages.stream().map(message ->
+            String.format("<b># %s</b> [%s]%n", message.getSender(), message.getDate().toString()) + message.getMessage()
+        ).collect(Collectors.joining("\n\n"));
+    }
+
+    private boolean checkUser(List<DisputeMessage> messages,User user) {
+        return messages.stream().anyMatch(c -> c.getSender().equals(user.getUsername()) || c.getReceiver().equals(user.getUsername()));
     }
 }

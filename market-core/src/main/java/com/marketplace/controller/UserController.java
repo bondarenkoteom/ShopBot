@@ -1,6 +1,6 @@
 package com.marketplace.controller;
 
-import com.marketplace.database.model.User;
+import com.marketplace.database.jpa.model.User;
 import com.marketplace.database.service.UserService;
 import com.marketplace.requests.TriggerRequest;
 import com.marketplace.requests.UserRequest;
@@ -11,10 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.marketplace.utils.Values.isNotEmpty;
 

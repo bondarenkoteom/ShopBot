@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-@EnableR2dbcRepositories(basePackages = "com.marketplace.database.repository.r2dbc")
+@EnableR2dbcRepositories(basePackages = "com.marketplace.database.r2dbc")
 public class R2dbcConfig {
 
     @Bean

@@ -1,7 +1,7 @@
 package com.marketplace.controller;
 
-import com.marketplace.database.model.Message;
-import com.marketplace.database.model.User;
+import com.marketplace.database.jpa.model.Message;
+import com.marketplace.database.jpa.model.User;
 import com.marketplace.database.service.MessageService;
 import com.marketplace.database.service.UserService;
 import org.springdoc.core.annotations.ParameterObject;

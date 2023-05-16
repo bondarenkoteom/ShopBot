@@ -2,10 +2,10 @@ package com.marketplace.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marketplace.database.model.DisputeChannel;
-import com.marketplace.database.model.DisputeMessage;
-import com.marketplace.database.repository.r2dbc.DisputeChannelRepository;
-import com.marketplace.database.repository.r2dbc.DisputeMessageRepository;
+import com.marketplace.database.r2dbc.model.DisputeChannel;
+import com.marketplace.database.r2dbc.model.DisputeMessage;
+import com.marketplace.database.r2dbc.repository.DisputeChannelRepository;
+import com.marketplace.database.r2dbc.repository.DisputeMessageRepository;
 import com.marketplace.websocket.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

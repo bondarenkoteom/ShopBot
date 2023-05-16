@@ -1,17 +1,13 @@
 package com.marketplace.controller;
 
-import com.marketplace.database.model.Dispute;
-import com.marketplace.database.model.DisputeMessage;
-import com.marketplace.database.model.Purchase;
+import com.marketplace.database.r2dbc.model.DisputeMessage;
+import com.marketplace.database.jpa.model.Purchase;
 import com.marketplace.database.service.DisputeService;
 import com.marketplace.database.service.PurchaseService;
 import com.marketplace.requests.DisputeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

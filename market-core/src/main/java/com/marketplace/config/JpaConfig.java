@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.marketplace.database.repository.jpa")
+@EnableJpaRepositories(basePackages = "com.marketplace.database.jpa")
 @EnableTransactionManagement
 public class JpaConfig {
 
@@ -59,7 +59,9 @@ public class JpaConfig {
 
     @Bean
     public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory.getObject());
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
+        return transactionManager;
     }
 
 }

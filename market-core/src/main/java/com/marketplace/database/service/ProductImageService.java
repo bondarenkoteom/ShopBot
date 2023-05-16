@@ -1,7 +1,7 @@
 package com.marketplace.database.service;
 
-import com.marketplace.database.model.ProductImage;
-import com.marketplace.database.repository.r2dbc.ProductImageRepository;
+import com.marketplace.database.r2dbc.model.ProductImage;
+import com.marketplace.database.r2dbc.repository.ProductImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

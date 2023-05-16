@@ -1,7 +1,7 @@
 package com.marketplace.controller;
 
-import com.marketplace.database.model.Product;
-import com.marketplace.database.model.ProductImage;
+import com.marketplace.database.jpa.model.Product;
+import com.marketplace.database.r2dbc.model.ProductImage;
 import com.marketplace.database.service.ProductImageService;
 import com.marketplace.database.service.ProductService;
 import org.springdoc.core.annotations.ParameterObject;

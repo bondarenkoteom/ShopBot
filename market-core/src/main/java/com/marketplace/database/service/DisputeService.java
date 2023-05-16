@@ -1,20 +1,14 @@
 package com.marketplace.database.service;
 
-import com.marketplace.database.model.DisputeChannel;
-import com.marketplace.database.model.DisputeMessage;
-import com.marketplace.database.repository.r2dbc.DisputeChannelRepository;
-import com.marketplace.database.repository.r2dbc.DisputeMessageRepository;
+import com.marketplace.database.r2dbc.model.DisputeChannel;
+import com.marketplace.database.r2dbc.model.DisputeMessage;
+import com.marketplace.database.r2dbc.repository.DisputeChannelRepository;
+import com.marketplace.database.r2dbc.repository.DisputeMessageRepository;
 import com.marketplace.requests.DisputeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Service
 public class DisputeService {

@@ -1,7 +1,7 @@
 package com.marketplace.controller;
 
-import com.marketplace.database.model.Product;
-import com.marketplace.database.model.Purchase;
+import com.marketplace.database.jpa.model.Product;
+import com.marketplace.database.jpa.model.Purchase;
 import com.marketplace.database.service.BuyProcess;
 import com.marketplace.database.service.ProductService;
 import com.marketplace.database.service.PurchaseService;

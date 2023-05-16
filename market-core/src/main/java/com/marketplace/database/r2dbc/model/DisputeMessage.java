@@ -1,4 +1,4 @@
-package com.marketplace.database.model;
+package com.marketplace.database.r2dbc.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

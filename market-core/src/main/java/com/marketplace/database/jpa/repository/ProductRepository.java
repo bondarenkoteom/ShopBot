@@ -1,19 +1,17 @@
-package com.marketplace.database.repository.jpa;
+package com.marketplace.database.jpa.repository;
 
 import com.marketplace.constant.Category;
-import com.marketplace.database.model.Product;
+import com.marketplace.database.jpa.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
-@Transactional("transactionManager")
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findById(Long id, Pageable pageable);

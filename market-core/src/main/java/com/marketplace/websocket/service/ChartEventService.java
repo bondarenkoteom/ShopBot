@@ -1,6 +1,6 @@
 package com.marketplace.websocket.service;
 
-import com.marketplace.database.model.ChartData;
+import com.marketplace.database.r2dbc.model.ChartData;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

@@ -1,15 +1,12 @@
-package com.marketplace.database.repository.r2dbc;
+package com.marketplace.database.r2dbc.repository;
 
-import com.marketplace.database.model.Dispute;
-import com.marketplace.database.model.DisputeMessage;
+import com.marketplace.database.r2dbc.model.DisputeMessage;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 import java.util.Date;
-import java.util.List;
 
 @Repository
 public interface DisputeMessageRepository extends R2dbcRepository<DisputeMessage, Long> {

@@ -1,9 +1,11 @@
 package com.marketplace.database.service;
 
 import com.marketplace.constant.OrderStatus;
-import com.marketplace.database.model.Purchase;
-import com.marketplace.database.repository.jpa.PurchaseRepository;
+import com.marketplace.database.jpa.model.Purchase;
+import com.marketplace.database.jpa.repository.PurchaseRepository;
+import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional("transactionManager")
 public class PurchaseService {
 
     @Autowired
@@ -58,10 +59,10 @@ public class PurchaseService {
     }
 
     public List<Purchase> getBuyerDisputesPurchases(Long id) {
-        return purchaseRepository.disputePurchasesByBuyer(id);
+        return purchaseRepository.findPurchasesByBuyerIdAndStatus(id, OrderStatus.DISPUTE);
     }
 
     public List<Purchase> getSellerDisputesPurchases(Long id) {
-        return purchaseRepository.disputePurchasesBySeller(id);
+        return purchaseRepository.findPurchasesBySellerIdAndStatus(id, OrderStatus.DISPUTE);
     }
 }

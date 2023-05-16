@@ -1,6 +1,6 @@
-package com.marketplace.database.repository.jpa;
+package com.marketplace.database.jpa.repository;
 
-import com.marketplace.database.model.Settings;
+import com.marketplace.database.jpa.model.Settings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

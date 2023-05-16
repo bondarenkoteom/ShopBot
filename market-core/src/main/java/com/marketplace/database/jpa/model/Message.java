@@ -1,4 +1,4 @@
-package com.marketplace.database.model;
+package com.marketplace.database.jpa.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "t_dispute")
-public class Dispute {
+@Table(name = "t_message")
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,9 @@ public class Dispute {
     @Column(name = "sender_id")
     private Long sender;
 
+    @Column(name = "receiver_id")
+    private Long receiver;
+
     @Column
     private Date date;
-
-    @Column(name = "purchase_id")
-    private Long purchaseId;
 }

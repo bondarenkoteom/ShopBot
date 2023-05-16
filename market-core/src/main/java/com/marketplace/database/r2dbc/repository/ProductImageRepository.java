@@ -1,6 +1,6 @@
-package com.marketplace.database.repository.r2dbc;
+package com.marketplace.database.r2dbc.repository;
 
-import com.marketplace.database.model.ProductImage;
+import com.marketplace.database.r2dbc.model.ProductImage;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 

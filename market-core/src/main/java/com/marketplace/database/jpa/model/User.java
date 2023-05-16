@@ -1,6 +1,5 @@
-package com.marketplace.database.model;
+package com.marketplace.database.jpa.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.marketplace.constant.Trigger;
 import jakarta.persistence.*;

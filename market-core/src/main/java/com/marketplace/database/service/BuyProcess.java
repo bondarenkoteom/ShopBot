@@ -1,9 +1,9 @@
 package com.marketplace.database.service;
 
 import com.marketplace.constant.OrderStatus;
-import com.marketplace.database.model.Product;
-import com.marketplace.database.model.Purchase;
-import com.marketplace.database.model.User;
+import com.marketplace.database.jpa.model.Product;
+import com.marketplace.database.jpa.model.Purchase;
+import com.marketplace.database.jpa.model.User;
 import com.marketplace.responses.BuyResponse;
 import com.marketplace.utils.Values;
 import org.springframework.beans.factory.annotation.Autowired;

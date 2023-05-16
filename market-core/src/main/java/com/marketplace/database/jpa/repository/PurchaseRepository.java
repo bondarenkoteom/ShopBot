@@ -1,6 +1,7 @@
-package com.marketplace.database.repository.jpa;
+package com.marketplace.database.jpa.repository;
 
-import com.marketplace.database.model.Purchase;
+import com.marketplace.constant.OrderStatus;
+import com.marketplace.database.jpa.model.Purchase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,13 +9,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
-@Transactional("transactionManager")
 public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     @Modifying
@@ -33,9 +32,9 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     Page<Purchase> findById(Long id, Pageable pageable);
 
-    @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND buyer_id = :id", nativeQuery = true)
-    List<Purchase> disputePurchasesByBuyer(@Param("id") Long id);
+//    @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND buyer_id = :id", nativeQuery = true)
+    List<Purchase> findPurchasesByBuyerIdAndStatus(Long buyerId, OrderStatus status);
 
-    @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND seller_id = :id", nativeQuery = true)
-    List<Purchase> disputePurchasesBySeller(@Param("id") Long id);
+//    @Query(value = "SELECT * from t_purchase WHERE status = 'DISPUTE' AND seller_id = :id", nativeQuery = true)
+    List<Purchase> findPurchasesBySellerIdAndStatus(Long buyerId, OrderStatus status);
 }

@@ -2,7 +2,7 @@ package com.marketplace.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marketplace.database.model.ChartData;
+import com.marketplace.database.r2dbc.model.ChartData;
 import com.marketplace.websocket.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
