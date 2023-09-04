@@ -19,6 +19,7 @@
         <module>telegram-client</module>
         <module>integrations</module>
         <module>admin-panel</module>
+        <module>web-app</module>
     </modules>
 
     <properties>
