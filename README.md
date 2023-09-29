@@ -8,6 +8,7 @@ sudo apt-get -y install postgresql
 ---------------------------------
 ```
 CREATE DATABASE centaur;
+CREATE DATABASE test;
 ALTER USER postgres WITH PASSWORD 'Kill';
 ```
 ---------------------------------

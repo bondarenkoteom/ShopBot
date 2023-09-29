@@ -2,8 +2,12 @@ package com.marketplace.controller;
 
 import com.marketplace.database.jpa.model.Product;
 import com.marketplace.database.r2dbc.model.ProductImage;
+import com.marketplace.database.service.BuyProcess;
 import com.marketplace.database.service.ProductImageService;
 import com.marketplace.database.service.ProductService;
+import com.marketplace.requests.BuyRequest;
+import com.marketplace.requests.SearchRequest;
+import com.marketplace.responses.BuyResponse;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,9 +36,30 @@ public class ProductController {
     @Autowired
     private ProductImageService productImageService;
 
+    @Autowired
+    private BuyProcess buyProcess;
+
     @Value("classpath:no-content.png")
     Resource resourceFile;
 
+    @RequestMapping(value = "/api/v1/product/search", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody
+    Page<Product> search(@ParameterObject Pageable pageable, @RequestBody SearchRequest searchRequest) {
+        return productService.findAllProducts(
+                searchRequest.getQuery(),
+                searchRequest.getCategory(),
+                searchRequest.getOwnerId(),
+                pageable);
+    }
+
+    @RequestMapping(value = "/api/v1/product/buy", method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<BuyResponse> buy(@RequestBody BuyRequest buyRequest) {
+        return ResponseEntity.ok(buyProcess.run(
+                buyRequest.getProductId(),
+                buyRequest.getUserId()));
+    }
 
     @RequestMapping(value = "/api/v1/product", method = RequestMethod.GET)
     public @ResponseBody
@@ -47,7 +72,7 @@ public class ProductController {
     @RequestMapping(value = "/api/v1/product", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
-    void productUpdate(@RequestBody Product product) {
+    void productCreate(@RequestBody Product product) {
         productService.save(product);
     }
 

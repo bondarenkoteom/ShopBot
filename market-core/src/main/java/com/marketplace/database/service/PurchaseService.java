@@ -3,13 +3,10 @@ package com.marketplace.database.service;
 import com.marketplace.constant.OrderStatus;
 import com.marketplace.database.jpa.model.Purchase;
 import com.marketplace.database.jpa.repository.PurchaseRepository;
-import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
